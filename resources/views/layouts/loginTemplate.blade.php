@@ -10,7 +10,7 @@
     </title>
 
 
-    @vite(['resources/sass/app.scss','resources/css/azia.min.css'])
+    @vite(['resources/js/app.js'])
     
 </head>
 

@@ -20,3 +20,4 @@ Route::get('/', function () {
 
 
 Route::get('/login', [LoginController::class, 'index']);
+Route::post('/authenticate', [LoginController::class, 'authenticate']);
