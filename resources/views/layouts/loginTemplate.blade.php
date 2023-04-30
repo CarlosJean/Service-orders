@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -10,8 +10,8 @@
     </title>
 
 
-    @vite(['resources/js/app.js'])
-    
+    @vite(['resources/css/azia.min.css','resources/js/app.js'])
+
 </head>
 
 <body class="az-body">
