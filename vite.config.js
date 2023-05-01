@@ -6,6 +6,7 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/css/azia.min.css',
+                'resources/css/azia.css',
                 'resources/sass/app.scss',
                 'resources/js/app.js',
                 'resources/js/azia.js',
