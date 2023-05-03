@@ -5,7 +5,10 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
+                'resources/css/azia.min.css',
+                'resources/sass/app.scss',
                 'resources/js/app.js',
+                'resources/js/azia.js',
             ],
             refresh: true,
         }),
