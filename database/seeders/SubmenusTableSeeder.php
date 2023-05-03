@@ -13,6 +13,13 @@ class SubmenusTableSeeder extends Seeder
      */
     public function run(): void
     {
+        DB::table('submenus')->insert([
+            'name' => 'Dashboard',
+            'order' => 1,
+            'menu_id' => null,
+            'icon' => 'typcn typcn-chart-bar-outline',
+        ]);
+        
         //Menú de personas
         DB::table('submenus')->insert([
             'name' => 'Tecnicos',

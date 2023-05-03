@@ -2,21 +2,22 @@
 
 namespace App\Repositories;
 
-use App\Models\Menu;
 use App\Models\Role;
-use App\Models\Submenu;
-use Illuminate\Support\Facades\DB;
 
 class MenuRepository
 {
-    
+
     public static function submenusByRole()
     {
         //Find current logged user´s id
         $userId = auth()->id();
+
+        //Find user´s role id
+        $employeerRepository  = new EmployeerRepository();        
+        $roleId = $employeerRepository->employeerByUserId($userId)['roleId'];
         
         //Find user´s role
-        $role = Role::where('id', $userId)
+        $role = Role::where('id', $roleId)
         ->first();
 
         //Array to store menus and submenus information
@@ -25,14 +26,15 @@ class MenuRepository
         $currentMenuName = '';
         foreach ($role->submenus as $submenu) {
 
-            $newSubmenu = array('name' => $submenu->name);
+            $newSubmenu = array('name' => $submenu->name, 'icon' => $submenu?->icon);
 
-            $isNewMenu = ($currentMenuName != $submenu->menu->name);
-            if ($isNewMenu) {
+            $isNewMenu = ($currentMenuName != $submenu->menu?->name);
+            
+            if ($isNewMenu || $submenu->menu?->name == null) {
 
                 $menu = array(
-                    'name' => $submenu->menu->name, 
-                    'icon' => $submenu->menu->icon
+                    'name' => $submenu->menu?->name, 
+                    'icon' => $submenu->menu?->icon
                 );
 
                 $newArray = array(
@@ -46,7 +48,7 @@ class MenuRepository
                 array_push($submenusByRole[$lastIndex]['submenus'], $newSubmenu);
             }
 
-            $currentMenuName = $submenu->menu->name;
+            $currentMenuName = $submenu->menu?->name;
         }
 
         return $submenusByRole;

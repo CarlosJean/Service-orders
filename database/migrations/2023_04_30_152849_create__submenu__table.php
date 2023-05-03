@@ -16,10 +16,13 @@ return new class extends Migration
             $table->timestamps();
             $table->string('name');
             $table->string('order')->nullable();
+            $table->string('url')->nullable();
+            $table->string('icon')->nullable();
             $table->integer('menu_id')
             ->foreign('menu_id')
             ->references('id')
-            ->on('menus');
+            ->on('menus')
+            ->nullable();
 
         });
     }
