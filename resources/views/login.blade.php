@@ -1,6 +1,7 @@
   @extends('layouts.loginTemplate')
 
   @section('content')
+  
   <div class="az-signin-wrapper">
       <div class="az-card-signin shadow">
           <h1 class="az-logo"><span></span></h1>
