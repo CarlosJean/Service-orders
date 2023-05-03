@@ -1,3 +1,13 @@
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+
+>>>>>>> feb1d8674f7caed6110851dae7440c6e2da9f6ab
 $(function(){
   'use strict'
 
