@@ -5,7 +5,7 @@
 @foreach($menu['submenus'] as $submenu)
 <li class="nav-item">
 
-    <a class="nav-link" href="#">
+    <a class="nav-link" href="{{url($submenu['url'])}}">
         <i class="{{$submenu['icon']}}"></i>
         {{$submenu['name']}}
     </a>

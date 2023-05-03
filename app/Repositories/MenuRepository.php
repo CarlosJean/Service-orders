@@ -26,7 +26,7 @@ class MenuRepository
         $currentMenuName = '';
         foreach ($role->submenus as $submenu) {
 
-            $newSubmenu = array('name' => $submenu->name, 'icon' => $submenu?->icon);
+            $newSubmenu = array('name' => $submenu->name, 'icon' => $submenu?->icon, 'url' => $submenu?->url);
 
             $isNewMenu = ($currentMenuName != $submenu->menu?->name);
             
@@ -34,7 +34,8 @@ class MenuRepository
 
                 $menu = array(
                     'name' => $submenu->menu?->name, 
-                    'icon' => $submenu->menu?->icon
+                    'icon' => $submenu->menu?->icon, 
+                    'url' => $submenu?->url
                 );
 
                 $newArray = array(
