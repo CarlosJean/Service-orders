@@ -21,8 +21,9 @@
 
     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
         @foreach($menu['submenus'] as $submenu)
-        <a class="dropdown-item" href="{{ route('logout') }}">
+        <a class="dropdown-item" href="{{$submenu['url']}}">
             {{$submenu['name']}}
+           
         </a>
         @endforeach
     </div>
