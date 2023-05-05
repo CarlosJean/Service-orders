@@ -18,6 +18,7 @@ class SubmenusTableSeeder extends Seeder
             'order' => 1,
             'menu_id' => null,
             'icon' => 'typcn typcn-chart-bar-outline',
+            'URL' => 'orders'
         ]);
         
         //Menú de personas
@@ -99,7 +100,8 @@ class SubmenusTableSeeder extends Seeder
         DB::table('submenus')->insert([
             'name' => 'Órdenes de servicios',
             'order' => 3,
-            'menu_id' => 5
+            'menu_id' => 5,
+            'URL' => 'orders'
         ]);
         
         DB::table('submenus')->insert([
