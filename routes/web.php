@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EmployeesController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\OrdersController;
@@ -24,7 +25,10 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('/asignar-tecnico', function(){
+Route::get('asignar-tecnico', function(){
     return view('orders.assign_technician');
 });
 Route::get('/orders', [OrdersController::class, 'index']);
+
+Route::get('registro-empleado', [EmployeesController::class, 'index']);
+Route::post('registro-empleado', [EmployeesController::class, 'store']);
