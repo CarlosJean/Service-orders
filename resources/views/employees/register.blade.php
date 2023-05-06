@@ -13,20 +13,38 @@
                             @csrf
                             <div class="row">
                                 <div class="col-6 form-group">
-                                    <label for="">Documento de identificación</label>
-                                    <input type="text" name="identification" id="" class="form-control" placeholder="Escriba el número de identificación">
+                                    <label for="txtIdentification">Documento de identificación</label>
+                                    <input type="text" name="identification" id="txtIdentification" class="form-control" placeholder="Escriba el número de identificación">
                                 </div>
                                 <div class="col-6 form-group">
-                                    <label for="">Correo electrónico</label>
-                                    <input type="email" name="email" id="" class="form-control" placeholder="Escriba el correo electrónico">
+                                    <label for="txtEmail">Correo electrónico</label>
+                                    <input type="email" name="email" id="txtEmail" class="form-control" placeholder="Escriba el correo electrónico">
                                 </div>
                                 <div class="col-6 form-group">
-                                    <label for="">Nombres del empleado</label>
-                                    <input type="text" name="names" id="" class="form-control" placeholder="Nombres">
+                                    <label for="txtNames">Nombres del empleado</label>
+                                    <input type="text" name="names" id="txtNames" class="form-control" placeholder="Nombres">
                                 </div>
                                 <div class="col-6 form-group">
-                                    <label for="">Apellidos del empleado</label>
-                                    <input type="text" name="last_names" id="" class="form-control" placeholder="Apellidos">
+                                    <label for="txtLastNames">Apellidos del empleado</label>
+                                    <input type="text" name="last_names" id="txtLastNames" class="form-control" placeholder="Apellidos">
+                                </div>
+                                <div class="col-6 form-group">
+                                    <label for="txtRole">Rol</label>
+                                    <select id="slcRole" name="role_id" class="form-select">
+                                        <option value="">Seleccione un rol</option>
+                                        @foreach($roles as $role)
+                                        <option value="{{$role['id']}}">{{$role['name']}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-6 form-group">
+                                    <label for="txtDepartment">Departamento</label>
+                                    <select id="slcDepartment" name="department_id" class="form-select">
+                                        <option value="">Seleccione un departamento</option>
+                                        @foreach($departments as $department)
+                                        <option value="{{$department['id']}}">{{$department['name']}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div class="col-6 form-group">
                                     <div class="form-check row px-0">
@@ -38,7 +56,7 @@
                                 </div>
                                 <div class="col-12 form-group">
                                     <div class="row justify-content-end">
-                                        <button  class="col-2 btn btn-secondary w-100" type="reset">Limpiar</button>
+                                        <button class="col-2 btn btn-secondary w-100" type="reset">Limpiar</button>
                                         <div class="col-2">
                                             <input type="submit" value="Guardar" class="btn btn-primary w-100">
                                         </div>

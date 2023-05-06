@@ -3,18 +3,50 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\CreateEmployeeRequest;
+use App\Models\Employee;
+use App\Repositories\DepartmentsRepository;
+use App\Repositories\EmployeerRepository;
+use App\Repositories\RolesRepository;
 
 class EmployeesController extends Controller
 {
-    public function index(){
-        return view('employees.register');
-    }    
 
-
-    public function store(Request $request){
-        var_dump($request->all());
-        return view('employees.register');
+    protected $rolesRepository;
+    protected $employeeRepository;
+    protected $departmentsRepository;
+    public function __construct(
+        RolesRepository $rolesRepository,
+        EmployeerRepository $employeeRepository,
+        DepartmentsRepository $departmentsRepository
+    ) {
+        $this->rolesRepository = $rolesRepository;
+        $this->employeeRepository = $employeeRepository;
+        $this->departmentsRepository = $departmentsRepository;
     }
-    
+
+    public function index()
+    {
+        $roles = $this->rolesRepository->roles();
+        $deparments = $this->departmentsRepository->departments();
+
+        return view('employees.register')->with(array(
+            'roles' => $roles,
+            'departments' => $deparments
+        ));
+    }
+
+    public function store(CreateEmployeeRequest $request)
+    {
+        $employee = new Employee($request->except('_token'));
+        $this->employeeRepository->create($employee);
+
+        $roles = $this->rolesRepository->roles();   
+        $deparments = $this->departmentsRepository->departments();
+
+        return view('employees.register')->with(array(
+            'roles' => $roles,
+            'departments' => $deparments
+        ));
+    }
 }
