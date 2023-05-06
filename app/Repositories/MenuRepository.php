@@ -14,7 +14,7 @@ class MenuRepository
 
         //Find user´s role id
         $employeerRepository  = new EmployeerRepository();
-        $roleId = $employeerRepository->employeerByUserId($userId)['roleId'];
+        $roleId = $employeerRepository->employeeByUserId($userId)['roleId'];
 
         //Find user´s role
         $role = Role::where('id', $roleId)
