@@ -4,6 +4,7 @@ use App\Http\Controllers\EmployeesController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\OrdersController;
+use App\Http\Controllers\OrdersSupController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,3 +33,4 @@ Route::get('/orders', [OrdersController::class, 'index']);
 
 Route::get('registro-empleado', [EmployeesController::class, 'index']);
 Route::post('registro-empleado', [EmployeesController::class, 'store']);
+Route::get('/ordersSup', [OrdersSupController::class, 'index']);

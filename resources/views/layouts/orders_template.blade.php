@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+
 @section('content')
 <div class="container">
     <div class="row">
@@ -22,7 +23,7 @@
                                     </div>
                                     <div class="col-10">
                                         <!-- Input con el número de orden -->
-                                        @stack('orderNumber')
+                                        @stack('orderNumber')                                     
                                     </div>
                                 </div>
                             </div>
@@ -34,10 +35,11 @@
                         <hr class="mt-3 opacity-100" />
                     </div>
                     <div class="col-12 px-5">
-                        @yield('orderContent')
+                        @yield('orderContent')               
                     </div>
                 </div>
-            </div>
+            </div>   
+        @yield('orderFooter')
         </div>
     </div>
 </div>

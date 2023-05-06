@@ -1,10 +1,31 @@
-@extends('layouts.orders_template')
 
-@section('screenName', 'Orden de servicios')
-@push('orderNumber')
-<input type="text" name="" id="" value="0" class="form-control text-end" readonly>
-@endpush
+@extends('layouts.app')
 
-@section('orderContent')
-    <h1>Prueba</h1>
+
+@section('content')
+
+
+
+<div class="container">
+      <a class="btn btn-primary float-right" href="/service-orders/public/ordersSup" >+ Nueva orden de servicio </a>
+      <br>
+    <br>
+      <table id="example" class="table table-striped table-bordered nowrap" style="font-size:13px">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Nombre</th>
+                <th>Fecha</th>
+                <th>Servicio</th>
+                <th>Hora inicio</th>
+                <th>Hora finalización</th>
+                <th>Estado</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        
+    </table>
+</div>
 @endsection
+
+
