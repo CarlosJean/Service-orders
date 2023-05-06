@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateEmployeeRequest;
 use App\Models\Employee;
 use App\Repositories\DepartmentsRepository;
-use App\Repositories\EmployeerRepository;
+use App\Repositories\EmployeeRepository;
 use App\Repositories\RolesRepository;
 
 class EmployeesController extends Controller
@@ -17,7 +17,7 @@ class EmployeesController extends Controller
     protected $departmentsRepository;
     public function __construct(
         RolesRepository $rolesRepository,
-        EmployeerRepository $employeeRepository,
+        EmployeeRepository $employeeRepository,
         DepartmentsRepository $departmentsRepository
     ) {
         $this->rolesRepository = $rolesRepository;

@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Employee;
 
-class EmployeerRepository
+class EmployeeRepository
 {
     
     public function employeeByUserId($userId){  
