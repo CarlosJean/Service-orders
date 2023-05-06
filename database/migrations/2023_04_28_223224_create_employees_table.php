@@ -26,6 +26,7 @@ return new class extends Migration
             ->on('roles');
 
             $table->integer('user_id')
+            ->nullable()
             ->foreign('user_id')
             ->references('id')
             ->on('users');
