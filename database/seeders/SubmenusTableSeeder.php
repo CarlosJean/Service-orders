@@ -117,5 +117,12 @@ class SubmenusTableSeeder extends Seeder
             'menu_id' => 6
         ]);
 
+        //Menú de administración
+        DB::table('submenus')->insert([
+            'name' => 'Registro empleado',
+            'order' => 1,
+            'menu_id' => 7,
+            'url' => 'registro-empleado'
+        ]);
     }
 }

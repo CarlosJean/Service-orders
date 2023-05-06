@@ -50,5 +50,11 @@ class MenusTableSeeder extends Seeder
             'icon' => 'typcn typcn-bookmark',
             'order' => 6,
         ]);
+        
+        DB::table('menus')->insert([
+            'name' => 'Administración',
+            'icon' => 'typcn typcn-bookmark',
+            'order' => 7,
+        ]);
     }
 }
