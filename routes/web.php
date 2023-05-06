@@ -3,6 +3,7 @@
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\OrdersController;
+use App\Http\Controllers\OrdersSupController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,3 +29,4 @@ Route::get('/asignar-tecnico', function(){
     return view('orders.assign_technician');
 });
 Route::get('/orders', [OrdersController::class, 'index']);
+Route::get('/ordersSup', [OrdersSupController::class, 'index']);
