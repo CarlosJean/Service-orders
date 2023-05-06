@@ -6,7 +6,6 @@
 
 @foreach($menu['submenus'] as $submenu)
 <li class="nav-item">
-
     <a class="nav-link" href="{{url($submenu['url'])}}">
         <i class="{{$submenu['icon']}}"></i>
         {{$submenu['name']}}
@@ -23,9 +22,8 @@
 
     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
         @foreach($menu['submenus'] as $submenu)
-        <a class="dropdown-item" href="{{$submenu['url']}}">
+        <a class="dropdown-item" href="{{url($submenu['url'])}}">
             {{$submenu['name']}}
-           
         </a>
         @endforeach
     </div>

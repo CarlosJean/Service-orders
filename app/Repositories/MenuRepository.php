@@ -13,12 +13,12 @@ class MenuRepository
         $userId = auth()->id();
 
         //Find user´s role id
-        $employeerRepository  = new EmployeerRepository();        
+        $employeerRepository  = new EmployeerRepository();
         $roleId = $employeerRepository->employeerByUserId($userId)['roleId'];
-        
+
         //Find user´s role
         $role = Role::where('id', $roleId)
-        ->first();
+            ->first();
 
         //Array to store menus and submenus information
         $submenusByRole = array();
@@ -26,16 +26,20 @@ class MenuRepository
         $currentMenuName = '';
         foreach ($role->submenus as $submenu) {
 
-            $newSubmenu = array('name' => $submenu->name, 'icon' => $submenu?->icon, 'url' => $submenu?->url);
+            $newSubmenu = array(
+                'name' => $submenu->name,
+                'icon' => $submenu?->icon,
+                'url' => $submenu?->url ?? '/'
+            );
 
             $isNewMenu = ($currentMenuName != $submenu->menu?->name);
-            
+
             if ($isNewMenu || $submenu->menu?->name == null) {
 
                 $menu = array(
-                    'name' => $submenu->menu?->name, 
-                    'icon' => $submenu->menu?->icon, 
-                    'url' => $submenu?->url
+                    'name' => $submenu->menu?->name,
+                    'icon' => $submenu->menu?->icon,
+                    'url' => $submenu?->url ?? '/'
                 );
 
                 $newArray = array(

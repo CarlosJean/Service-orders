@@ -38,11 +38,9 @@
                         @yield('orderContent')               
                     </div>
                 </div>
-            </div>s    
+            </div>   
         @yield('orderFooter')
         </div>
     </div>
-    
-    @endsection
-
-  
+</div>
+@endsection
