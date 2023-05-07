@@ -12,7 +12,7 @@ class Employee extends Model
     protected $fillable = ['identification', 'email', 'names', 'last_names', 'role_id','department_id'];
 
     public function user(){
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class);
     }
     
     public function role(){
