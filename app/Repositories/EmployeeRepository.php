@@ -83,8 +83,9 @@ class EmployeeRepository
                     'email' => $employee->email,
                     'password' => Hash::make($employee->email),
                 ]);
-
                 $newUser->save();
+
+                $newEmployee->user_id = $newUser->id;
             }
 
             $newEmployee->save();
@@ -119,12 +120,24 @@ class EmployeeRepository
             $updatedEmployee->department_id = $employee->department_id;
             $updatedEmployee->role_id = $employee->role_id;
 
-            if($employee->email != null){
+            //Si el correo electrónico del empleado cambió lo actualizamos en la tabla de usuarios
+            if($employee->email != null && $employee->user != null){
                 $user = User::find($updatedEmployee->user->id);
                 $user->name = $employee->email;
                 $user->email = $employee->email;
     
                 $user->save();
+            }else if($createUser && $employee->user == null){ 
+                //Si se solicita crear el usuario pero el empleado no tiene entonces se crea 
+                //el nuevo usuario para el empleado.
+
+                $user = new User([
+                    'name' => $employee->email,
+                    'email' => $employee->email,
+                    'password' => Hash::make($employee->email),
+                ]);
+                $user->save();
+                $updatedEmployee->user_id = $user->id;
             }
             
             $updatedEmployee->save();
