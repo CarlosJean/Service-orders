@@ -75,7 +75,7 @@
             </span>
             @endif
         </div>
-        @if($employee->email == null)
+        @if($employee?->user?->id == null)
         <div class="col-6 form-group">
             <div class="form-check row px-0">
                 <label class="form-check-label col-11" for="flexCheckDefault">
