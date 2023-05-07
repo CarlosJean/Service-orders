@@ -31,6 +31,7 @@ Route::get('asignar-tecnico', function(){
 });
 Route::get('/orders', [OrdersController::class, 'index']);
 
-Route::get('registro-empleado', [EmployeesController::class, 'index']);
-Route::post('registro-empleado', [EmployeesController::class, 'store']);
+Route::get('registro-empleado/{id?}', [EmployeesController::class, 'index']);
+Route::post('registro-empleado/{id?}', [EmployeesController::class, 'store']);
+
 Route::get('/ordersSup', [OrdersSupController::class, 'index']);
