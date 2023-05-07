@@ -103,10 +103,10 @@ class EmployeeRepository
 
             $employeeIdByEmail = Employee::where('email', $employee->email)
                 ?->select('id')
-                ?->first();
+                ?->first()
+                ?->id;
 
-
-            if ($employee->email != null && $employeeIdByEmail?->id != $employee->id) {
+            if ($employee->email != null && $employeeIdByEmail != null && $employeeIdByEmail != $employee->id) {
                 $message = 'Ya existe un empleado con el correo ' . $employee->email . '.';
                 throw new UniqueColumnException($message);
             }
