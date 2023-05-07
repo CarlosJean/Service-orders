@@ -5,7 +5,7 @@
         <input type="hidden" name="id" value="{{$employee->id}}">
         <div class="col-6 form-group">
             <label for="txtIdentification">Documento de identificación</label>
-            <input type="text" name="identification" id="txtIdentification" class="form-control" placeholder="Escriba el número de identificación" value="<?= (old('identification') != null) ? old('identification') : $employee->identification; ?>">
+            <input type="text" name="identification" id="txtIdentification" class="form-control" placeholder="Escriba el número de identificación" value="<?= old('identification',$employee->identification)?>">
             @if($errors->first('identification'))
             <span class="text-danger">
                 <?= $errors->first('identification') ?>
@@ -14,7 +14,7 @@
         </div>
         <div class="col-6 form-group">
             <label for="txtEmail">Correo electrónico</label>
-            <input type="email" name="email" id="txtEmail" class="form-control" placeholder="Escriba el correo electrónico" value="<?= (old('email') != null) ? old('email') : $employee->email; ?>">
+            <input type="email" name="email" id="txtEmail" class="form-control" placeholder="Escriba el correo electrónico" value="<?= old('email',$employee->email)?>">
             @if($errors->first('email'))
             <span class="text-danger">
                 <?= $errors->first('email') ?>
@@ -23,7 +23,7 @@
         </div>
         <div class="col-6 form-group">
             <label for="txtNames">Nombres del empleado</label>
-            <input type="text" name="names" id="txtNames" class="form-control" placeholder="Nombres" value="<?= (old('names') != null) ? old('names') : $employee->names; ?>">
+            <input type="text" name="names" id="txtNames" class="form-control" placeholder="Nombres" value="<?= old('names',$employee->names)?>">
             @if($errors->first('names'))
             <span class="text-danger">
                 <?= $errors->first('names') ?>
@@ -32,7 +32,7 @@
         </div>
         <div class="col-6 form-group">
             <label for="txtLastNames">Apellidos del empleado</label>
-            <input type="text" name="last_names" id="txtLastNames" class="form-control" placeholder="Apellidos" value="<?= (old('last_names') != null) ? old('last_names') : $employee->last_names; ?>">
+            <input type="text" name="last_names" id="txtLastNames" class="form-control" placeholder="Apellidos" value="<?= old('last_names',$employee->last_names)?>">
             @if($errors->first('last_names'))
             <span class="text-danger">
                 <?= $errors->first('last_names') ?>
@@ -41,7 +41,7 @@
         </div>
         <div class="col-6 form-group">
             <label for="txtRole">Rol</label>
-            <select id="slcRole" name="role_id" class="form-select" value="<?= old('role_id'); ?>">
+            <select id="slcRole" name="role_id" class="form-select">
                 <option value="">Seleccione un rol</option>
                 @foreach($roles as $role)
                 @if($role['id'] == old('role_id') || $role['id'] == $employee->role_id)
@@ -59,7 +59,7 @@
         </div>
         <div class="col-6 form-group">
             <label for="txtDepartment">Departamento</label>
-            <select id="slcDepartment" name="department_id" class="form-select" value="<?= old('department_id'); ?>">
+            <select id="slcDepartment" name="department_id" class="form-select">
                 <option value="">Seleccione un departamento</option>
                 @foreach($departments as $department)
                 @if($department['id'] == old('department_id') || $department['id'] == $employee->department_id)
