@@ -16,10 +16,10 @@ class Employee extends Model
     }
     
     public function role(){
-        return $this->hasOne(Role::class);
+        return $this->belongsTo(Role::class);
     }
     
     public function Department(){
-        return $this->hasOne(Role::class);
+        return $this->belongsTo(Role::class);
     }
 }
