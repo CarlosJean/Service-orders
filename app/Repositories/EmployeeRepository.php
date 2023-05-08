@@ -6,12 +6,33 @@ use App\Exceptions\NoUserEmailException;
 use App\Exceptions\UniqueColumnException;
 use App\Models\Employee;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use OutOfRangeException;
-use PhpParser\Node\Stmt\TryCatch;
 
 class EmployeeRepository
 {
+
+    public function employees()
+    {
+        $employees = DB::table('employees')
+            ->join('departments', 'employees.department_id', '=', 'departments.id')
+            ->join('roles', 'employees.role_id', '=', 'roles.id')
+            ->leftJoin('users', 'employees.user_id', '=', 'users.id')
+            ->select(
+                'employees.id',
+                'names',
+                'last_names',
+                'identification',
+                'employees.email',
+                'departments.name as department',
+                'roles.name as role',
+                DB::raw('(CASE WHEN user_id IS NULL then "No" ELSE "Sí" END) as has_user ')
+            )
+            ->get();
+
+        return $employees;
+    }
 
     public function employeeByUserId($userId)
     {
@@ -121,13 +142,13 @@ class EmployeeRepository
             $updatedEmployee->role_id = $employee->role_id;
 
             //Si el correo electrónico del empleado cambió lo actualizamos en la tabla de usuarios
-            if($employee->email != null && $employee->user != null){
+            if ($employee->email != null && $employee->user != null) {
                 $user = User::find($updatedEmployee->user->id);
                 $user->name = $employee->email;
                 $user->email = $employee->email;
-    
+
                 $user->save();
-            }else if($createUser && $employee->user == null){ 
+            } else if ($createUser && $employee->user == null) {
                 //Si se solicita crear el usuario pero el empleado no tiene entonces se crea 
                 //el nuevo usuario para el empleado.
 
@@ -139,7 +160,7 @@ class EmployeeRepository
                 $user->save();
                 $updatedEmployee->user_id = $user->id;
             }
-            
+
             $updatedEmployee->save();
         } catch (UniqueColumnException $ex) {
             throw $ex;

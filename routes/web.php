@@ -33,5 +33,6 @@ Route::get('/orders', [OrdersController::class, 'index']);
 
 Route::get('registro-empleado/{id?}', [EmployeesController::class, 'index']);
 Route::post('registro-empleado/{id?}', [EmployeesController::class, 'store']);
+Route::get('employees', [EmployeesController::class, 'getEmployees']);
 
 Route::get('/ordersSup', [OrdersSupController::class, 'index']);

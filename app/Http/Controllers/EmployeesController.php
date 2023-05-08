@@ -84,4 +84,10 @@ class EmployeesController extends Controller
                 ->withErrors(['error' => $e->getMessage()]);
         }
     }
+
+    public function getEmployees(){
+        $employees = $this->employeeRepository->employees();
+
+        echo json_encode($employees);
+    }
 }
