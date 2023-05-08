@@ -10,6 +10,7 @@ export default defineConfig({
                 'resources/sass/app.scss',
                 'resources/js/app.js',
                 'resources/js/azia.js',
+                'resources/js/pruebaDatatable.js'
             ],
             refresh: true,
         }),
