@@ -55,6 +55,7 @@ class MenuRepository
 
             $currentMenuName = $submenu->menu?->name;
         }
+echo json_encode($submenusByRole);
 
         return $submenusByRole;
     }
