@@ -33,7 +33,7 @@ return new class extends Migration
 
             $table->string('names');
             $table->string('last_names');
-            $table->string('identification');
+            $table->string('identification')->unique();
             
             $table->string('email')
             ->nullable()

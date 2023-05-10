@@ -18,7 +18,8 @@
     @vite(['resources/sass/app.scss', 
     'resources/js/app.js',
     'resources/js/azia.js',
-    'resources/css/azia.css'])
+    'resources/css/azia.css',
+    'resources/js/pruebaDatatable.js'])
 </head>
 
 <body>
