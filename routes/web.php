@@ -5,6 +5,11 @@ use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\OrdersSupController;
+use App\Http\Controllers\GestionMaterialesController;
+use App\Http\Controllers\GestionMaterialesBTNController;
+use App\Http\Controllers\DepartamentosController;
+use App\Http\Controllers\ServiciosController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,11 +34,18 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('asignar-tecnico', function(){
     return view('orders.assign_technician');
 });
-Route::get('/orders', [OrdersController::class, 'index']);
 
 Route::get('registro-empleado/{id?}', [EmployeesController::class, 'index']);
 Route::post('registro-empleado/{id?}', [EmployeesController::class, 'store']);
 Route::get('empleados', [EmployeesController::class, 'list']);
 Route::get('getEmployees', [EmployeesController::class, 'getEmployees']);
 
+Route::get('registro-empleado', [EmployeesController::class, 'index']);
+Route::post('registro-empleado', [EmployeesController::class, 'store']);
+Route::get('/orders', [OrdersController::class, 'index']);
 Route::get('/ordersSup', [OrdersSupController::class, 'index']);
+Route::get('/GestionMateriales', [GestionMaterialesController::class, 'index']);
+Route::get('/GestionMaterialesBTN', [GestionMaterialesBTNController::class, 'index']);
+Route::get('/departamentos', [DepartamentosController::class, 'index']);
+Route::get('/servicios', [ServiciosController::class, 'index']);
+
