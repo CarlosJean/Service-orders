@@ -17,14 +17,16 @@ class MenuRepository
         $roleId = $employeeRepository->employeeByUserId($userId)['roleId'];
 
         //Find user´s role
-        $role = Role::where('id', $roleId)
-            ->first();
+        $role = Role::find($roleId);
 
         //Array to store menus and submenus information
         $submenusByRole = array();
 
         $currentMenuName = '';
-        foreach ($role->submenus as $submenu) {
+        $submenus = $role->submenus
+            ->sortBy('menu_id');
+
+        foreach ($submenus as $submenu) {
 
             $newSubmenu = array(
                 'name' => $submenu->name,
