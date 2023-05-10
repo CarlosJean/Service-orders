@@ -5,6 +5,8 @@
 @section('content')
 
 
+@vite(['resources/js/orders.js'])
+
 
 <div class="container">
       <a class="btn btn-primary float-right" href="/service-orders/public/ordersSup" >+ Nueva orden de servicio </a>
@@ -23,8 +25,17 @@
                 <th>Acción</th>
             </tr>
         </thead>
-        
-    </table>
+        <!-- <tbody>
+        <td>No.</td>
+                <td>Nombre</td>
+                <td>Fecha</td>
+                <td>Servicio</td>
+                <td>Hora inicio</td>
+                <td>Hora finalización</td>
+                <td>Estado</td>
+                <td>Acción</td>
+          </tbody>         
+    </table> -->
 </div>
 @endsection
 
