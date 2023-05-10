@@ -13,9 +13,9 @@ class MenuRepository
         $userId = auth()->id();
 
         //Find user´s role id
-        $employeerRepository  = new EmployeeRepository();        
-        $roleId = $employeerRepository->employeeByUserId($userId)['roleId'];
-        
+        $employeeRepository  = new EmployeeRepository();
+        $roleId = $employeeRepository->employeeByUserId($userId)['roleId'];
+
         //Find user´s role
         $role = Role::find($roleId);
 
@@ -28,16 +28,20 @@ class MenuRepository
 
         foreach ($submenus as $submenu) {
 
-            $newSubmenu = array('name' => $submenu->name, 'icon' => $submenu?->icon, 'url' => $submenu?->url);
+            $newSubmenu = array(
+                'name' => $submenu->name,
+                'icon' => $submenu?->icon,
+                'url' => $submenu?->url ?? '/'
+            );
 
             $isNewMenu = ($currentMenuName != $submenu->menu?->name);
-            
+
             if ($isNewMenu || $submenu->menu?->name == null) {
 
                 $menu = array(
-                    'name' => $submenu->menu?->name, 
-                    'icon' => $submenu->menu?->icon, 
-                    'url' => $submenu?->url
+                    'name' => $submenu->menu?->name,
+                    'icon' => $submenu->menu?->icon,
+                    'url' => $submenu?->url ?? '/'
                 );
 
                 $newArray = array(
