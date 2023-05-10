@@ -19,7 +19,7 @@
     'resources/js/app.js',
     'resources/js/azia.js',
     'resources/css/azia.css',
-    'resources/js/pruebaDatatable.js'])
+    'resources/js/employeesList.js'])
 </head>
 
 <body>

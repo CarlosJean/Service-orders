@@ -86,8 +86,17 @@ class EmployeesController extends Controller
     }
 
     public function getEmployees(){
-        $employees = $this->employeeRepository->employees();
+        $employees = $this->employeeRepository
+            ->employees();
+
+        foreach ($employees as $row) {
+            
+        }
 
         echo json_encode($employees);
+    }
+
+    public function list(){
+        return view('employees.list');
     }
 }
