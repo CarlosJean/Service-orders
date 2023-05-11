@@ -6,3 +6,5 @@ window.$ = jquery;
 
 import DataTables from 'datatables.net-bs5';
 import 'datatables.net-responsive-bs5';
+
+import '../css/createOrder.css';

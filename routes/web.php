@@ -9,7 +9,7 @@ use App\Http\Controllers\GestionMaterialesController;
 use App\Http\Controllers\GestionMaterialesBTNController;
 use App\Http\Controllers\DepartamentosController;
 use App\Http\Controllers\ServiciosController;
-
+use App\Http\Controllers\ServiceOrdersController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -49,3 +49,10 @@ Route::get('/GestionMaterialesBTN', [GestionMaterialesBTNController::class, 'ind
 Route::get('/departamentos', [DepartamentosController::class, 'index']);
 Route::get('/servicios', [ServiciosController::class, 'index']);
 
+Route::prefix('ordenes-servicio')->group(function(){
+    Route::get('/','ServiceOrdersController@index');
+    Route::get('crear',[ServiceOrdersController::class,'create']);
+    Route::get('asignar-tecnico','ServiceOrderController@assignTechnician');
+    Route::post('crear',[ServiceOrdersController::class,'store']);
+    Route::post('asignar-tecnico','ServiceOrderController@assignTechnician');
+});

@@ -19,7 +19,7 @@ class Employee extends Model
         return $this->belongsTo(Role::class);
     }
     
-    public function Department(){
-        return $this->belongsTo(Role::class);
+    public function department(){
+        return $this->belongsTo(Department::class);
     }
 }
