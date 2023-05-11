@@ -18,9 +18,27 @@ class EmployeesTableSeeder extends Seeder
             'last_names' => 'Holguin Berihuete',
             'identification' => '40225628558',
             'email' => 'holguinjean1@gmail.com',
-            'department_id'=> 1,
-            'role_id'=> 1,
-            'user_id'=> 1,
+            'department_id' => 1,
+            'role_id' => 1,
+            'user_id' => 1,
+        ]);
+        DB::table('employees')->insert([
+            'names' => 'Jhosua',
+            'last_names' => 'Brown',
+            'identification' => '00154678949',
+            'email' => 'jhosuabrown@gmail.com',
+            'department_id' => 2,
+            'role_id' => 2,
+            'user_id' => 2,
+        ]);
+        DB::table('employees')->insert([
+            'names' => 'Yoel',
+            'last_names' => 'Yoel',
+            'identification' => '00154678948',
+            'email' => 'yoel@gmail.com',
+            'department_id' => 3,
+            'role_id' => 2,
+            'user_id' => 3,
         ]);
     }
 }
