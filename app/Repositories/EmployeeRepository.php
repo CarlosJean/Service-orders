@@ -152,7 +152,7 @@ class EmployeeRepository
             //Si el correo electrónico del empleado cambió lo actualizamos en la tabla de usuarios
             if ($employee->email != null && $employee->user != null) {
                 $user = User::find($updatedEmployee->user->id);
-                $user->name = $employee->email;
+                $user->name = $employee->names.' '.$employee->last_names;
                 $user->email = $employee->email;
 
                 $user->save();
@@ -161,7 +161,7 @@ class EmployeeRepository
                 //el nuevo usuario para el empleado.
 
                 $user = new User([
-                    'name' => $employee->email,
+                    'name' => $employee->names.' '.$employee->last_names,
                     'email' => $employee->email,
                     'password' => Hash::make($employee->email),
                 ]);
