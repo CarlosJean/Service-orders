@@ -31,6 +31,9 @@ class EmployeesController extends Controller
 
     public function index($id = null)
     {
+        if (auth()->guest()) {
+            return redirect('login');
+        }
 
         $roles = $this->rolesRepository->roles();
         $deparments = $this->departmentsRepository->departments();
@@ -85,18 +88,16 @@ class EmployeesController extends Controller
         }
     }
 
-    public function getEmployees(){
+    public function getEmployees()
+    {
         $employees = $this->employeeRepository
             ->employees();
-
-        foreach ($employees as $row) {
-            
-        }
 
         echo json_encode($employees);
     }
 
-    public function list(){
+    public function list()
+    {
         return view('employees.list');
     }
 }
