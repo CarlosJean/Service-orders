@@ -14,7 +14,7 @@
                         <div class="row">
                             <!-- Nombre de la orden -->
                             <div class="col-12 text-end">
-                                <h3>@yield('screenName', 'Órdenes de...')</h3>
+                                <h3><strong>@yield('screenName', 'Órdenes de...')</strong></h3>
                             </div>
                             <div class="col-12">
                                 <div class="row align-items-center">
@@ -23,7 +23,7 @@
                                     </div>
                                     <div class="col-10">
                                         <!-- Input con el número de orden -->
-                                        @stack('orderNumber')                                     
+                                        @stack('orderNumber')
                                     </div>
                                 </div>
                             </div>
@@ -35,11 +35,11 @@
                         <hr class="mt-3 opacity-100" />
                     </div>
                     <div class="col-12 px-5">
-                        @yield('orderContent')               
+                        @yield('orderContent')
                     </div>
                 </div>
-            </div>   
-        @yield('orderFooter')
+            </div>
+            @yield('orderFooter')
         </div>
     </div>
 </div>

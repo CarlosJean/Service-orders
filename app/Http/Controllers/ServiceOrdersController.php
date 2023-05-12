@@ -21,8 +21,15 @@ class ServiceOrdersController extends Controller
         $this->ordersRepository = $ordersRepository;
     }
 
+    public function index(){
+        
+        return view('orders.index');
+    }
+
     public function create()
     {
+        if (auth()->guest()) return redirect('login');
+
         $userId = auth()->user()->id;
 
         $orderNumber = $this->ordersRepository->orderNumber();
@@ -40,10 +47,29 @@ class ServiceOrdersController extends Controller
 
     public function store(CreateOrderRequest $request)
     {
-        $issue = $request->input('issue');
-        $orderNumber = $request->input('order_number');
+        try {
+            $issue = $request->input('issue');
+            $orderNumber = $request->input('order_number');
+    
+            $this->ordersRepository->createOrder($issue, $orderNumber);
+    
+            return view('orders.created')->with('orderNumber', $orderNumber);
+        } catch (\Throwable $th) {
+            //throw $th;
 
-        $this->ordersRepository->createOrder($issue,$orderNumber);
-        return back();
+            if ($th->getCode() == 1) {
+                return back()->withErrors(['error' => $th->getMessage()]);
+            }
+        }
+    }
+
+    public function getOrders(){
+        $userId = auth()->id();
+        $serviceOrders = $this->ordersRepository->serviceOrdersByUserId($userId);
+        return $serviceOrders;
+    }
+
+    public function assignTechnician($orderNumber){
+        return view('orders.assign_technician');
     }
 }

@@ -26,7 +26,14 @@ class CreateOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'issue' => 'required'
+        ];
+    }
+
+    public function messages() : array
+    {
+        return [
+            'issue' => 'Debe especificar el inconveniente.',
         ];
     }
 }
