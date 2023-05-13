@@ -14,10 +14,24 @@ class UsersTableSeeder extends Seeder
      */
     public function run(): void
     {
+        DB::table('users')->insert(
+            [
+                'name' => 'holguinjean1@gmail.com',
+                'email' => 'holguinjean1@gmail.com',
+                'password' => Hash::make('holguinjean1@gmail.com'),
+            ]
+        );
+        DB::table('users')->insert(
+            [
+                'name' => 'jhosuabrown@gmail.com',
+                'email' => 'jhosuabrown@gmail.com',
+                'password' => Hash::make('jhosuabrown@gmail.com'),
+            ]
+        );        
         DB::table('users')->insert([
-            'name' => 'holguinjean1@gmail.com',
-            'email' => 'holguinjean1@gmail.com',
-            'password' => Hash::make('holguinjean1@gmail.com'),
+            'name' => 'yoel@gmail.com',
+            'email' => 'yoel@gmail.com',
+            'password' => Hash::make('yoel@gmail.com'),
         ]);
     }
 }

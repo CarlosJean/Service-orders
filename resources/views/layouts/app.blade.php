@@ -15,11 +15,13 @@
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
     <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 
+    @vite(['resources/sass/app.scss',
     'resources/js/app.js',
     'resources/js/azia.js',
     'resources/css/azia.css',
-    'resources/js/employeesList.js'])
+    'resources/js/employeesList.js',
+    'resources/js/serviceOrders.js',
+    ])
 </head>
 
 <body>

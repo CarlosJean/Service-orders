@@ -101,7 +101,7 @@ class SubmenusTableSeeder extends Seeder
             'name' => 'Órdenes de servicios',
             'order' => 3,
             'menu_id' => 5,
-            'URL' => 'orders'
+            'URL' => 'ordenes-servicio'
         ]);
         
         DB::table('submenus')->insert([
