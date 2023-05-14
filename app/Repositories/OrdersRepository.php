@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Order;
+use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -92,6 +93,78 @@ class OrdersRepository
         } catch (\Throwable $th) {
             //throw $th;
             var_dump($th);
+        }
+    }
+
+    public function serviceOrderByNumber($orderNumber)
+    {
+        try {
+            $order = DB::table('orders')
+                ->join('users', 'orders.requestor', '=', 'users.id')
+                ->join('employees as e', 'users.id', '=', 'e.user_id')
+                ->select(
+                    'orders.id',
+                    DB::raw('concat(e.names," ",e.last_names) requestor'),
+                    DB::raw('DATE_FORMAT(orders.created_at, "%d/%c/%Y %r") created_at'),
+                    'orders.issue',
+                    'orders.number',
+                    DB::raw('orders.assignation_date'),
+                    'orders.status',
+                    'orders.observations',
+                    'orders.technician',
+                )
+                ->where('number', $orderNumber)
+                ->first();
+
+            if ($order == null) {
+                throw new Exception('No existe una orden de servicio con este número.', 1);
+            }
+
+            return $order;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function assignTechnician($orderNumber, $technicianId)
+    {
+
+        try {
+            $order = Order::where('number', $orderNumber)
+                ->first();
+            if ($order == null) {
+                return new Exception('No se encontró la orden número ' . $orderNumber);
+            }
+
+            $technicianUser = User::find($technicianId);
+
+            if ($technicianUser == null) throw new Exception('El técnico indicado es incorrecto.');
+
+            $order->technician = $technicianId;
+            $order->assignation_date = now();
+
+            $order->save();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function disapprove($orderNumber, $observations)
+    {
+        try {
+            $order = Order::where('number', $orderNumber)
+                ->first();
+
+            if ($order == null) {
+                return new Exception('No se encontró la orden número ' . $orderNumber);
+            }
+
+            $order->observations = $observations;
+            $order->status = 'desaprobado';
+            $order->save();
+
+        } catch (\Throwable $th) {
+            throw $th;
         }
     }
 }

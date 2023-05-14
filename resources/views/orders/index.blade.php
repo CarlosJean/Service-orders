@@ -1,3 +1,8 @@
+@vite([
+'resources/js/app.js',
+'resources/js/serviceOrders.js',
+])
+
 @extends('layouts.app')
 
 @section('content')

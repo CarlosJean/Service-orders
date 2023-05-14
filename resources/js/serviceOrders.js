@@ -5,7 +5,6 @@ $(document).ready(function () {
         dataType: 'json',
     })
         .done(function (employees) {
-            console.log(employees);
             $("#spinner").css('display', 'none');
 
             $('#ordersTable').DataTable({
@@ -17,9 +16,9 @@ $(document).ready(function () {
                     { data: 'status', title: 'Estado' },
                     { data: 'technician', title: 'Técnico asignado' },
                 ],
-                dom:"<'row justify-content-end'<'col-3'f><'col-12't><'col-12'<'row justify-content-center'<'col-3'p>>>>",
-                language:{
-                    url:'https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'
+                dom: "<'row justify-content-end'<'col-3'f><'col-12't><'col-12'<'row justify-content-center'<'col-3'p>>>>",
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'
                 }
             });
         });

@@ -1,5 +1,10 @@
 @extends('layouts.app')
 
+@vite([
+'resources/js/app.js',
+'resources/js/employeesList.js'
+])
+
 @section('content')
 <div class="container">
     <div class="card shadow p-3">

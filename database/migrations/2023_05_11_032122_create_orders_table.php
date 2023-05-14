@@ -42,6 +42,8 @@ return new class extends Migration
                 ->nullable();
             $table->datetime('assignation_date')
                 ->nullable();
+            $table->string('observations')
+                ->nullable();
         });
     }
 
