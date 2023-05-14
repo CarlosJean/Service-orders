@@ -1,25 +1,48 @@
-$(document).ready(function () {
+
+
+$(function () {
     $.ajax({
         url: 'ordenes-servicio/getOrders',
         type: 'get',
         dataType: 'json',
     })
-        .done(function (employees) {
+        .done(function (orders) {
             $("#spinner").css('display', 'none');
 
-            $('#ordersTable').DataTable({
-                data: employees,
-                columns: [
-                    { data: 'id', title: 'Id' },
-                    { data: 'order_number', title: 'Número de órden' },
-                    { data: 'created_at', title: 'Fecha y hora de creación' },
-                    { data: 'status', title: 'Estado' },
-                    { data: 'technician', title: 'Técnico asignado' },
-                ],
+            const table = $('#ordersTable').DataTable({
+                data: orders.data,
+                columns: columnsByUserRole(orders.user_role),
                 dom: "<'row justify-content-end'<'col-3'f><'col-12't><'col-12'<'row justify-content-center'<'col-3'p>>>>",
                 language: {
                     url: 'https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'
-                }
+                },
+                responsive:true
             });
+
+            table.columns(0).visible(false);
         });
+    newOrderButton();
 });
+
+const columnsByUserRole = function (userRole) {
+    if (userRole == 'departmentSupervisor') {
+        return [
+            { data: 'id', title: 'Id' },
+            { data: 'order_number', title: 'Número de órden' },
+            { data: 'created_at', title: 'Fecha y hora de creación' },
+            { data: 'status', title: 'Estado' },
+            { data: 'technician', title: 'Técnico asignado' },
+        ]
+    } else if (userRole == 'maintenanceSupervisor') {
+        return [
+            { data: 'id', title: 'Id' },
+            { data: 'order_number', title: 'Número de órden' },
+            { data: 'created_at', title: 'Fecha y hora de creación' },
+            { data: 'requestor', title: 'Solicitante' },
+            {
+                data: 'order_number',
+                render: (orderNumber) => "<a href='ordenes-servicio/asignar-tecnico/" + orderNumber + "' class='btn btn-primary'>Desaprobar o asignar técnico</a>"
+            },
+        ]
+    }
+}

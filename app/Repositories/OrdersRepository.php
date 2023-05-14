@@ -57,13 +57,17 @@ class OrdersRepository
         try {
             $employee = $this->employeeRepository->employeeByUserId($userId);
 
-            $orders = [];
+            $orders = ['user_role' => ''];
 
             $isDepartmentSupervisor = ($employee['role']->id == 2 && $employee['department']->id != 2);
             $isMaintenanceDepartmentSupervisor = ($employee['role']->id == 2 && $employee['department']->id == 2);
 
             if ($isDepartmentSupervisor) {
+                $orders['user_role'] = 'departmentSupervisor';
                 $orders = $this->departmentSupervisorOrders($userId);
+            } else if ($isMaintenanceDepartmentSupervisor) {
+                $orders['user_role'] = 'maintenanceSupervisor';
+                $orders = $this->maintenanceSupervisorOrders();
             }
 
             return $orders;
@@ -75,7 +79,9 @@ class OrdersRepository
     private function departmentSupervisorOrders($userId)
     {
         try {
-            $orders = DB::table('orders')
+            $orders = ['user_role' => 'departmentSupervisor', 'data' => []];
+
+            $data = DB::table('orders')
                 ->leftJoin('users', 'orders.technician', '=', 'users.id')
                 ->leftJoin('employees', 'users.id', '=', 'employees.user_id')
                 ->where('requestor', $userId)
@@ -88,6 +94,8 @@ class OrdersRepository
                     DB::raw('(CASE WHEN orders.technician is null THEN "Sin asignar" ELSE employees.names+" "+employees.last_names END) technician')
                 )
                 ->get();
+
+            $orders['data'] = $data;
 
             return $orders;
         } catch (\Throwable $th) {
@@ -162,9 +170,34 @@ class OrdersRepository
             $order->observations = $observations;
             $order->status = 'desaprobado';
             $order->save();
-
         } catch (\Throwable $th) {
             throw $th;
         }
+    }
+
+    public function maintenanceSupervisorOrders()
+    {
+
+        $orders = ['user_role' => 'maintenanceSupervisor', 'data' => []];
+
+        $data = DB::table('orders')
+            ->join('users', 'orders.requestor', '=', 'users.id')
+            ->join('employees as e', 'users.id', '=', 'e.user_id')
+            ->select(
+                'orders.id',
+                DB::raw('concat(e.names," ",e.last_names) requestor'),
+                DB::raw('DATE_FORMAT(orders.created_at, "%d/%c/%Y %r") created_at'),
+                'orders.issue',
+                'orders.number as order_number',
+            )
+            ->where('status', 'pendiente de asignar')
+            ->where('assignation_date', null)
+            ->where('technician', null)
+            ->get();
+
+
+        $orders['data'] = $data;
+
+        return $orders;
     }
 }

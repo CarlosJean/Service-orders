@@ -1,8 +1,3 @@
-@vite([
-'resources/js/app.js',
-'resources/js/assignTechnician.js',
-])
-
 @extends('layouts.orders_template')
 
 @section('screenName','Órden de servicio')
@@ -101,8 +96,14 @@
     @endif
     <div class="col-12 p-0">
         <div class="row justify-content-center">
-            <a class="btn btn-primary col-3" href="http://localhost/service-orders/public/ordenes-servicio">Volver</a>
+            <a class="btn btn-secondary col-3" href="http://localhost/service-orders/public/ordenes-servicio">Volver</a>
         </div>
     </div>
 </div>
 @endsection
+
+<!-- Scripts -->
+@vite([
+'resources/js/app.js',
+'resources/js/assignTechnician.js',
+])
