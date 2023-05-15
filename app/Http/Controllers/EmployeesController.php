@@ -23,7 +23,9 @@ class EmployeesController extends Controller
         RolesRepository $rolesRepository,
         EmployeeRepository $employeeRepository,
         DepartmentsRepository $departmentsRepository
-    ) {
+    ) 
+    
+    {
         $this->rolesRepository = $rolesRepository;
         $this->employeeRepository = $employeeRepository;
         $this->departmentsRepository = $departmentsRepository;
