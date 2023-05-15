@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Exceptions\NoUserEmailException;
 use App\Exceptions\UniqueColumnException;
 use App\Models\Employee;
+use App\Models\Service;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -36,10 +37,10 @@ class EmployeeRepository
 
     public function employeeByUserId($userId)
     {
-        try {           
-            
-            $employeeModel =  Employee::find($userId);            
-    
+        try {
+
+            $employeeModel =  Employee::find($userId);
+
             $employee = array(
                 'id' => $employeeModel->id,
                 'roleId' => $employeeModel->role_id,
@@ -51,9 +52,9 @@ class EmployeeRepository
                 'department' => $employeeModel->department,
                 'role' => $employeeModel->role,
             );
-            
+
             return $employee;
-        }catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             var_dump($th);
             //throw $th;
         }
@@ -152,7 +153,7 @@ class EmployeeRepository
             //Si el correo electrónico del empleado cambió lo actualizamos en la tabla de usuarios
             if ($employee->email != null && $employee->user != null) {
                 $user = User::find($updatedEmployee->user->id);
-                $user->name = $employee->names.' '.$employee->last_names;
+                $user->name = $employee->names . ' ' . $employee->last_names;
                 $user->email = $employee->email;
 
                 $user->save();
@@ -161,7 +162,7 @@ class EmployeeRepository
                 //el nuevo usuario para el empleado.
 
                 $user = new User([
-                    'name' => $employee->names.' '.$employee->last_names,
+                    'name' => $employee->names . ' ' . $employee->last_names,
                     'email' => $employee->email,
                     'password' => Hash::make($employee->email),
                 ]);
@@ -185,5 +186,24 @@ class EmployeeRepository
         } catch (\Throwable $th) {
             throw new OutOfRangeException();
         }
+    }
+
+    public function employeesByService($serviceId)
+    {
+
+        $employeesByService = Service::with('employees')
+            ->where('id',$serviceId)
+            ->first()
+            ->employees;
+
+        $employees = [];
+        foreach($employeesByService as $employee){
+            array_push($employees, [
+                'id' => $employee->user->id,
+                'name' => $employee->names.' '.$employee->last_names,
+            ]);
+        }
+
+        return $employees;
     }
 }

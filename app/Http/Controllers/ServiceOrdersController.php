@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AssignTechnicianToOrderRequest;
 use App\Http\Requests\CreateOrderRequest;
+use App\Http\Requests\DisapproveServiceOrderRequest;
 use App\Models\Order;
 use App\Repositories\EmployeeRepository;
 use App\Repositories\OrdersRepository;
+use App\Repositories\ServicesRepository;
 use Illuminate\Http\Request;
 
 class ServiceOrdersController extends Controller
@@ -14,11 +17,16 @@ class ServiceOrdersController extends Controller
 
     protected $employeeRepository;
     protected $ordersRepository;
+    protected $servicesRepository;
 
-    public function __construct(EmployeeRepository $employeeRepository, OrdersRepository $ordersRepository)
+    public function __construct(
+        EmployeeRepository $employeeRepository, 
+        OrdersRepository $ordersRepository,
+        ServicesRepository $servicesRepository)
     {
         $this->employeeRepository = $employeeRepository;
         $this->ordersRepository = $ordersRepository;
+        $this->servicesRepository = $servicesRepository;
     }
 
     public function index(){
@@ -69,7 +77,60 @@ class ServiceOrdersController extends Controller
         return $serviceOrders;
     }
 
-    public function assignTechnician($orderNumber){
-        return view('orders.assign_technician');
+    public function assignTechnicianCreate($orderNumber){
+
+        try {
+            $serviceOrder = $this->ordersRepository->serviceOrderByNumber($orderNumber);
+            return view('orders.assign_technician')->with('order',$serviceOrder);
+        } catch (\Throwable $th) {
+            //throw $th;
+            var_dump($th);
+        }
+    }
+
+    public function getServices() {
+        return $this->servicesRepository->services();
+    }
+
+    public function getEmployeesByService($idService){
+        return $this->employeeRepository->employeesByService($idService);
+    }
+
+    public function assignTechnicianUpdate(AssignTechnicianToOrderRequest $request){    
+        try {            
+            $serviceOrderNumber  = $request->input('order_number');
+            $technicianId = $request->input('technician_id');
+
+
+            $this->ordersRepository->assignTechnician($serviceOrderNumber, $technicianId);
+
+            $employee = $this->employeeRepository->employeeByUserId($technicianId);
+            $technician = $employee['names'].' '.$employee['last_names'];
+            
+            return view('orders.assigned_technician')
+                ->with([
+                    'orderNumber' => $serviceOrderNumber,
+                    'technician' => $technician,
+                ]);
+        } catch (\Throwable $th) {
+            var_dump($th);
+            //throw $th;
+        }    
+    }   
+
+    public function disapproveUpdate(DisapproveServiceOrderRequest $request){
+        try {
+            $serviceOrderNumber  = $request->input('order_number');
+            $observations = $request->input('observations');          
+            
+            $this->ordersRepository->disapprove($serviceOrderNumber, $observations);
+            
+            return view('orders.disaproved')
+                ->with([
+                    'orderNumber' => $serviceOrderNumber,
+                ]);
+        } catch (\Throwable $th) {
+            var_dump($th);
+        }
     }
 }

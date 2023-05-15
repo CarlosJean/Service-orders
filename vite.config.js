@@ -12,6 +12,7 @@ export default defineConfig({
                 'resources/js/azia.js',
                 'resources/js/employeesList.js',
                 'resources/js/serviceOrders.js',
+                'resources/js/assignTechnician.js',
             ],
             refresh: true,
         }),

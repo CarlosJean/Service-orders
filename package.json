@@ -16,6 +16,7 @@
         "datatables.net-bs5": "^1.13.4",
         "datatables.net-responsive-bs5": "^2.4.1",
         "jquery": "^3.6.4",
+        "select2": "^4.1.0-rc.0",
         "typicons.font": "^2.1.2"
     }
 }

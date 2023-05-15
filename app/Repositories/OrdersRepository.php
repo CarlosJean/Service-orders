@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Order;
+use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -56,13 +57,17 @@ class OrdersRepository
         try {
             $employee = $this->employeeRepository->employeeByUserId($userId);
 
-            $orders = [];
+            $orders = ['user_role' => ''];
 
             $isDepartmentSupervisor = ($employee['role']->id == 2 && $employee['department']->id != 2);
             $isMaintenanceDepartmentSupervisor = ($employee['role']->id == 2 && $employee['department']->id == 2);
 
             if ($isDepartmentSupervisor) {
+                $orders['user_role'] = 'departmentSupervisor';
                 $orders = $this->departmentSupervisorOrders($userId);
+            } else if ($isMaintenanceDepartmentSupervisor) {
+                $orders['user_role'] = 'maintenanceSupervisor';
+                $orders = $this->maintenanceSupervisorOrders();
             }
 
             return $orders;
@@ -74,7 +79,9 @@ class OrdersRepository
     private function departmentSupervisorOrders($userId)
     {
         try {
-            $orders = DB::table('orders')
+            $orders = ['user_role' => 'departmentSupervisor', 'data' => []];
+
+            $data = DB::table('orders')
                 ->leftJoin('users', 'orders.technician', '=', 'users.id')
                 ->leftJoin('employees', 'users.id', '=', 'employees.user_id')
                 ->where('requestor', $userId)
@@ -88,6 +95,8 @@ class OrdersRepository
                 )
                 ->get();
 
+            $orders['data'] = $data;
+
             return $orders;
         } catch (\Throwable $th) {
             //throw $th;
@@ -95,5 +104,100 @@ class OrdersRepository
         }
     }
 
-    
+    public function serviceOrderByNumber($orderNumber)
+    {
+        try {
+            $order = DB::table('orders')
+                ->join('users', 'orders.requestor', '=', 'users.id')
+                ->join('employees as e', 'users.id', '=', 'e.user_id')
+                ->select(
+                    'orders.id',
+                    DB::raw('concat(e.names," ",e.last_names) requestor'),
+                    DB::raw('DATE_FORMAT(orders.created_at, "%d/%c/%Y %r") created_at'),
+                    'orders.issue',
+                    'orders.number',
+                    DB::raw('orders.assignation_date'),
+                    'orders.status',
+                    'orders.observations',
+                    'orders.technician',
+                )
+                ->where('number', $orderNumber)
+                ->first();
+
+            if ($order == null) {
+                throw new Exception('No existe una orden de servicio con este número.', 1);
+            }
+
+            return $order;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function assignTechnician($orderNumber, $technicianId)
+    {
+
+        try {
+            $order = Order::where('number', $orderNumber)
+                ->first();
+            if ($order == null) {
+                return new Exception('No se encontró la orden número ' . $orderNumber);
+            }
+
+            $technicianUser = User::find($technicianId);
+
+            if ($technicianUser == null) throw new Exception('El técnico indicado es incorrecto.');
+
+            $order->technician = $technicianId;
+            $order->assignation_date = now();
+
+            $order->save();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function disapprove($orderNumber, $observations)
+    {
+        try {
+            $order = Order::where('number', $orderNumber)
+                ->first();
+
+            if ($order == null) {
+                return new Exception('No se encontró la orden número ' . $orderNumber);
+            }
+
+            $order->observations = $observations;
+            $order->status = 'desaprobado';
+            $order->save();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function maintenanceSupervisorOrders()
+    {
+
+        $orders = ['user_role' => 'maintenanceSupervisor', 'data' => []];
+
+        $data = DB::table('orders')
+            ->join('users', 'orders.requestor', '=', 'users.id')
+            ->join('employees as e', 'users.id', '=', 'e.user_id')
+            ->select(
+                'orders.id',
+                DB::raw('concat(e.names," ",e.last_names) requestor'),
+                DB::raw('DATE_FORMAT(orders.created_at, "%d/%c/%Y %r") created_at'),
+                'orders.issue',
+                'orders.number as order_number',
+            )
+            ->where('status', 'pendiente de asignar')
+            ->where('assignation_date', null)
+            ->where('technician', null)
+            ->get();
+
+
+        $orders['data'] = $data;
+
+        return $orders;
+    }
 }

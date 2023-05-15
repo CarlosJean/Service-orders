@@ -52,8 +52,11 @@ Route::get('/services', [ServicesController::class, 'index']);
 Route::prefix('ordenes-servicio')->group(function(){
     Route::get('/',[ServiceOrdersController::class,'index']);
     Route::get('crear',[ServiceOrdersController::class,'create']);
-    Route::get('asignar-tecnico/{orderNumber}',[ServiceOrdersController::class, 'assignTechnician']);
+    Route::get('asignar-tecnico/{orderNumber}',[ServiceOrdersController::class, 'assignTechnicianCreate']);
     Route::get('getOrders', [ServiceOrdersController::class, 'getOrders']);
+    Route::get('get-services', [ServiceOrdersController::class, 'getServices']);
+    Route::get('get-employees-by-service/{serviceId}', [ServiceOrdersController::class, 'getEmployeesByService']);
     Route::post('crear',[ServiceOrdersController::class,'store']);
-    Route::post('asignar-tecnico','ServiceOrderController@assignTechnician');
+    Route::post('asignar-tecnico',[ServiceOrdersController::class,'assignTechnicianUpdate']);
+    Route::post('desaprobar',[ServiceOrdersController::class,'disapproveUpdate']);
 });
