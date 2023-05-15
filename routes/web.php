@@ -8,7 +8,7 @@ use App\Http\Controllers\OrdersSupController;
 use App\Http\Controllers\GestionMaterialesController;
 use App\Http\Controllers\GestionMaterialesBTNController;
 use App\Http\Controllers\DepartamentosController;
-use App\Http\Controllers\ServiciosController;
+use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\ServiceOrdersController;
 use Illuminate\Support\Facades\Route;
 
@@ -47,7 +47,7 @@ Route::get('/ordersSup', [OrdersSupController::class, 'index']);
 Route::get('/GestionMateriales', [GestionMaterialesController::class, 'index']);
 Route::get('/GestionMaterialesBTN', [GestionMaterialesBTNController::class, 'index']);
 Route::get('/departamentos', [DepartamentosController::class, 'index']);
-Route::get('/servicios', [ServiciosController::class, 'index']);
+Route::get('/services', [ServicesController::class, 'index']);
 
 Route::prefix('ordenes-servicio')->group(function(){
     Route::get('/',[ServiceOrdersController::class,'index']);
