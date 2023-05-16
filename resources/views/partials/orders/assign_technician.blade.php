@@ -1,29 +1,5 @@
-@extends('layouts.orders_template')
-
-@section('screenName','Órden de servicio')
-@push('orderNumber')
-<input type="text" value="{{$order->number}}" readonly id="txt_order_number" class="form-control">
-@endpush
-
-@section('orderContent')
 <div class="row justify-content-end p-3">
-    <div class="col-12">
-        <h3>Detalle de la orden</h3>
-        <hr class="opacity-100">
-    </div>
-
-    <div class="form-group col-6">
-        <label for="txt_required_by">Requerido por</label>
-        <input type="text" name="" id="txt_required_by" readonly class="form-control" value="{{$order->requestor}}">
-    </div>
-    <div class="form-group col-6">
-        <label for="txt_requird_by">Fecha y hora de solicitud</label>
-        <input type="text" name="" id="txt_requird_by" readonly class="form-control" value="{{$order->created_at}}">
-    </div>
-    <div class="form-group col-12">
-        <label for="">Problema</label>
-        <textarea name="" id="" cols="30" rows="5" class="form-control" readonly>{{$order->issue}}</textarea>
-    </div>
+    @include('partials.orders.detail')
     @if($order->status != 'desaprobado' && $order->observations == null)
     <div class="col-12">
         <h3>Asignación de técnico</h3>
@@ -100,7 +76,6 @@
         </div>
     </div>
 </div>
-@endsection
 
 <!-- Scripts -->
 @vite([

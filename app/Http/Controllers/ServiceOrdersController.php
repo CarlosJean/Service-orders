@@ -133,4 +133,28 @@ class ServiceOrdersController extends Controller
             var_dump($th);
         }
     }
+
+
+    public function show($orderNumber){
+        $userId = auth()->id();
+        $employee = $this->employeeRepository
+            ->employeeByUserId($userId);
+
+        $roleId = $employee['role']->id;
+        $departmentId = $employee['department']->id;
+        
+        $userRole = '';
+        if($departmentId = 2 && $roleId == 2 ){
+            $userRole = 'maintenanceSupervisor';
+        }else if($departmentId = 2 && $roleId == 3 ){
+            $userRole = 'technician';
+        }
+
+        $serviceOrder = $this->ordersRepository->serviceOrderByNumber($orderNumber);
+
+        return view('orders.show')->with([
+            'order' => $serviceOrder,
+            'userRole' => $userRole
+        ]);
+    }
 }

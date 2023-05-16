@@ -8,6 +8,7 @@ use App\Http\Controllers\OrdersSupController;
 use App\Http\Controllers\GestionMaterialesController;
 use App\Http\Controllers\GestionMaterialesBTNController;
 use App\Http\Controllers\DepartamentosController;
+use App\Http\Controllers\QuotesController;
 use App\Http\Controllers\ServiciosController;
 use App\Http\Controllers\ServiceOrdersController;
 use Illuminate\Support\Facades\Route;
@@ -52,6 +53,7 @@ Route::get('/servicios', [ServiciosController::class, 'index']);
 Route::prefix('ordenes-servicio')->group(function(){
     Route::get('/',[ServiceOrdersController::class,'index']);
     Route::get('crear',[ServiceOrdersController::class,'create']);
+    Route::get('{orderNumber}',[ServiceOrdersController::class,'show']);
     Route::get('asignar-tecnico/{orderNumber}',[ServiceOrdersController::class, 'assignTechnicianCreate']);
     Route::get('getOrders', [ServiceOrdersController::class, 'getOrders']);
     Route::get('get-services', [ServiceOrdersController::class, 'getServices']);
@@ -59,4 +61,10 @@ Route::prefix('ordenes-servicio')->group(function(){
     Route::post('crear',[ServiceOrdersController::class,'store']);
     Route::post('asignar-tecnico',[ServiceOrdersController::class,'assignTechnicianUpdate']);
     Route::post('desaprobar',[ServiceOrdersController::class,'disapproveUpdate']);
+});
+
+
+Route::prefix('cotizaciones')->group(function(){
+    Route::get('crear', [QuotesController::class, 'create']);
+    Route::post('crear', [QuotesController::class, 'store']);
 });
