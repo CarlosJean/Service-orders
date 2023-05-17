@@ -13,6 +13,7 @@ export default defineConfig({
                 'resources/js/employeesList.js',
                 'resources/js/serviceOrders.js',
                 'resources/js/assignTechnician.js',
+                'resources/js/quotes.js',
             ],
             refresh: true,
         }),
