@@ -4,7 +4,7 @@
 <di class="container">
     <div class="row justify-content-center">
         <div class="card col-6 p-3">
-            <h2>¡Órden dsaprobada satisfactoriamente!</h2>
+            <h2>¡Órden desaprobada satisfactoriamente!</h2>
             <hr class="opacity-100">
             <p>La orden número <strong>{{$orderNumber}}</strong> ha sido desaprobada satisfactoriamente.</p>
             <div class="row justify-content-end">                

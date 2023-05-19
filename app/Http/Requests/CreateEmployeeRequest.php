@@ -22,7 +22,7 @@ class CreateEmployeeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'identification' => 'required|max:20|min:8',
+            'identification' => 'required|max:15|min:8|regex:/^[0-9]+$/',
             'names' => 'required',
             'last_names' => 'required',
             'role_id' => 'required',
@@ -34,8 +34,9 @@ class CreateEmployeeRequest extends FormRequest
     {
         return [
             'identification.required' => 'Debe indicar un número de documento de identificación.',
-            'identification.max' => 'La cantidad máxima de caracteres es de 20.',
+            'identification.max' => 'La cantidad máxima de caracteres es de 15.',
             'identification.min' => 'La cantidad mínima de caracteres es de 8.',
+            'identification.regex' => 'El campo de identificación acepta números solamente.',
             'names.required' => 'Debe indicar el nombre del empleado.',
             'last_names.required' => 'Debe indicar el apellido del empleado.',
             'role_id.required' => 'Debe indicar el rol del empleado.',

@@ -21,11 +21,11 @@
       <label for="">Precio</label>
       <input type="text" name="" id="" class="form-control">
     </div>
-    <div class="form-group col-4">
+    <div class="form-group col-6">
       <label for="">Medida</label>
       <input type="number" name="" id="" class="form-control">
     </div>
-    <div class="form-group col-8">
+    <div class="form-group col-6">
       <label for="">Información extra</label>
       <textarea name="" id="" cols="30" rows="5" class="form-control"></textarea>
     </div>

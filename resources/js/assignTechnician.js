@@ -9,7 +9,7 @@ $(function () {
 
 const getServices = function () {
     $.ajax({
-        url: "../../ordenes-servicio/get-services",
+        url: "./get-services",
         type: 'get',
         dataType: 'json',
         success: function (services) {
@@ -27,7 +27,7 @@ $(".slcServices").on('change', function (e) {
 
     const serviceId = e.target.value;
     $.ajax({
-        url: `../../ordenes-servicio/get-employees-by-service/${serviceId}`,
+        url: `./get-employees-by-service/${serviceId}`,
         type: 'get',
         dataType: 'json',
         success: function (employees) {

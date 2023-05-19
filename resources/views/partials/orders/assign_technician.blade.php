@@ -7,7 +7,7 @@
     </div>
     <div class="col-12">
         <div class="row">
-            <form action="../asignar-tecnico" method="post">
+            <form action="./asignar-tecnico" method="post">
                 @csrf
                 <input type="hidden" name="order_number" value="{{$order->number}}">
                 <div class="row justify-content-between">
@@ -44,7 +44,7 @@
     <div class="col-12">
         <h3>Desaprobación de la orden</h3>
         <hr class="opacity-100" />
-        <form action="../desaprobar" method="post">
+        <form action="./desaprobar" method="post">
             @csrf
             <input type="hidden" name="order_number" value="{{$order->number}}">
             <div class="row justify-content-end">

@@ -43,7 +43,7 @@ class OrdersRepository
                 'requestor' => auth()->id(),
                 'number' => $orderNumber,
                 'issue' => $issue,
-                'status' => 'pendiente de asignar'
+                'status' => 'pendiente de asignar tecnico'
             ]);
 
             $order->save();
@@ -57,16 +57,12 @@ class OrdersRepository
         try {
             $employee = $this->employeeRepository->employeeByUserId($userId);
 
-            $orders = ['user_role' => ''];
-
             $isDepartmentSupervisor = ($employee['role']->id == 2 && $employee['department']->id != 2);
             $isMaintenanceDepartmentSupervisor = ($employee['role']->id == 2 && $employee['department']->id == 2);
 
-            if ($isDepartmentSupervisor) {
-                $orders['user_role'] = 'departmentSupervisor';
+            if ($isDepartmentSupervisor) {                
                 $orders = $this->departmentSupervisorOrders($userId);
-            } else if ($isMaintenanceDepartmentSupervisor) {
-                $orders['user_role'] = 'maintenanceSupervisor';
+            } else if ($isMaintenanceDepartmentSupervisor) {                
                 $orders = $this->maintenanceSupervisorOrders();
             }
 
@@ -150,6 +146,7 @@ class OrdersRepository
 
             $order->technician = $technicianId;
             $order->assignation_date = now();
+            $order->status = 'tecnico asignado';
 
             $order->save();
         } catch (\Throwable $th) {
@@ -190,12 +187,12 @@ class OrdersRepository
                 'orders.issue',
                 'orders.number as order_number',
             )
-            ->where('status', 'pendiente de asignar')
+            ->where('status', 'pendiente de asignar tecnico')
             ->where('assignation_date', null)
             ->where('technician', null)
             ->get();
 
-
+        
         $orders['data'] = $data;
 
         return $orders;

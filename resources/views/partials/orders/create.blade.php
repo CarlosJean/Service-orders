@@ -15,8 +15,12 @@
         </span>
         @endif
     </div>
-    <div class="form-group row justify-content-end">
-        <a href="{{url('ordenes-servicio/')}}" class="btn btn-secondary col-2">Volver</a>
-        <input type="submit" value="Crear" class="btn btn-primary col-2 mx-1">
+    <div class="form-group">
+        <div class="container">
+            <div class="row justify-content-end">
+                <a href="{{url('ordenes-servicio/')}}" class="btn btn-secondary col-2">Volver</a>
+                <input type="submit" value="Crear" class="btn btn-primary col-2 ml-1">
+            </div>
+        </div>
     </div>
 </form>
