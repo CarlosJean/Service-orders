@@ -101,7 +101,6 @@ class ServiceOrdersController extends Controller
             $serviceOrderNumber  = $request->input('order_number');
             $technicianId = $request->input('technician_id');
 
-
             $this->ordersRepository->assignTechnician($serviceOrderNumber, $technicianId);
 
             $employee = $this->employeeRepository->employeeByUserId($technicianId);
@@ -156,5 +155,9 @@ class ServiceOrdersController extends Controller
             'order' => $serviceOrder,
             'userRole' => $userRole
         ]);
+    }
+
+    public function materialsManagementCreate(){
+        return view('warehouse.management');
     }
 }
