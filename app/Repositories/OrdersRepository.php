@@ -3,6 +3,8 @@
 namespace App\Repositories;
 
 use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\OrderItemsDetail;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -11,9 +13,11 @@ class OrdersRepository
 {
 
     protected $employeeRepository;
-    public function __construct(EmployeeRepository $employeeRepository)
+    protected $itemsRepository;
+    public function __construct(EmployeeRepository $employeeRepository, ItemsRepository $itemsRepository)
     {
         $this->employeeRepository = $employeeRepository;
+        $this->itemsRepository = $itemsRepository;
     }
 
     public function orderNumber()
@@ -60,9 +64,9 @@ class OrdersRepository
             $isDepartmentSupervisor = ($employee['role']->id == 2 && $employee['department']->id != 2);
             $isMaintenanceDepartmentSupervisor = ($employee['role']->id == 2 && $employee['department']->id == 2);
 
-            if ($isDepartmentSupervisor) {                
+            if ($isDepartmentSupervisor) {
                 $orders = $this->departmentSupervisorOrders($userId);
-            } else if ($isMaintenanceDepartmentSupervisor) {                
+            } else if ($isMaintenanceDepartmentSupervisor) {
                 $orders = $this->maintenanceSupervisorOrders();
             }
 
@@ -192,9 +196,43 @@ class OrdersRepository
             ->where('technician', null)
             ->get();
 
-        
+
         $orders['data'] = $data;
 
         return $orders;
+    }
+
+    public function storeItemsOrder($orderNumber, $items)
+    {
+        try {
+            //Encontramos la orden
+            $order = Order::where('number', $orderNumber)
+                ->first();
+
+            if ($order == null) {
+                return new Exception('La orden a la cual intenta agregar materiales no existe.');
+            }
+            
+            $requestor = $this->employeeRepository->employeeByUserId(auth()->id())['id'];
+
+            $orderItem = new OrderItem([
+                'service_order_id' => $order->id,
+                'requestor' => $requestor,
+                'status' => 'en espera de entrega'
+            ]);
+            $orderItem->save();
+            
+            foreach($items as $item){
+                $detail = new OrderItemsDetail();
+                $detail->orderItem()->associate($orderItem);
+                $detail->quantity = $item['quantity'];
+                $detail->item_id = $item['id'];
+
+                $detail->save();
+            }         
+                    
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }
