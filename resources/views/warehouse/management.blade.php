@@ -2,7 +2,7 @@
 
 @section('screenName', 'Gestión de materiales')
 @push('orderNumber')
-<input type="text" readonly="readonly" class="form-control" value="{{$order->number}}">
+<input type="text" readonly="readonly" class="form-control text-right" value="{{$order->number}}">
 @endpush
 
 @section('orderContent')
