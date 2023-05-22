@@ -26,7 +26,7 @@ const columnsByUserRole = function (userRole) {
     if (userRole == 'departmentSupervisor') {
         return [
             { data: 'id', title: 'Id', visible:false },
-            { data: 'order_number', title: 'Número de órden' },
+            { data: 'order_number', title: 'Número de orden' },
             { data: 'created_at', title: 'Fecha y hora de creación' },
             { data: 'status', title: 'Estado' },
             { data: 'technician', title: 'Técnico asignado' },
@@ -34,7 +34,7 @@ const columnsByUserRole = function (userRole) {
     } else if (userRole == 'maintenanceSupervisor') {
         return [
             { data: 'id', title: 'Id' },
-            { data: 'order_number', title: 'Número de órden' },
+            { data: 'order_number', title: 'Número de orden' },
             { data: 'created_at', title: 'Fecha y hora de creación' },
             { data: 'requestor', title: 'Solicitante' },
             {
