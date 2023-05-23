@@ -14,12 +14,16 @@ return new class extends Migration
         Schema::create('employee_service', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->integer('employee_id')
-                ->foreign('employee_id')
+            $table->bigInteger('employee_id')
+                ->unsigned();
+            $table->bigInteger('service_id')
+                ->unsigned();
+
+            //Foreign keys
+            $table->foreign('employee_id')
                 ->references('id')
                 ->on('employees');
-            $table->integer('service_id')
-                ->foreign('service_id')
+            $table->foreign('service_id')
                 ->references('id')
                 ->on('services');
         });

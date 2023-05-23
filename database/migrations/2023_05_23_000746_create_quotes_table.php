@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('number');
-            $table->integer('created_by')
+            $table->bigInteger('created_by')
                 ->foreign('created_by')
                 ->references('id')
                 ->on('employees');
-            $table->integer('order_id')
+            $table->bigInteger('order_id')
                 ->nullable()
                 ->foreign('order_id')
                 ->references('id')

@@ -14,16 +14,20 @@ return new class extends Migration
         Schema::create('order_items_details', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->integer('item_id')
-                ->foreign()
-                ->references('items')
-                ->on('id');
-            $table->integer('order_item_id')
-                ->foreign()
-                ->references('order_items')
-                ->on('id')
-                ->cascadeOnDelete();
+            $table->bigInteger('item_id')
+                ->unsigned();                                              
+            $table->bigInteger('order_item_id')
+                ->unsigned();                
             $table->float('quantity');
+
+            //Foreign keys
+            $table->foreign('item_id')
+            ->references('id')
+            ->on('items');
+            $table->foreign('order_item_id')
+            ->references('id')
+            ->on('order_items')
+            ->onDelete('cascade');
         });
     }
 

@@ -14,30 +14,27 @@ return new class extends Migration
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-
-            $table->integer('department_id')
-            ->foreign('department_id')
-            ->references('id')
-            ->on('departments');
-
-            $table->integer('role_id')
-            ->foreign('role_id')
-            ->references('id')
-            ->on('roles');
-
-            $table->integer('user_id')
-            ->nullable()
-            ->foreign('user_id')
-            ->references('id')
-            ->on('users');
-
+            $table->bigInteger('department_id')
+                ->unsigned();
+            $table->bigInteger('role_id')
+                ->unsigned();
+            $table->bigInteger('user_id')
+                ->unsigned()
+                ->nullable();
             $table->string('names');
             $table->string('last_names');
             $table->string('identification')->unique();
-            
             $table->string('email')
-            ->nullable()
-            ->unique();
+                ->nullable()
+                ->unique();
+
+            //Foreign keys
+            $table->foreign('department_id')
+                ->references('id')->on('departments');
+            $table->foreign('role_id')
+                ->references('id')->on('roles');
+            $table->foreign('user_id')
+                ->references('id')->on('users');
         });
     }
 

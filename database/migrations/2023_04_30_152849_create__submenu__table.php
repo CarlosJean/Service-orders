@@ -18,12 +18,13 @@ return new class extends Migration
             $table->string('order')->nullable();
             $table->string('url')->nullable();
             $table->string('icon')->nullable();
-            $table->integer('menu_id')
-            ->foreign('menu_id')
-            ->references('id')
-            ->on('menus')
-            ->nullable();
+            $table->bigInteger('menu_id')
+                ->unsigned()
+                ->nullable();
 
+            $table->foreign('menu_id')
+                ->references('id')
+                ->on('menus');
         });
     }
 

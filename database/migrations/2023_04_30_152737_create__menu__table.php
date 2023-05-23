@@ -16,7 +16,7 @@ return new class extends Migration
             $table->timestamps();
             $table->string('name');
             $table->string('icon')->nullable();
-            $table->integer('order')->nullable();
+            $table->integer('order')->unsigned()->nullable();
         });
     }
 

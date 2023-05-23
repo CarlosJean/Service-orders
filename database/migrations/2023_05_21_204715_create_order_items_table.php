@@ -14,21 +14,26 @@ return new class extends Migration
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->integer('service_order_id')
-                ->foreign()
-                ->references('service_orders')
-                ->on('id')
+            $table->bigInteger('service_order_id')
+                ->unsigned()
                 ->unique();
-            $table->integer('requestor')
-                ->foreign()
-                ->references('employees')
-                ->on('id');
-            $table->integer('dispatched_by')
-                ->foreign()
-                ->references('employees')
-                ->on('id')
-            ->nullable();
+            $table->bigInteger('requestor')
+                ->unsigned();
+            $table->bigInteger('dispatched_by')
+                ->unsigned()
+                ->nullable();
             $table->string('status');
+
+            //Foreign keys
+            $table->foreign('service_order_id')
+                ->references('id')
+                ->on('orders');
+            $table->foreign('requestor')
+                ->references('id')
+                ->on('employees');
+            $table->foreign('dispatched_by')
+                ->references('id')
+                ->on('employees');
         });
     }
 

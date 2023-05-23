@@ -19,15 +19,15 @@ return new class extends Migration
             $table->string('item');
             $table->string('reference')->nullable();
             $table->float('quantity');
-            $table->float('price');            
-            
+            $table->float('price');
+
+            //Foreign keys
             $table->foreign('quote_id')
-            ->references('id')
-            ->on('quotes');
-            
+                ->references('id')
+                ->on('quotes');
             $table->foreign('item_id')
-            ->references('id')
-            ->on('items');
+                ->references('id')
+                ->on('items');
         });
     }
 

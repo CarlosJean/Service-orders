@@ -14,20 +14,20 @@ return new class extends Migration
         Schema::create('role_submenu', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            
-            $table->integer('role_id')
-            ->foreign('role_id')
-            ->references('id')
-            ->on('roles');
+            $table->bigInteger('role_id')
+                ->unsigned();
+            $table->bigInteger('submenu_id')
+                ->unsigned();
 
-            $table->integer('submenu_id')
-            ->foreign('submenu_id')
-            ->references('id')
-            ->on('submenus');         
-            
             //Foreign keys            
-
-
+            $table->foreign('role_id')
+                ->foreign('role_id')
+                ->references('id')
+                ->on('roles');
+            $table->foreign('submenu_id')
+                ->foreign('submenu_id')
+                ->references('id')
+                ->on('submenus');
         });
     }
 
