@@ -9,7 +9,7 @@ use App\Http\Controllers\GestionMaterialesController;
 use App\Http\Controllers\GestionMaterialesBTNController;
 use App\Http\Controllers\DepartamentosController;
 use App\Http\Controllers\ItemsController;
-use App\Http\Controllers\QuotesController;
+use App\Http\Controllers\QuoteController;
 use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\ServiceOrdersController;
 use Illuminate\Support\Facades\Route;
@@ -66,8 +66,8 @@ Route::prefix('ordenes-servicio')->group(function(){
 });
 
 Route::prefix('cotizaciones')->group(function(){
-    Route::get('crear', [QuotesController::class, 'create']);
-    Route::post('crear', [QuotesController::class, 'store']);
+    Route::get('crear', [QuoteController::class, 'create']);
+    Route::post('crear', [QuoteController::class, 'store']);
 });
 
 Route::prefix('articulos')->group(function(){
