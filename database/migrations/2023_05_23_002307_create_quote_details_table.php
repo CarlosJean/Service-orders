@@ -14,8 +14,13 @@ return new class extends Migration
         Schema::create('quote_details', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->bigInteger('quote_id')->unsigned();
-            $table->bigInteger('item_id')->unsigned();
+            $table->bigInteger('quote_id')
+                ->unsigned();
+            $table->bigInteger('item_id')
+                ->unsigned()
+                ->nullable();
+            $table->bigInteger('supplier_id')
+                ->unsigned();
             $table->string('item');
             $table->string('reference')->nullable();
             $table->float('quantity');
@@ -24,10 +29,14 @@ return new class extends Migration
             //Foreign keys
             $table->foreign('quote_id')
                 ->references('id')
-                ->on('quotes');
+                ->on('quotes')
+                ->onDelete('cascade');
             $table->foreign('item_id')
                 ->references('id')
                 ->on('items');
+            $table->foreign('supplier_id')
+                ->references('id')
+                ->on('suppliers');
         });
     }
 

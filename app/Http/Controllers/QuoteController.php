@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Quote;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\QuoteRequest;
 use App\Repositories\QuotesRepository;
 use Illuminate\Http\Request;
 
@@ -35,10 +36,13 @@ class QuoteController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request){
-        $orderNumber = $request->input('numero_orden');
+    public function store(QuoteRequest $request){       
+        $quoteNumber = $request->input('quote_number');
+        $serviceOrderNumber = $request->input('service_order_number');
+        $quotes = $request->input('quotes');
+        $this->quotesRepository->storeQuote($quoteNumber, $serviceOrderNumber, $quotes);
 
-        return view('quotes.create');
+        //return view('quotes.create');
     }
 
     /**

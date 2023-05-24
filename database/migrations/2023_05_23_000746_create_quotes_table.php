@@ -16,18 +16,21 @@ return new class extends Migration
             $table->timestamps();
             $table->string('number');
             $table->bigInteger('created_by')
-                ->foreign('created_by')
-                ->references('id')
-                ->on('employees');
+                ->unsigned();
             $table->bigInteger('order_id')
-                ->nullable()
-                ->foreign('order_id')
-                ->references('id')
-                ->on('orders');
+                ->unsigned()
+                ->nullable();
             $table->boolean('retrieved')
                 ->nullable();
             $table->float('total');
 
+            //Foreign keys
+            $table->foreign('created_by')
+                ->references('id')
+                ->on('users');
+            $table->foreign('order_id')
+                ->references('id')
+                ->on('orders');
         });
     }
 

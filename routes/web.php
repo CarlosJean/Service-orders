@@ -12,6 +12,7 @@ use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\QuoteController;
 use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\ServiceOrdersController;
+use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -57,6 +58,7 @@ Route::prefix('ordenes-servicio')->group(function(){
     Route::get('getOrders', [ServiceOrdersController::class, 'getOrders']);
     Route::get('get-services', [ServiceOrdersController::class, 'getServices']);
     Route::get('get-employees-by-service/{serviceId}', [ServiceOrdersController::class, 'getEmployeesByService']);
+    Route::post('orden-servicio',[ServiceOrdersController::class,'getServiceOrderByNumber']);
     Route::get('{orderNumber}/gestion-materiales', [ServiceOrdersController::class, 'materialsManagementCreate']);
     Route::get('{orderNumber}',[ServiceOrdersController::class,'show']);
     Route::post('crear',[ServiceOrdersController::class,'store']);
@@ -72,4 +74,8 @@ Route::prefix('cotizaciones')->group(function(){
 
 Route::prefix('articulos')->group(function(){
     Route::get('/', [ItemsController::class, 'getItems']);
+});
+
+Route::prefix('suplidores')->group(function(){
+    Route::get('/', [SupplierController::class, 'getSuppliers']);    
 });

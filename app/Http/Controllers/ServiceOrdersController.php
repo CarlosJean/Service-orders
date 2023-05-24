@@ -32,7 +32,6 @@ class ServiceOrdersController extends Controller
 
     public function index()
     {
-
         return view('orders.index');
     }
 
@@ -141,7 +140,6 @@ class ServiceOrdersController extends Controller
         }
     }
 
-
     public function show($orderNumber)
     {
         $userId = auth()->id();
@@ -183,5 +181,17 @@ class ServiceOrdersController extends Controller
             var_dump($th);
             //throw $th;
         }
+    }
+
+    public function getServiceOrderByNumber(Request $request){
+        $orderNumber = $request->input("order_number");
+        $order = $this->ordersRepository->serviceOrderByNumber($orderNumber);
+
+        $order = json_encode([
+            'requestor' => $order->requestor,
+            'technician' => $order->technician,
+        ]);
+
+        return $order;                
     }
 }
