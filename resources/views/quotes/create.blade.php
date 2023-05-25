@@ -115,7 +115,6 @@
 @endsection
 
 @vite([
-'resources/css/quotes.css',
 'resources/js/app.js',
 'resources/js/quotes.js'
 ])
