@@ -42,6 +42,7 @@ $(function () {
             },
             price: 'Debe indicar el precio.',
         },
+        errorClass:'text-danger'
     });
 })
 
@@ -145,6 +146,8 @@ btnAddToList.on('click', function () {
     $("table tbody").prepend(newRow);
 
     totalRow();
+
+    $('#frm_add_item').trigger("reset");
 });
 
 

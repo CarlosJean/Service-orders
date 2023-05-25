@@ -52,23 +52,23 @@
     <form class="col-12" id="frm_add_item" method="post">
       <div class="row">
         <div class="form-group col-6">
-          <label for="">Suplidor</label>
+          <label for="slc_suppliers">Suplidor</label>
           <select name="supplier" id="slc_suppliers" class="form-control"></select>
         </div>
         <div class="form-group col-6">
-          <label for="">Artículo</label>
+          <label for="txt_item">Artículo</label>
           <input type="text" name="item" id="txt_item" class="form-control" placeholder="Ingrese el nombre del artículo" required>
         </div>
         <div class="form-group col-8">
-          <label for="">Referencia</label>
+          <label for="txt_reference">Referencia</label>
           <input type="text" name="reference" id="txt_reference" class="form-control" placeholder="Ingrese una referencia">
         </div>
         <div class="form-group col-2">
-          <label for="">Cantidad</label>
+          <label for="txt_quantity">Cantidad</label>
           <input type="number" name="quantity" id="txt_quantity" class="form-control">
         </div>
         <div class="form-group col-2">
-          <label for="">Precio</label>
+          <label for="txt_price">Precio</label>
           <input type="number" name="price" id="txt_price" class="form-control">
         </div>
         <div class="col-12">
