@@ -12,11 +12,12 @@ class QuoteController extends Controller
 {
 
     protected $quotesRepository;
-    public function __construct(QuotesRepository $quotesRepository){
+    public function __construct(QuotesRepository $quotesRepository)
+    {
         $this->quotesRepository = $quotesRepository;
     }
-    
-    
+
+
     /**
      * Display a listing of the resource.
      */
@@ -24,25 +25,39 @@ class QuoteController extends Controller
     {
         //
     }
-    
+
     /**
      * Show the form for creating a new resource.
      */
-    public function create(){
+    public function create()
+    {
         $quoteNumber = $this->quotesRepository->quoteNumber();
-        return view('quotes.create')->with('quoteNumber', $quoteNumber);        
+        return view('quotes.create')->with('quoteNumber', $quoteNumber);
     }
-    
+
     /**
      * Store a newly created resource in storage.
      */
-    public function store(QuoteRequest $request){       
-        $quoteNumber = $request->input('quote_number');
-        $serviceOrderNumber = $request->input('service_order_number');
-        $quotes = $request->input('quotes');
-        $this->quotesRepository->storeQuote($quoteNumber, $serviceOrderNumber, $quotes);
+    public function store(QuoteRequest $request)
+    {
+        try {
+            $quoteNumber = $request->input('quote_number');
+            $serviceOrderNumber = $request->input('service_order_number');
+            $quotes = $request->input('quotes');
 
-        //return view('quotes.create');
+            if ($quotes == null) {
+                return back()
+                    ->withErrors(['no_items' => 'Debe especificar los artículos a comprar.'])
+                    ->withInput();
+            }
+            $this->quotesRepository->storeQuote($quoteNumber, $serviceOrderNumber, $quotes);
+
+            return view('quotes.created')->with('quoteNumber', $quoteNumber);
+        } catch (\Throwable $th) {
+            return back()
+                ->withErrors(['exceptions' => $th->getMessage()])
+                ->withInput();
+        }
     }
 
     /**

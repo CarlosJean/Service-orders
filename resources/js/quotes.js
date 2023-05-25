@@ -18,6 +18,30 @@ $(function () {
     loadItems();
     slcSuppliers.select2({
         placeholder: 'Seleccione un artículo',
+    });    
+
+    $("#frm_add_item").validate({
+        rules: {
+            supplier: 'required',
+            item: 'required',
+            quantity: {
+                required: true,
+                digits: true,
+            },
+            price:{
+                required: true,
+                digits: true,
+            },
+        },
+        messages: {
+            item: 'Debe indicar un artículo.',
+            supplier: 'Debe seleccionar un suplidor.',
+            quantity:{
+                digits: 'Se aceptan solo números.',
+                required: 'Este campo es requerido.',
+            },
+            price: 'Debe indicar el precio.',
+        },
     });
 })
 
@@ -41,6 +65,20 @@ const loadItems = function () {
 
 };
 
+const totalRow = function () {
+
+    const quantity = (txtQuantity.val() == '') ? 0 : txtQuantity.val();
+    let totalQuantity = $("#td_total_quantity").text() === "" ? 0 : parseFloat($("#td_total_quantity").text());
+    totalQuantity += parseFloat(quantity);
+
+    const price = (txtPrice.val() == '') ? 0 : txtPrice.val() * quantity;
+    let totalPrice = $("#td_total_price").text() === "" ? 0 : parseFloat($("#td_total_price").text());
+    totalPrice += parseFloat(price);
+
+    $("#td_total_quantity").text(totalQuantity);
+    $("#td_total_price").text(totalPrice);
+}
+
 btnFindServiceOrder.on('click', function () {
 
     const orderNumber = txtServiceOrderNumber.val();
@@ -56,7 +94,7 @@ btnFindServiceOrder.on('click', function () {
             $("#spn_message").text("");
             //Llenar campos
             $("#txt_requestor").val(serviceOrder.requestor);
-            $("#txt_technician").val(serviceOrder.technician);            
+            $("#txt_technician").val(serviceOrder.technician);
 
             //Si el campo oculto del número de servicio no existe
             //se crea el campo de la orden de servicio en el formulario
@@ -72,13 +110,17 @@ btnFindServiceOrder.on('click', function () {
         error: function (error) {
             const message = error.responseJSON.message;
             $("#spn_message").text(message);
-            $("#frm_quote input[name='service_order_number']").remove();
+            $("#frm_quote input[name='service_order_number']").val('');
         }
     });
 });
 
 btnAddToList.on('click', function () {
 
+    const formValid = $("#frm_add_item").valid();
+
+    if(!formValid) return;
+    
     const selectedOption = $("#slc_suppliers option:selected");
 
     const rowNumber = $("table tbody tr").length - 1;
@@ -96,29 +138,23 @@ btnAddToList.on('click', function () {
             <td>${txtReference.val()}</td>
             <td>${txtQuantity.val()}</td>
             <td>${txtPrice.val()}</td>
-            <td><button class="btn_remove btn btn-warning">Remover</td>
+            <td><button class="btn_remove btn btn-warning" type="button">Remover</td>
         </tr>
     `;
 
     $("table tbody").prepend(newRow);
 
-    let totalQuantity = $("#td_total_quantity").text() === "" ? 0 : parseFloat($("#td_total_quantity").text());
-    totalQuantity += parseFloat(txtQuantity.val());
-
-    let totalPrice = $("#td_total_price").text() === "" ? 0 : parseFloat($("#td_total_price").text());
-    totalPrice += parseFloat(txtPrice.val());
-
-    $("#td_total_quantity").text(totalQuantity);
-    $("#td_total_price").text(totalPrice);
+    totalRow();
 });
 
-$("#frm_quote").on('submit', function (e) {
 
-    const hiddenServiceOrderNumberExists = $("#frm_quote input[name='service_order_number']").length;
+$("#btn_save").on('click', function (e) {
 
-    if (!hiddenServiceOrderNumberExists) {
+    const hasServiceOrder = !($("#frm_quote input[name='service_order_number']").val() == '');
+
+    if (!hasServiceOrder) {
         e.preventDefault();
-    
+
         Swal.fire({
             title: 'No ha especificado un número de orden de servicio',
             text: "Aún no ha especificado una orden de servicio. ¿Desea continuar?",
@@ -130,12 +166,25 @@ $("#frm_quote").on('submit', function (e) {
             confirmButtonText: 'Sí'
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire(
-                    'Deleted!',
-                    'Your file has been deleted.',
-                    'success'
-                )
+                $("#frm_quote").trigger('submit');
             }
-        })        
+        })
     }
 });
+
+$(document).on('click', '.btn_remove', function () {
+    const row = $(this).parents()[1];
+    const td = $(this).parents()[0];
+
+    const quantityTd = $(td).siblings()[9];
+    const quantity = ($(quantityTd).text() == '') ? 0 : parseFloat($(quantityTd).text());
+
+    const priceTd = $(td).siblings()[10];
+    const price = ($(priceTd).text() == '') ? 0 : parseFloat($(priceTd).text()) * quantity;
+
+    $("#td_total_quantity").text(parseFloat($("#td_total_quantity").text()) - quantity);
+    $("#td_total_price").text(parseFloat($("#td_total_price").text()) - price);
+
+    row.remove();
+})
+

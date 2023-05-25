@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Quote;
 use App\Models\QuoteDetail;
 use App\Models\Supplier;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class QuotesRepository
@@ -28,47 +29,59 @@ class QuotesRepository
     }
 
     public function storeQuote($quoteNumber, $orderNumber, $quoteDetail){
-        try {         
+        try {           
             
+            //Calculando el costo total de la cotización
             $total = 0;
             foreach ($quoteDetail as $quote) {
                 $total += $quote['price'];
             }
-
-            $order = Order::where('number', $orderNumber)->first();
-
+            
+            //Objeto de cotización
             $newQuote = new Quote([
                 'number' => $quoteNumber,
                 'created_by' => auth()->id(), 
-                'order_id' => $order->id, 
                 'total' => $total
             ]);
+            
+            $serviceOrder = Order::where('number', $orderNumber)->first();
+            if ($serviceOrder != null) {
+                $newQuote->order_id = $serviceOrder->id;
+            }
             $newQuote->save();
             
             foreach ($quoteDetail as $quote) {      
 
-                $noSpaceWhere = DB::raw("replace(name,' ','')");
+                if($quote['supplier_id'] == null) {
+                    throw new Exception('Debe indicar el suplidor del artículo '.$quote['item'].'.');
+                }
+
+                $noSpaceWhere = DB::raw("LOWER(replace(name,' ',''))");                
                 $noSpaceItemName = str_replace(' ','',$quote['item']);
-                
-                $itemId = Item::where($noSpaceWhere, $noSpaceItemName)
-                    ->first()
-                    ->id;
+                $noSpaceItemName = strtolower($noSpaceItemName);                
                 
                 $newQuoteDetail = new QuoteDetail([
-                    'item_id' => $itemId,
                     'item' => $quote['item'],
                     'reference' => $quote['reference'],
                     'quantity' => $quote['quantity'],
                     'price' => $quote['price'], 
                     'supplier_id' => $quote['supplier_id'],
                 ]);
+                
+                $itemId = Item::where($noSpaceWhere, $noSpaceItemName)
+                    ->first()
+                    ?->id;
+                    
+                if ($itemId != null) {
+                    $newQuoteDetail->item_id = $itemId;
+                }
+
                 $newQuoteDetail->quote()->associate($newQuote);
                 $newQuoteDetail->save();                
             }
 
         } catch (\Throwable $th) {
-            var_dump($th);
-            //throw $th;
+            throw $th;
         }
     }
 }

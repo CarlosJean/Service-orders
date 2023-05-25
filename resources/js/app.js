@@ -18,3 +18,6 @@ select2();
 //SweetAlert2
 import swal from 'sweetalert2';
 window.Swal = swal;
+
+//JQuery validation
+import validate from 'jquery-validation';

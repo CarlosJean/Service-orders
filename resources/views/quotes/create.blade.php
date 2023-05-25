@@ -3,7 +3,7 @@
 @section('screenName', 'Cotización')
 
 @push('orderNumber')
-<input type="text" name="" id="" class="form-control text-end"  value="{{$quoteNumber}}" readonly>
+<input type="text" name="" id="" class="form-control text-end" value="{{$quoteNumber}}" readonly>
 @endpush
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -39,38 +39,51 @@
 <hr class="opacity-100">
 <h2>Materiales</h2>
 
-<div class="col-12">  
+@if($errors->any())
+<div class="col-12 mt-2">
+  <div class="alert alert-danger">
+    {{$errors->first()}}
+  </div>
+</div>
+@endif
+
+<div class="col-12">
   <div class="row">
-    <div class="form-group col-6">
-      <label for="">Suplidor</label>
-      <select name="" id="slc_suppliers" class="form-control"></select>
-    </div>
-    <div class="form-group col-6">
-      <label for="">Artículo</label>
-      <input type="text" name="" id="txt_item" class="form-control" placeholder="Ingrese el nombre del artículo">
-    </div>
-    <div class="form-group col-8">
-      <label for="">Referencia</label>
-      <input type="text" name="" id="txt_reference" class="form-control" placeholder="Ingrese una referencia">
-    </div>
-    <div class="form-group col-2">
-      <label for="">Cantidad</label>
-      <input type="number" name="" id="txt_quantity" class="form-control">
-    </div>
-    <div class="form-group col-2">
-      <label for="">Precio</label>
-      <input type="number" name="" id="txt_price" class="form-control">
-    </div>
-    <div class="col-12">
-      <div class="d-flex justify-content-end">
-        <button class="btn btn-secondary col-2 justify-self-end" id="btn_add_to_list">Agregar al listado</button>
+    <form class="col-12" id="frm_add_item" method="post">
+      <div class="row">
+        <div class="form-group col-6">
+          <label for="">Suplidor</label>
+          <select name="supplier" id="slc_suppliers" class="form-control"></select>
+        </div>
+        <div class="form-group col-6">
+          <label for="">Artículo</label>
+          <input type="text" name="item" id="txt_item" class="form-control" placeholder="Ingrese el nombre del artículo" required>
+        </div>
+        <div class="form-group col-8">
+          <label for="">Referencia</label>
+          <input type="text" name="reference" id="txt_reference" class="form-control" placeholder="Ingrese una referencia">
+        </div>
+        <div class="form-group col-2">
+          <label for="">Cantidad</label>
+          <input type="number" name="quantity" id="txt_quantity" class="form-control">
+        </div>
+        <div class="form-group col-2">
+          <label for="">Precio</label>
+          <input type="number" name="price" id="txt_price" class="form-control">
+        </div>
+        <div class="col-12">
+          <div class="d-flex justify-content-end">
+            <button class="btn btn-secondary col-2 justify-self-end" id="btn_add_to_list" type="button">Agregar al listado</button>
+          </div>
+        </div>
       </div>
-    </div>
+    </form>
 
     <div class="col-12">
       <form action="crear" method="post" id="frm_quote">
         @csrf
-        <input type="hidden" value="{{$quoteNumber}}" name="quote_number">        
+        <input type="hidden" value="{{$quoteNumber}}" name="quote_number" />
+        <input type="hidden" name="service_order_number" />
         <table class="table table-striped mt-2 col-12">
           <thead>
             <tr>
@@ -92,7 +105,7 @@
         </table>
         <div class="form-group col-12">
           <div class="row justify-content-end">
-            <input type="submit" value="Guardar" class="btn btn-primary col-2">
+            <input type="submit" value="Guardar" class="btn btn-primary col-2" id="btn_save">
           </div>
         </div>
       </form>
@@ -102,6 +115,7 @@
 @endsection
 
 @vite([
+'resources/css/quotes.css',
 'resources/js/app.js',
 'resources/js/quotes.js'
 ])

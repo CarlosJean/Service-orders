@@ -8,6 +8,7 @@ export default defineConfig({
                 'resources/css/azia.min.css',
                 'resources/css/azia.css',
                 'resources/sass/app.scss',
+                'resources/css/quotes.css',
                 'resources/js/app.js',
                 'resources/js/azia.js',
                 'resources/js/employeesList.js',
