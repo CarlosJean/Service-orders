@@ -9,6 +9,7 @@ use App\Http\Controllers\GestionMaterialesController;
 use App\Http\Controllers\GestionMaterialesBTNController;
 use App\Http\Controllers\DepartamentosController;
 use App\Http\Controllers\ItemsController;
+use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\QuoteController;
 use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\ServiceOrdersController;
@@ -68,6 +69,7 @@ Route::prefix('ordenes-servicio')->group(function(){
 });
 
 Route::prefix('cotizaciones')->group(function(){
+    Route::get('{quoteNumber}', [QuoteController::class, 'getQuoteByNumber']);
     Route::get('crear', [QuoteController::class, 'create']);
     Route::post('crear', [QuoteController::class, 'store']);
 });
@@ -78,4 +80,9 @@ Route::prefix('articulos')->group(function(){
 
 Route::prefix('suplidores')->group(function(){
     Route::get('/', [SupplierController::class, 'getSuppliers']);    
+});
+
+Route::prefix('ordenes-compra')->group(function(){
+    Route::get('crear', [PurchaseOrderController::class, 'create']);
+    Route::post('crear', [PurchaseOrderController::class, 'store']);
 });

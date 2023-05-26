@@ -19,4 +19,5 @@ class Quote extends Model
     public function details(){
         return $this->hasMany(QuoteDetail::class);
     }
+
 }

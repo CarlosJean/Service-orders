@@ -15,6 +15,7 @@ export default defineConfig({
                 'resources/js/assignTechnician.js',
                 'resources/js/quotes.js',
                 'resources/js/materialsManagement.js',
+                'resources/js/purchaseOrders.js',
             ],
             refresh: true,
         }),
