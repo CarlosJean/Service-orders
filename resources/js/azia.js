@@ -1,6 +1,18 @@
 
 
 
+function applyStyle(button){
+  
+  $(".dataTables_filter").append(button);
+
+  $('div.dataTables_filter').attr('style','display: flex;');
+  $('div.dataTables_filter label').attr('style','display: flex;align-items: center;margin-left: -135px;width: 120%;');
+  $('div.dataTables_filter input').attr('style','margin-left: 4px;width: 100%;');
+  $('div.dataTables_filter button').attr('style','margin-left: 15px;width: 117%; margin-bottom: 8px;');
+
+}
+
+export default applyStyle
 
 
 
