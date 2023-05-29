@@ -1,6 +1,5 @@
 @extends('layouts.app')
 
-
 @section('content')
 <div class="container">
     <div class="row">
@@ -14,7 +13,7 @@
                         <div class="row">
                             <!-- Nombre de la orden -->
                             <div class="col-12 text-end">
-                                <h3><strong>@yield('screenName', 'Órdenes de...')</strong></h3>
+                                <h3><strong>@yield('screenName', 'Ordenes de...')</strong></h3>
                             </div>
                             <div class="col-12">
                                 <div class="row align-items-center">

@@ -23,7 +23,7 @@
                 <div class="col-12">
                     <div class="row justify-content-end">
                         <a href="{{url('registro-empleado')}}" class="col-3 btn btn-secondary">Registrar otro empleado</a>
-                        <a href="{{url('registro-empleado')}}" class="mx-3 col-3 btn btn-primary">Listado de empleados</a>
+                        <a href="{{url('empleados')}}" class="mx-3 col-3 btn btn-primary">Listado de empleados</a>
                     </div>
                 </div>
             </div>

@@ -9,7 +9,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-12">
-            <h2><strong>Órdenes de servicio</strong></h2>
+            <h2><strong>Ordenes de servicio</strong></h2>
         </div>
         <div class="col-12">
             <a href="{{url('ordenes-servicio/crear')}}" class="btn btn-primary">

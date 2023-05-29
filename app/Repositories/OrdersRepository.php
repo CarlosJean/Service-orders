@@ -3,6 +3,8 @@
 namespace App\Repositories;
 
 use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\OrderItemsDetail;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -11,9 +13,11 @@ class OrdersRepository
 {
 
     protected $employeeRepository;
-    public function __construct(EmployeeRepository $employeeRepository)
+    protected $itemsRepository;
+    public function __construct(EmployeeRepository $employeeRepository, ItemsRepository $itemsRepository)
     {
         $this->employeeRepository = $employeeRepository;
+        $this->itemsRepository = $itemsRepository;
     }
 
     public function orderNumber()
@@ -43,7 +47,7 @@ class OrdersRepository
                 'requestor' => auth()->id(),
                 'number' => $orderNumber,
                 'issue' => $issue,
-                'status' => 'pendiente de asignar'
+                'status' => 'pendiente de asignar tecnico'
             ]);
 
             $order->save();
@@ -57,16 +61,12 @@ class OrdersRepository
         try {
             $employee = $this->employeeRepository->employeeByUserId($userId);
 
-            $orders = ['user_role' => ''];
-
             $isDepartmentSupervisor = ($employee['role']->id == 2 && $employee['department']->id != 2);
             $isMaintenanceDepartmentSupervisor = ($employee['role']->id == 2 && $employee['department']->id == 2);
 
             if ($isDepartmentSupervisor) {
-                $orders['user_role'] = 'departmentSupervisor';
                 $orders = $this->departmentSupervisorOrders($userId);
             } else if ($isMaintenanceDepartmentSupervisor) {
-                $orders['user_role'] = 'maintenanceSupervisor';
                 $orders = $this->maintenanceSupervisorOrders();
             }
 
@@ -150,6 +150,7 @@ class OrdersRepository
 
             $order->technician = $technicianId;
             $order->assignation_date = now();
+            $order->status = 'tecnico asignado';
 
             $order->save();
         } catch (\Throwable $th) {
@@ -190,7 +191,7 @@ class OrdersRepository
                 'orders.issue',
                 'orders.number as order_number',
             )
-            ->where('status', 'pendiente de asignar')
+            ->where('status', 'pendiente de asignar tecnico')
             ->where('assignation_date', null)
             ->where('technician', null)
             ->get();
@@ -199,5 +200,39 @@ class OrdersRepository
         $orders['data'] = $data;
 
         return $orders;
+    }
+
+    public function storeItemsOrder($orderNumber, $items)
+    {
+        try {
+            //Encontramos la orden
+            $order = Order::where('number', $orderNumber)
+                ->first();
+
+            if ($order == null) {
+                return new Exception('La orden a la cual intenta agregar materiales no existe.');
+            }
+            
+            $requestor = $this->employeeRepository->employeeByUserId(auth()->id())['id'];
+
+            $orderItem = new OrderItem([
+                'service_order_id' => $order->id,
+                'requestor' => $requestor,
+                'status' => 'en espera de entrega'
+            ]);
+            $orderItem->save();
+            
+            foreach($items as $item){
+                $detail = new OrderItemsDetail();
+                $detail->orderItem()->associate($orderItem);
+                $detail->quantity = $item['quantity'];
+                $detail->item_id = $item['id'];
+
+                $detail->save();
+            }         
+                    
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }

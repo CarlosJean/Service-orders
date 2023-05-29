@@ -39,7 +39,8 @@ class EmployeeRepository
     {
         try {
 
-            $employeeModel =  Employee::find($userId);
+            $employeeModel =  Employee::where('user_id', $userId)
+                ->first();
 
             $employee = array(
                 'id' => $employeeModel->id,
@@ -192,15 +193,15 @@ class EmployeeRepository
     {
 
         $employeesByService = Service::with('employees')
-            ->where('id',$serviceId)
+            ->where('id', $serviceId)
             ->first()
             ->employees;
 
         $employees = [];
-        foreach($employeesByService as $employee){
+        foreach ($employeesByService as $employee) {
             array_push($employees, [
                 'id' => $employee->user->id,
-                'name' => $employee->names.' '.$employee->last_names,
+                'name' => $employee->names . ' ' . $employee->last_names,
             ]);
         }
 

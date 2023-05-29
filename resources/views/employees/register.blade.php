@@ -12,11 +12,13 @@
                             {{$errors->first('error')}}
                         </ul>
                         @endif
-                        <h1>Registro de empleado</h1>
-                        <hr class="opacity-100">
                         @if(isset($employee))
+                        <h1>Actualización de empleado</h1>
+                        <hr class="opacity-100">
                         @include('partials.employees.update')
                         @else
+                        <h1>Registro de empleado</h1>
+                        <hr class="opacity-100">
                         @include('partials.employees.create')
                         @endif
                     </div>

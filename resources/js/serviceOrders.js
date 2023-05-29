@@ -7,9 +7,9 @@ $(function () {
         dataType: 'json',
     })
         .done(function (orders) {
-            $("#spinner").css('display', 'none');
+$("#spinner").css('display', 'none');
 
-            const table = $('#ordersTable').DataTable({
+            $('#ordersTable').DataTable({
                 data: orders.data,
                 columns: columnsByUserRole(orders.user_role),
                 dom: "<'row justify-content-end'<'col-3'f><'col-12't><'col-12'<'row justify-content-center'<'col-3'p>>>>",
@@ -19,16 +19,14 @@ $(function () {
                 responsive:true
             });
 
-            table.columns(0).visible(false);
-        });
-    newOrderButton();
+        });  
 });
 
 const columnsByUserRole = function (userRole) {
     if (userRole == 'departmentSupervisor') {
         return [
-            { data: 'id', title: 'Id' },
-            { data: 'order_number', title: 'Número de órden' },
+            { data: 'id', title: 'Id', visible:false },
+            { data: 'order_number', title: 'Número de orden' },
             { data: 'created_at', title: 'Fecha y hora de creación' },
             { data: 'status', title: 'Estado' },
             { data: 'technician', title: 'Técnico asignado' },
@@ -36,12 +34,12 @@ const columnsByUserRole = function (userRole) {
     } else if (userRole == 'maintenanceSupervisor') {
         return [
             { data: 'id', title: 'Id' },
-            { data: 'order_number', title: 'Número de órden' },
+            { data: 'order_number', title: 'Número de orden' },
             { data: 'created_at', title: 'Fecha y hora de creación' },
             { data: 'requestor', title: 'Solicitante' },
             {
                 data: 'order_number',
-                render: (orderNumber) => "<a href='ordenes-servicio/asignar-tecnico/" + orderNumber + "' class='btn btn-primary'>Desaprobar o asignar técnico</a>"
+                render: (orderNumber) => "<a href='ordenes-servicio/" + orderNumber + "' class='btn btn-primary'>Desaprobar o asignar técnico</a>"
             },
         ]
     }

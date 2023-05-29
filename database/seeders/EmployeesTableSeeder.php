@@ -32,13 +32,22 @@ class EmployeesTableSeeder extends Seeder
             'user_id' => 2,
         ]);
         DB::table('employees')->insert([
-            'names' => 'Yoel',
-            'last_names' => 'Yoel',
+            'names' => 'Yhoel',
+            'last_names' => 'Yhoel',
             'identification' => '00154678948',
-            'email' => 'yoel@gmail.com',
+            'email' => 'yhoel@gmail.com',
             'department_id' => 3,
             'role_id' => 2,
             'user_id' => 3,
+        ]);
+        DB::table('employees')->insert([
+            'names' => 'Xavier',
+            'last_names' => 'Vasquez',
+            'identification' => '00154678945',
+            'email' => 'xavier@gmail.com',
+            'department_id' => 2,
+            'role_id' => 3,
+            'user_id' => 4,
         ]);
     }
 }

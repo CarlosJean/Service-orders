@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AddItemsToOrderRequest;
 use App\Http\Requests\AssignTechnicianToOrderRequest;
 use App\Http\Requests\CreateOrderRequest;
 use App\Http\Requests\DisapproveServiceOrderRequest;
@@ -24,12 +25,12 @@ class ServiceOrdersController extends Controller
     protected $departmentsRepository;
 
     public function __construct(
-        EmployeeRepository $employeeRepository, 
+        EmployeeRepository $employeeRepository,
         OrdersRepository $ordersRepository,
         ServicesRepository $servicesRepository,
         DepartmentsRepository $departmentsRepository
-        )
-    {
+        
+    ) {
         $this->employeeRepository = $employeeRepository;
         $this->ordersRepository = $ordersRepository;
         $this->servicesRepository = $servicesRepository;
@@ -37,8 +38,8 @@ class ServiceOrdersController extends Controller
 
     }
 
-    public function index(){
-        
+    public function index()
+    {
         return view('orders.index');
     }
 
@@ -66,9 +67,9 @@ class ServiceOrdersController extends Controller
         try {
             $issue = $request->input('issue');
             $orderNumber = $request->input('order_number');
-    
+
             $this->ordersRepository->createOrder($issue, $orderNumber);
-    
+
             return view('orders.created')->with('orderNumber', $orderNumber);
         } catch (\Throwable $th) {
             //throw $th;
@@ -79,24 +80,27 @@ class ServiceOrdersController extends Controller
         }
     }
 
-    public function getOrders(){
+    public function getOrders()
+    {
         $userId = auth()->id();
         $serviceOrders = $this->ordersRepository->serviceOrdersByUserId($userId);
         return $serviceOrders;
     }
 
-    public function assignTechnicianCreate($orderNumber){
+    public function assignTechnicianCreate($orderNumber)
+    {
 
         try {
             $serviceOrder = $this->ordersRepository->serviceOrderByNumber($orderNumber);
-            return view('orders.assign_technician')->with('order',$serviceOrder);
+            return view('orders.assign_technician')->with('order', $serviceOrder);
         } catch (\Throwable $th) {
             //throw $th;
             var_dump($th);
         }
     }
 
-    public function getServices() {
+    public function getServices()
+    {
         return $this->servicesRepository->services();
     }
 
@@ -104,21 +108,22 @@ class ServiceOrdersController extends Controller
         return   $this->departmentsRepository->departments();
     }
 
-    public function getEmployeesByService($idService){
+    public function getEmployeesByService($idService)
+    {
         return $this->employeeRepository->employeesByService($idService);
     }
 
-    public function assignTechnicianUpdate(AssignTechnicianToOrderRequest $request){    
-        try {            
+    public function assignTechnicianUpdate(AssignTechnicianToOrderRequest $request)
+    {
+        try {
             $serviceOrderNumber  = $request->input('order_number');
             $technicianId = $request->input('technician_id');
-
 
             $this->ordersRepository->assignTechnician($serviceOrderNumber, $technicianId);
 
             $employee = $this->employeeRepository->employeeByUserId($technicianId);
-            $technician = $employee['names'].' '.$employee['last_names'];
-            
+            $technician = $employee['names'] . ' ' . $employee['last_names'];
+
             return view('orders.assigned_technician')
                 ->with([
                     'orderNumber' => $serviceOrderNumber,
@@ -127,16 +132,17 @@ class ServiceOrdersController extends Controller
         } catch (\Throwable $th) {
             var_dump($th);
             //throw $th;
-        }    
-    }   
+        }
+    }
 
-    public function disapproveUpdate(DisapproveServiceOrderRequest $request){
+    public function disapproveUpdate(DisapproveServiceOrderRequest $request)
+    {
         try {
             $serviceOrderNumber  = $request->input('order_number');
-            $observations = $request->input('observations');          
-            
+            $observations = $request->input('observations');
+
             $this->ordersRepository->disapprove($serviceOrderNumber, $observations);
-            
+
             return view('orders.disaproved')
                 ->with([
                     'orderNumber' => $serviceOrderNumber,
@@ -144,5 +150,60 @@ class ServiceOrdersController extends Controller
         } catch (\Throwable $th) {
             var_dump($th);
         }
+    }
+
+    public function show($orderNumber)
+    {
+        $userId = auth()->id();
+        $employee = $this->employeeRepository
+            ->employeeByUserId($userId);
+
+        $roleId = $employee['role']->id;
+        $departmentId = $employee['department']->id;
+
+        $userRole = '';
+        if ($departmentId = 2 && $roleId == 2) {
+            $userRole = 'maintenanceSupervisor';
+        } else if ($departmentId = 2 && $roleId == 3) {
+            $userRole = 'technician';
+        }
+
+        $serviceOrder = $this->ordersRepository->serviceOrderByNumber($orderNumber);
+
+        return view('orders.show')->with([
+            'order' => $serviceOrder,
+            'userRole' => $userRole
+        ]);
+    }
+
+    public function materialsManagementCreate($orderNumber)
+    {
+        $serviceOrder = $this->ordersRepository->serviceOrderByNumber($orderNumber);
+        return view('warehouse.management')->with('order', $serviceOrder);
+    }
+
+    public function orderMaterialsStore(AddItemsToOrderRequest $request, $orderNumber)
+    {
+        try {
+            $items = $request->input('items');
+            $this->ordersRepository->storeItemsOrder($orderNumber, $items);
+
+            return view('orders.order_items_created')->with('orderNumber', $orderNumber);
+        } catch (\Throwable $th) {
+            var_dump($th);
+            //throw $th;
+        }
+    }
+
+    public function getServiceOrderByNumber(Request $request){
+        $orderNumber = $request->input("order_number");
+        $order = $this->ordersRepository->serviceOrderByNumber($orderNumber);
+
+        $order = json_encode([
+            'requestor' => $order->requestor,
+            'technician' => $order->technician,
+        ]);
+
+        return $order;                
     }
 }

@@ -14,22 +14,14 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->integer('requestor')
-                ->foreign('requestor')
-                ->references('id')
-                ->on('users');
-            $table->integer('technician')
-                ->nullable()
-                ->foreign('technician')
-                ->references('id')
-                ->on('users');
-            $table->integer('assigned_by')
-                ->nullable()
-                ->foreign('assigned_by')
-                ->references('id')
-                ->on('users');
-            // $table->integer('service')
-            //     ->nullable();
+            $table->bigInteger('requestor')
+                ->unsigned();
+            $table->bigInteger('technician')
+                ->unsigned()
+                ->nullable();
+            $table->bigInteger('assigned_by')
+                ->unsigned()
+                ->nullable();
             $table->string('status');
             $table->string('number')
                 ->unique();
@@ -44,6 +36,17 @@ return new class extends Migration
                 ->nullable();
             $table->string('observations')
                 ->nullable();
+
+            //Foreign keys
+            $table->foreign('requestor')
+                ->references('id')
+                ->on('users');
+            $table->foreign('technician')
+                ->references('id')
+                ->on('users');
+            $table->foreign('assigned_by')
+                ->references('id')
+                ->on('users');
         });
     }
 
