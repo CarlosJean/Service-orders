@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('cellphone')->nullable();
             $table->string('identType')->nullable();
             $table->string('ident')->nullable();
+            $table->string('website')->nullable();                        
             $table->boolean('active')->default(1);
 
         });
