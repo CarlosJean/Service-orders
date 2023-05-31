@@ -69,8 +69,8 @@ Route::prefix('ordenes-servicio')->group(function(){
 });
 
 Route::prefix('cotizaciones')->group(function(){
-    Route::get('{quoteNumber}', [QuoteController::class, 'getQuoteByNumber']);
     Route::get('crear', [QuoteController::class, 'create']);
+    Route::get('{quoteNumber}', [QuoteController::class, 'getQuoteByNumber']);
     Route::post('crear', [QuoteController::class, 'store']);
 });
 

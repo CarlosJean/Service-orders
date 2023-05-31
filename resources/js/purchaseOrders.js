@@ -24,6 +24,10 @@ $("#frmGetQuoteByNumber").on('submit', function (e) {
                         targets: 0
                     },
                     {
+                        target: 1,
+                        visible: false
+                    },
+                    {
                         target: 2,
                         visible: false
                     }],
@@ -34,13 +38,14 @@ $("#frmGetQuoteByNumber").on('submit', function (e) {
                     order: [[1, 'asc']],
                     data: quote,
                     columns: [
-                        { data: null, defaultContent: "" },
-                        { data: 'supplier' },
-                        { data: 'item_id' },
-                        { data: 'item' },
-                        { data: 'reference' },
-                        { data: 'quantity' },
-                        { data: 'price' },
+                        { title: '', data: null, defaultContent: "" },
+                        { title: '', data: 'supplier_id' },
+                        { title: '', data: 'item_id' },
+                        { title: 'Suplidor', data: 'supplier' },
+                        { title: 'Artículo', data: 'item' },
+                        { title: 'Referencia', data: 'reference' },
+                        { title: 'Cantidad', data: 'quantity' },
+                        { title: 'Precio', data: 'price' },
                     ]
                 });
                 $("#spnQuoteNotFound").addClass('d-none');
@@ -61,11 +66,12 @@ $("#btnSave").on('click', function () {
     for (let index = 0; index < rows.length; index++) {
         const row = rows[index];
         $("#frmPurchaseOrder").append(`
-        <input type="hidden" name="items[${index}]['item_id']" value="${row.item_id}" />
-        <input type="hidden" name="items[${index}]['item']" value="${row.item}" />
-        <input type="hidden" name="items[${index}]['reference']" value="${row.reference}" />
-        <input type="hidden" name="items[${index}]['quantity']" value="${row.quantity}" />
-        <input type="hidden" name="items[${index}]['price']" value="${row.price}" />
+        <input type="hidden" name="items[${index}][supplier_id]" value="${row.supplier_id}" />
+        <input type="hidden" name="items[${index}][item_id]" value="${row.item_id}" />
+        <input type="hidden" name="items[${index}][item]" value="${row.item}" />
+        <input type="hidden" name="items[${index}][reference]" value="${row.reference}" />
+        <input type="hidden" name="items[${index}][quantity]" value="${row.quantity}" />
+        <input type="hidden" name="items[${index}][price]" value="${row.price}" />
         `);
 
     }

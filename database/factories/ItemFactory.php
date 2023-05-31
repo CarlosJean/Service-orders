@@ -19,6 +19,7 @@ class ItemFactory extends Factory
     {
         return [
             'name' => fake()->name(),
+            'price' => fake()->randomDigit(),
             'quantity' => fake()->randomDigit(),
             'reference' => fake()->sentence(),
             'measurement_unit' => fake()->sentence(1),

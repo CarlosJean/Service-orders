@@ -21,7 +21,6 @@ class QuotesRepository
 
     private function newQuoteNumber()
     {
-
         $number = rand(111111, 999999);
         $isUsed =  Quote::where('number', $number)->first();
         if ($isUsed) {
@@ -105,6 +104,7 @@ class QuotesRepository
                 'quantity' => $detail->quantity,
                 'price' => $detail->price,
                 'supplier' => Supplier::find($detail->supplier_id)->name,
+                'supplier_id' => $detail->supplier_id,
             ]);
         }
 
