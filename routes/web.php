@@ -11,8 +11,12 @@ use App\Http\Controllers\DepartamentosController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\QuoteController;
+use App\Http\Controllers\DepartmentsController;
 use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\ServiceOrdersController;
+use App\Http\Controllers\SuppliersController;
+use App\Http\Controllers\CategoriesController;
+
 use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 
@@ -46,18 +50,38 @@ Route::get('getEmployees', [EmployeesController::class, 'getEmployees']);
 
 Route::get('registro-empleado', [EmployeesController::class, 'index']);
 Route::post('registro-empleado', [EmployeesController::class, 'store']);
+
+Route::get('services', [ServicesController::class, 'index']);
+Route::post('register-services', [ServicesController::class, 'store']);
+Route::get('update-services/{id?}', [ServicesController::class, 'update']);
+
+
+Route::get('categories', [CategoriesController::class, 'index']);
+Route::get('get-categories', [CategoriesController::class, 'getCategories']);
+Route::post('register-categories', [CategoriesController::class, 'store']);
+Route::get('update-categories/{id?}', [CategoriesController::class, 'update']);
+
+Route::get('suppliers', [SuppliersController::class, 'index']);
+Route::get('get-suppliers', [SuppliersController::class, 'getSuppliers']);
+Route::post('register-suppliers', [SuppliersController::class, 'store']);
+Route::get('update-suppliers/{id?}', [SuppliersController::class, 'update']);
+
 Route::get('/orders', [OrdersController::class, 'index']);
 Route::get('/ordersSup', [OrdersSupController::class, 'index']);
 Route::get('/GestionMateriales', [GestionMaterialesController::class, 'index']);
 Route::get('/GestionMaterialesBTN', [GestionMaterialesBTNController::class, 'index']);
-Route::get('/departamentos', [DepartamentosController::class, 'index']);
-Route::get('/services', [ServicesController::class, 'index']);
+
+Route::get('/departments', [DepartmentsController::class, 'index']);
+Route::post('register-deparment', [DepartmentsController::class, 'store']);
+Route::get('update-deparment/{id?}', [DepartmentsController::class, 'update']);
 
 Route::prefix('ordenes-servicio')->group(function(){
     Route::get('/',[ServiceOrdersController::class,'index']);
     Route::get('crear',[ServiceOrdersController::class,'create']);
     Route::get('getOrders', [ServiceOrdersController::class, 'getOrders']);
     Route::get('get-services', [ServiceOrdersController::class, 'getServices']);
+    Route::get('get-deparments', [ServiceOrdersController::class, 'getDeparments']);
+
     Route::get('get-employees-by-service/{serviceId}', [ServiceOrdersController::class, 'getEmployeesByService']);
     Route::post('orden-servicio',[ServiceOrdersController::class,'getServiceOrderByNumber']);
     Route::get('{orderNumber}/gestion-materiales', [ServiceOrdersController::class, 'materialsManagementCreate']);

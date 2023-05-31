@@ -2,29 +2,31 @@
 
 namespace App\Repositories;
 
-use App\Models\Department;
+use App\Models\Categories;
 use Exception;
 
-class DepartmentsRepository
-{
-    public function departments()
-    {
-        $departments = Department::select('name', 'id','description') ->where('active', 1)
-            ->get();
-            
-        return $departments;
+class CategoriesRepository{
+
+    public function categories(){
+        //return Service::get();
+
+        $services = Categories::select('name', 'id','description') ->where('active', 1)
+        ->get();
+        
+    return $services;
+
     }
 
-    
+
     public function update($id)
     {
         try {
 
-            $deparment =  Department::find($id);
+            $model =  Categories::find($id);
 
-            $deparment->active = 0;
+            $model->active = 0;
 
-            $deparment->save();
+            $model->save();
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -42,16 +44,18 @@ class DepartmentsRepository
                 throw new Exception('Debe especificar un nombre.', 1);
             }
 
-            $deparment = new Department([
+            $model = new Categories([
                 'description' => $description,
                 'name' => $nombre
 
             ]);
 
-            $deparment->save();
+            $model->save();
 
         } catch (\Throwable $th) {
             throw $th;
         }
     }
+
+
 }

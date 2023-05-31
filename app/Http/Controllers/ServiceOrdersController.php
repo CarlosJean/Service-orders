@@ -11,6 +11,9 @@ use App\Models\Order;
 use App\Repositories\EmployeeRepository;
 use App\Repositories\OrdersRepository;
 use App\Repositories\ServicesRepository;
+use App\Repositories\DepartmentsRepository;
+
+
 use Illuminate\Http\Request;
 
 class ServiceOrdersController extends Controller
@@ -19,15 +22,20 @@ class ServiceOrdersController extends Controller
     protected $employeeRepository;
     protected $ordersRepository;
     protected $servicesRepository;
+    protected $departmentsRepository;
 
     public function __construct(
         EmployeeRepository $employeeRepository,
         OrdersRepository $ordersRepository,
-        ServicesRepository $servicesRepository
+        ServicesRepository $servicesRepository,
+        DepartmentsRepository $departmentsRepository
+        
     ) {
         $this->employeeRepository = $employeeRepository;
         $this->ordersRepository = $ordersRepository;
         $this->servicesRepository = $servicesRepository;
+        $this->departmentsRepository = $departmentsRepository;
+
     }
 
     public function index()
@@ -94,6 +102,10 @@ class ServiceOrdersController extends Controller
     public function getServices()
     {
         return $this->servicesRepository->services();
+    }
+
+    public function getDeparments() {      
+        return   $this->departmentsRepository->departments();
     }
 
     public function getEmployeesByService($idService)

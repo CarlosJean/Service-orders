@@ -7,9 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Service extends Model
 {
+    protected $fillable = ['name', 'description'];
     use HasFactory;
 
     public function employees(){
         return $this->belongsToMany(Employee::class);
     }
+
+
 }

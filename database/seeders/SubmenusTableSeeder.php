@@ -56,7 +56,9 @@ class SubmenusTableSeeder extends Seeder
         DB::table('submenus')->insert([
             'name' => 'Suplidor',
             'order' => 3,
-            'menu_id' => 3
+            'menu_id' => 3,
+            'URL' => 'suppliers'
+            
         ]);
         
         //Menú de inventarios
@@ -81,20 +83,26 @@ class SubmenusTableSeeder extends Seeder
         DB::table('submenus')->insert([
             'name' => 'Categorías',
             'order' => 4,
-            'menu_id' => 4
+            'menu_id' => 4,
+            'URL' => 'categories'
+
         ]);
         
         //Menú de Ordenes
         DB::table('submenus')->insert([
             'name' => 'Servicios',
             'order' => 1,
-            'menu_id' => 5
+            'menu_id' => 5,
+            'URL' => 'services'
+
         ]);
         
         DB::table('submenus')->insert([
             'name' => 'Departamentos',
             'order' => 2,
-            'menu_id' => 5
+            'menu_id' => 5,
+            'URL' => 'departments'
+
         ]);
         
         DB::table('submenus')->insert([
