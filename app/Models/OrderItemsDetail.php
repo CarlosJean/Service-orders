@@ -16,8 +16,8 @@ class OrderItemsDetail extends Model
         return $this->BelongsTo(OrderItem::class);
     }
     
-    public function items(){
-        return $this->BelongsTo(Item::class);
+    public function item(){
+        return $this->belongsTo(Item::class);
     }
     
 }

@@ -17,4 +17,8 @@ class Item extends Model
         'reference',
         'measurement_unit',
     ];
+
+    public function orderItemDetail(){
+        return $this->hasMany(OrderItemDetail::class);
+    }
 }

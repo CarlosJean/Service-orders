@@ -16,5 +16,11 @@ class ItemsController extends Controller
     public function getItems(){
         $items = $this->itemsRepository->all();
         return $items;
+    }    
+
+    public function createDeliveryOfMaterials(){
+
+        $this->itemsRepository->itemsByServiceOrderNumber('546646');
+        return view('items.delivery');
     }
 }

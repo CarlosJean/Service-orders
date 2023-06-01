@@ -2,20 +2,19 @@
 
 namespace Database\Seeders;
 
-use App\Models\Quote;
+use App\Models\QuoteDetail;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
-class QuoteSeeder extends Seeder
+class QuoteDetailsSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Quote::factory()
-            ->count(1)
+        QuoteDetail::factory()
+            ->count(3)
             ->create();
     }
 }

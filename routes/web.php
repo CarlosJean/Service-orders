@@ -100,6 +100,7 @@ Route::prefix('cotizaciones')->group(function(){
 
 Route::prefix('articulos')->group(function(){
     Route::get('/', [ItemsController::class, 'getItems']);
+    Route::get('entrega', [ItemsController::class, 'createDeliveryOfMaterials']);
 });
 
 Route::prefix('suplidores')->group(function(){

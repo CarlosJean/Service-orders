@@ -11,7 +11,7 @@ class OrderItem extends Model
 
     protected $fillable = ['service_order_id', 'requestor', 'status'];
 
-    public function orderItemsDetail(){
+    public function detail(){
         return $this->hasMany(OrderItemsDetail::class);   
     }
 

@@ -10,4 +10,8 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = ['requestor', 'number', 'issue', 'status'];
+
+    public function orderItem(){
+        return $this->hasOne(OrderItem::class);
+    }
 }

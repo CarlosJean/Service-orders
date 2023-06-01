@@ -20,4 +20,8 @@ class Quote extends Model
         return $this->hasMany(QuoteDetail::class);
     }
 
+    public function purchaseOrderDetail(){
+        return $this->hasManyThrough(PurchaseOrderDetail::class, PurchaseOrder::class);
+    }
+
 }
