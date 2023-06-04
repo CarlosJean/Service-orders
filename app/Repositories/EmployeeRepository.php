@@ -207,4 +207,11 @@ class EmployeeRepository
 
         return $employees;
     }
+
+    public function employeeByRoleAndDepartment($roleId, $departmentId){
+        $employees = Employee::where('role_id', $roleId)
+            ->where('department_id', $departmentId);
+        
+        return $employees;
+    }
 }

@@ -6,12 +6,22 @@ use App\Models\detail;
 use App\Models\Item;
 use App\Models\PurchaseOrder;
 use App\Models\details;
+use App\Models\OrderItem;
+use App\Models\OrderItemsDetail;
 use App\Models\PurchaseOrderDetail;
 use App\Models\Quote;
 use Exception;
 
 class PurchaseOrderRepository
 {
+
+    protected $ordersRepository;
+    protected $employeeRepository;
+    public function __construct(OrdersRepository $ordersRepository, EmployeeRepository $employeeRepository)
+    {
+        $this->ordersRepository = $ordersRepository;
+        $this->employeeRepository = $employeeRepository;
+    }
 
     public function purchaseOrderNumber()
     {
@@ -40,9 +50,30 @@ class PurchaseOrderRepository
             $purchaseOrder->total = collect($details)->sum('price');
             $purchaseOrder->save();
 
+            $maintenanceSupervisor = $this->employeeRepository
+                ?->employeeByRoleAndDepartment(2, 2)
+                ?->first()
+                ->user_id;
+
+            $orderItem = $quote->orderItem;
+            if ($orderItem == null) {
+                $orderItem = new OrderItem([
+                    'service_order_id' => $quote->order_id,
+                    'requestor' => $maintenanceSupervisor,
+                    'status' => 'en espera de entrega',
+                ]);
+
+                $orderItem->save();
+            }
+
             foreach ($details as $detail) {
 
                 $item = new Item();
+
+                /*
+                    Si el item id está nul quiere decir que el artículo no existe.
+                    Se inserta en la base de datos.                
+                */
                 if ($detail['item_id'] == 'null') {
                     $detail['item_id'] = null;
                     $item = new Item([
@@ -73,6 +104,17 @@ class PurchaseOrderRepository
 
                 $item->save();
                 $purchaseOrderDetail->save();
+
+                //Si la cotización no está asociada a una orden de servicio entonces el programa finaliza
+                if ($quote->order == null) return;
+
+                $orderItemDetail = new OrderItemsDetail();
+                $orderItemDetail->item()->associate($item);
+                $orderItemDetail->orderItem()->associate($orderItem);
+                $orderItemDetail->quantity = $detail['quantity'];
+                $orderItemDetail->save();
+
+                echo json_encode($orderItemDetail);
             }
         } catch (\Throwable $th) {
             throw $th;

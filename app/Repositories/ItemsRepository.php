@@ -31,18 +31,18 @@ class ItemsRepository{
             $items =  [];
             foreach ($details as $detail) {
                 $item = $detail->item;
-                echo json_encode($item);
+                //echo json_encode($item);
             }
 
             $quote = Quote::where('order_id', $serviceOrder->id)
                 ->first();
 
-            $purchaseOrder = PurchaseOrder::where('qote_id', $quote->id)
+            $purchaseOrder = PurchaseOrder::where('quote_id', $quote->id)
                 ->first();
 
-            foreach ($quote->purchaseOrderDetail/*$purchaseOrder->detail*/ as $detail) {
+            foreach (/*$quote->purchaseOrderDetail*/$purchaseOrder->detail as $detail) {
                 $item = $detail->item;
-                echo json_encode($item);
+                echo json_encode($detail);
             }
             
 
@@ -50,5 +50,25 @@ class ItemsRepository{
             var_dump($th);
             //throw $th;
         }
+    }
+
+    public function serviceOrderItems($serviceOrderNumber){        
+        $serviceOrder = Order::where('number', $serviceOrderNumber)->first();
+
+        $details = $serviceOrder
+            ->orderItem
+            ->orderItemDetail;
+        
+        $items = [];
+        foreach ($details as $detail) {
+            array_push($items, [
+                'id' => $detail['id'],
+                'name' => $detail->item->name,
+                'reference' => $detail->item->reference,
+                'quantity' => $detail->quantity,
+            ]);
+        }
+        
+        echo json_encode($items);
     }
 }

@@ -18,11 +18,11 @@ class QuoteDetailFactory extends Factory
     {
         return [
             'quote_id' => 1,
-            'item_id' => fake()->randomDigitNot(6,7,8,9),
-            'supplier_id' => fake()->numberBetween(1,5),
+            'item_id' => null,
+            'supplier_id' => fake()->numberBetween(2,5),
             'item' => fake()->word(),
             'reference' => fake()->words(4,true),
-            'quantity' => fake()->randomFloat(2,1,99999),
+            'quantity' => fake()->randomFloat(2,1,50),
             'price' => fake()->randomFloat(2,1,99999),
         ];
     }

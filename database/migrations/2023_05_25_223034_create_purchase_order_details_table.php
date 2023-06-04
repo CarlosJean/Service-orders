@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('reference')->nullable();
             $table->float('price');
             $table->float('quantity');
-            $table->float('total_price');
+            $table->double('total_price');
 
             $table->foreign('purchase_order_id')->references('id')->on('purchase_orders');
             $table->foreign('item_id')->references('id')->on('items');

@@ -12,6 +12,6 @@ class Order extends Model
     protected $fillable = ['requestor', 'number', 'issue', 'status'];
 
     public function orderItem(){
-        return $this->hasOne(OrderItem::class);
+        return $this->hasOne(OrderItem::class, 'service_order_id');
     }
 }

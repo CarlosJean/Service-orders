@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Item;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemsDetail;
@@ -234,5 +235,25 @@ class OrdersRepository
         } catch (\Throwable $th) {
             throw $th;
         }
+    }
+
+    /*
+        *Registra materiales necesarios de una orden de servicio.
+        *@param $quote
+        *@param $items
+    */    
+    public function storeItemsToItemsOrder($quote, $items){        
+        
+        $orderItem = $quote
+            ->orderItem;
+        
+        foreach ($items as $item) {
+
+            echo $item;
+            //$item = Item::find($item);
+            //$orderItem->orderItemDetail->save($item);
+        }        
+
+        echo json_encode($orderItem);
     }
 }

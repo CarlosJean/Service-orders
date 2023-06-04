@@ -24,4 +24,12 @@ class Quote extends Model
         return $this->hasManyThrough(PurchaseOrderDetail::class, PurchaseOrder::class);
     }
 
+    public function order(){
+        return $this->belongsTo(Order::class);
+    }
+
+    public function orderItem(){
+        return $this->hasOneThrough(OrderItem::class, Order::class,'id','service_order_id');
+    }
+
 }

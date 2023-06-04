@@ -14,10 +14,10 @@ class OrderItemsSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('order_items')->insert([
-            'service_order_id' => 1,
-            'requestor' => 1,
-            'status' => 'en espera de entrega'
-        ]);
+        // DB::table('order_items')->insert([
+        //     'service_order_id' => 1,
+        //     'requestor' => 1,
+        //     'status' => 'en espera de entrega'
+        // ]);
     }
 }

@@ -20,7 +20,7 @@ class ItemsController extends Controller
 
     public function createDeliveryOfMaterials(){
 
-        $this->itemsRepository->itemsByServiceOrderNumber('546646');
+        $this->itemsRepository->serviceOrderItems('546646');
         return view('items.delivery');
     }
 }
