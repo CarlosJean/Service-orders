@@ -56,19 +56,20 @@ class ItemsRepository{
         $serviceOrder = Order::where('number', $serviceOrderNumber)->first();
 
         $details = $serviceOrder
-            ->orderItem
-            ->orderItemDetail;
+            ?->orderItem
+            ?->orderItemDetail;        
         
-        $items = [];
+        $items = ['data' => []];       
+        if ($details == null) { return $items; }
         foreach ($details as $detail) {
-            array_push($items, [
-                'id' => $detail['id'],
+            array_push($items['data'], [
+                'id' => $detail->id,
                 'name' => $detail->item->name,
                 'reference' => $detail->item->reference,
                 'quantity' => $detail->quantity,
             ]);
         }
         
-        echo json_encode($items);
+        return $items;
     }
 }

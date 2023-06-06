@@ -20,4 +20,7 @@ class OrderItemsDetail extends Model
         return $this->belongsTo(Item::class);
     }
     
+    protected $attributes = [
+        'dispatched' => false
+    ];
 }

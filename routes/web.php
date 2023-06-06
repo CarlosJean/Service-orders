@@ -84,6 +84,7 @@ Route::prefix('ordenes-servicio')->group(function(){
 
     Route::get('get-employees-by-service/{serviceId}', [ServiceOrdersController::class, 'getEmployeesByService']);
     Route::post('orden-servicio',[ServiceOrdersController::class,'getServiceOrderByNumber']);
+    Route::post('materiales', [ServiceOrdersController::class, 'serviceOrderItems']);
     Route::get('{orderNumber}/gestion-materiales', [ServiceOrdersController::class, 'materialsManagementCreate']);
     Route::get('{orderNumber}',[ServiceOrdersController::class,'show']);
     Route::post('crear',[ServiceOrdersController::class,'store']);
@@ -100,7 +101,8 @@ Route::prefix('cotizaciones')->group(function(){
 
 Route::prefix('articulos')->group(function(){
     Route::get('/', [ItemsController::class, 'getItems']);
-    Route::get('entrega', [ItemsController::class, 'createDeliveryOfMaterials']);
+    Route::get('entrega', [ItemsController::class, 'createDispatchMaterials']);
+    Route::post('despachar', [ItemsController::class, 'storeDispatch']);
 });
 
 Route::prefix('suplidores')->group(function(){

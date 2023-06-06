@@ -12,8 +12,7 @@ use App\Repositories\EmployeeRepository;
 use App\Repositories\OrdersRepository;
 use App\Repositories\ServicesRepository;
 use App\Repositories\DepartmentsRepository;
-
-
+use App\Repositories\ItemsRepository;
 use Illuminate\Http\Request;
 
 class ServiceOrdersController extends Controller
@@ -23,19 +22,21 @@ class ServiceOrdersController extends Controller
     protected $ordersRepository;
     protected $servicesRepository;
     protected $departmentsRepository;
+    protected $itemsRepository;
 
     public function __construct(
         EmployeeRepository $employeeRepository,
         OrdersRepository $ordersRepository,
         ServicesRepository $servicesRepository,
-        DepartmentsRepository $departmentsRepository
+        DepartmentsRepository $departmentsRepository,
+        ItemsRepository $itemsRepository
         
     ) {
         $this->employeeRepository = $employeeRepository;
         $this->ordersRepository = $ordersRepository;
         $this->servicesRepository = $servicesRepository;
         $this->departmentsRepository = $departmentsRepository;
-
+        $this->itemsRepository = $itemsRepository;
     }
 
     public function index()
@@ -205,5 +206,11 @@ class ServiceOrdersController extends Controller
         ]);
 
         return $order;                
+    }
+
+    public function serviceOrderItems(Request $request){
+        $serviceOrderNumber = $request->input('service_order_number');
+        return $this->itemsRepository
+            ->serviceOrderItems($serviceOrderNumber);
     }
 }
