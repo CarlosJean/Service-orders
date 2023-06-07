@@ -18,19 +18,26 @@ class ItemsController extends Controller
         return $items;
     }    
 
-
     public function createDispatchMaterials(){
         
         return view('items.dispatch');
     }
     
-    public function createDeliveryOfMaterials(){
-
-        $this->itemsRepository->serviceOrderItems('546646');
+    public function createDeliveryOfMaterials(Request $request){
+        $serviceOrderNumber = $request->input('service_order_number');
+        $this->itemsRepository->serviceOrderItems($serviceOrderNumber);
         return view('items.delivery');
     }
 
-    public function storeDispatch(Request $request){
-        var_dump($request);
+    public function storeDispatch(Request $request){       
+        try {
+            $itemsId = $request->input('items');
+            $this->itemsRepository->dispatch($itemsId);
+
+            return view('items.dispatched');
+        } catch (\Throwable $th) {
+            var_dump($th);
+            //throw $th;
+        } 
     }
 }

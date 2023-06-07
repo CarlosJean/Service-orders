@@ -1,16 +1,14 @@
 const tblItems = $("#tblItems");
 var itemsTable = null;
-
-$(function () {
-    serviceOrderItems();
-})
+const txtServiceOrder = $("#txtServiceOrder");
+const btnFindOrderItems = $("#btnFindOrderItems");
 
 //Funciones
-const serviceOrderItems = function () {
+const serviceOrderItems = function (serviceOrderNumber) {
     itemsTable = tblItems.DataTable({
         ajax: {
             url: '../ordenes-servicio/materiales',
-            data: { service_order_number: '546646' },
+            data: { service_order_number: serviceOrderNumber },
             type: 'post',
             dataType: 'json'
         },
@@ -33,19 +31,39 @@ const serviceOrderItems = function () {
             style: 'multi',
             selector: 'td:first-child'
         },
+        dom: 'ftp',
+        destroy: true,
+        language: {
+            url: "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+        }
     });
 };
 
-$("#btnDispatch").on('click', function(){
-    var selectedRowsData = itemsTable.rows('.selected').data();
+$("#btnDispatch").on('click', function () {
+    var selectedRowsData = itemsTable?.rows('.selected')?.data();
+
+    console.log(selectedRowsData);
+    if (selectedRowsData == undefined) {
+        Swal.fire({
+            icon: 'error',
+            text: 'Debe seleccionar los materiales a despachar.',
+        });
+    }
 
     var form = document.getElementById("frmDispatchItems");
-    var formData = new FormData(form);
-    
+
     for (let index = 0; index < selectedRowsData.length; index++) {
         const element = selectedRowsData[index];
         $(form).append(`<input type="hidden" name="items[${index}]" value="${element.id}" />`)
     }
-    
+
     form.submit();
+});
+
+
+btnFindOrderItems.on('click', function (e) {
+    e.preventDefault();
+
+    const serviceOrderNumber = txtServiceOrder.val();
+    serviceOrderItems(serviceOrderNumber);
 });

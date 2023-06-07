@@ -81,7 +81,6 @@ Route::prefix('ordenes-servicio')->group(function(){
     Route::get('getOrders', [ServiceOrdersController::class, 'getOrders']);
     Route::get('get-services', [ServiceOrdersController::class, 'getServices']);
     Route::get('get-deparments', [ServiceOrdersController::class, 'getDeparments']);
-
     Route::get('get-employees-by-service/{serviceId}', [ServiceOrdersController::class, 'getEmployeesByService']);
     Route::post('orden-servicio',[ServiceOrdersController::class,'getServiceOrderByNumber']);
     Route::post('materiales', [ServiceOrdersController::class, 'serviceOrderItems']);

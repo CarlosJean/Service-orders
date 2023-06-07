@@ -4,6 +4,7 @@ namespace App\Repositories;
 use App\Models\Item;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\OrderItemsDetail;
 use App\Models\PurchaseOrder;
 use App\Models\Quote;
 
@@ -57,7 +58,8 @@ class ItemsRepository{
 
         $details = $serviceOrder
             ?->orderItem
-            ?->orderItemDetail;        
+            ?->orderItemDetail
+            ->where('dispatched', false);        
         
         $items = ['data' => []];       
         if ($details == null) { return $items; }
@@ -71,5 +73,22 @@ class ItemsRepository{
         }
         
         return $items;
+    }
+
+    public function dispatch($itemsId){
+
+        try {
+            
+            foreach ($itemsId as $itemId) {
+                $item = OrderItemsDetail::find($itemId);
+                $item->dispatched = true;
+                $item->save();    
+            }
+
+            //TODO: Guardar histórico para inventario
+
+        } catch (\Throwable $th) {
+            throw $th;
+        }       
     }
 }
