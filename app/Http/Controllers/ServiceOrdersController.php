@@ -7,6 +7,7 @@ use App\Http\Requests\AddItemsToOrderRequest;
 use App\Http\Requests\AssignTechnicianToOrderRequest;
 use App\Http\Requests\CreateOrderRequest;
 use App\Http\Requests\DisapproveServiceOrderRequest;
+use App\Http\Requests\TechnicalReportRequest;
 use App\Models\Order;
 use App\Repositories\EmployeeRepository;
 use App\Repositories\OrdersRepository;
@@ -212,5 +213,20 @@ class ServiceOrdersController extends Controller
         $serviceOrderNumber = $request->input('service_order_number');
         return $this->itemsRepository
             ->serviceOrderItems($serviceOrderNumber);
+    }
+    
+    public function storeTechnicalReport(TechnicalReportRequest $request){
+        try {
+            $technicalReport = $request->input('technical_report'); 
+            $startOrder = $request->boolean('start'); 
+            $orderNumber = $request->get('order_number');
+            
+            $this->ordersRepository->technicianReport($orderNumber, $technicalReport, $startOrder);
+    
+            return view('orders.diagnosed_by_technician')->with(['orderNumber' => $orderNumber]);
+        } catch (\Throwable $th) {
+            var_dump($th);
+            //throw $th;
+        }
     }
 }

@@ -9,6 +9,6 @@
 @if($userRole == 'maintenanceSupervisor')
 @include('partials.orders.assign_technician')
 @elseIf($userRole == 'technician')
-@include('partials.orders.technician_order')
+@include('partials.orders.technician_order', ['orderNumber' => $order->number])
 @endif
 @endsection

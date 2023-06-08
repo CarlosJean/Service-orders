@@ -237,23 +237,21 @@ class OrdersRepository
         }
     }
 
-    /*
-        *Registra materiales necesarios de una orden de servicio.
-        *@param $quote
-        *@param $items
-    */    
-    public function storeItemsToItemsOrder($quote, $items){        
-        
-        $orderItem = $quote
-            ->orderItem;
-        
-        foreach ($items as $item) {
+    public function technicianReport($orderNumber, $technicianReport, $startOrder = false){
 
-            echo $item;
-            //$item = Item::find($item);
-            //$orderItem->orderItemDetail->save($item);
-        }        
+        try {
+            $order = Order::where('number', $orderNumber)
+                ->first();
+    
+            $order->diagnosis = $technicianReport;
 
-        echo json_encode($orderItem);
-    }
+            if ($startOrder) {
+                $order->start_date = now();
+            }
+    
+            $order->save();
+        } catch (\Throwable $th) {
+            throw $th;
+        }       
+    }   
 }

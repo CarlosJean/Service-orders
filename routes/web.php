@@ -90,6 +90,7 @@ Route::prefix('ordenes-servicio')->group(function(){
     Route::post('asignar-tecnico',[ServiceOrdersController::class,'assignTechnicianUpdate']);
     Route::post('desaprobar',[ServiceOrdersController::class,'disapproveUpdate']);
     Route::post('{orderNumber}/gestion-materiales',[ServiceOrdersController::class,'orderMaterialsStore']);
+    Route::post('reporte-tecnico', [ServiceOrdersController::class, 'storeTechnicalReport']);
 });
 
 Route::prefix('cotizaciones')->group(function(){
