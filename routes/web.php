@@ -85,12 +85,16 @@ Route::prefix('ordenes-servicio')->group(function(){
     Route::post('orden-servicio',[ServiceOrdersController::class,'getServiceOrderByNumber']);
     Route::post('materiales', [ServiceOrdersController::class, 'serviceOrderItems']);
     Route::get('{orderNumber}/gestion-materiales', [ServiceOrdersController::class, 'materialsManagementCreate']);
+    Route::get('{orderNumber}/aprobacion-materiales', [ServiceOrdersController::class, 'createItemsRequestApproval']);
     Route::get('{orderNumber}',[ServiceOrdersController::class,'show']);
+    Route::post('{orderNumber}/aprobacion-materiales', [ServiceOrdersController::class, 'updateItemsRequest']);
     Route::post('crear',[ServiceOrdersController::class,'store']);
     Route::post('asignar-tecnico',[ServiceOrdersController::class,'assignTechnicianUpdate']);
     Route::post('desaprobar',[ServiceOrdersController::class,'disapproveUpdate']);
     Route::post('{orderNumber}/gestion-materiales',[ServiceOrdersController::class,'orderMaterialsStore']);
     Route::post('reporte-tecnico', [ServiceOrdersController::class, 'storeTechnicalReport']);
+    Route::post('iniciar', [ServiceOrdersController::class, 'startOrder']);
+    Route::post('finalizar', [ServiceOrdersController::class, 'finishOrder']);
 });
 
 Route::prefix('cotizaciones')->group(function(){
