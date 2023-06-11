@@ -11,16 +11,22 @@ use App\Models\OrderItemsDetail;
 use App\Models\PurchaseOrderDetail;
 use App\Models\Quote;
 use Exception;
+use InventoryType;
 
 class PurchaseOrderRepository
 {
 
     protected $ordersRepository;
     protected $employeeRepository;
-    public function __construct(OrdersRepository $ordersRepository, EmployeeRepository $employeeRepository)
-    {
+    protected $inventoriesRepository;
+    public function __construct(
+        OrdersRepository $ordersRepository,
+        EmployeeRepository $employeeRepository,
+        InventoriesRepository $inventoriesRepository
+    ) {
         $this->ordersRepository = $ordersRepository;
         $this->employeeRepository = $employeeRepository;
+        $this->inventoriesRepository = $inventoriesRepository;
     }
 
     public function purchaseOrderNumber()
@@ -71,7 +77,7 @@ class PurchaseOrderRepository
                 $item = new Item();
 
                 /*
-                    Si el item id está nul quiere decir que el artículo no existe.
+                    Si el item id está nulo quiere decir que el artículo no existe.
                     Se inserta en la base de datos.                
                 */
                 if ($detail['item_id'] == 'null') {
@@ -104,6 +110,10 @@ class PurchaseOrderRepository
 
                 $item->save();
                 $purchaseOrderDetail->save();
+
+                //Guardar operacion en histórico
+                $item->quantity = $detail['quantity'];
+                $this->inventoriesRepository->historical($item, InventoryType::Entry);
 
                 //Si la cotización no está asociada a una orden de servicio entonces el programa finaliza
                 if ($quote->order == null) return;

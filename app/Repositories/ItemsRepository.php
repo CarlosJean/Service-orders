@@ -1,6 +1,8 @@
 <?php
+
 namespace App\Repositories;
 
+use App\Enums\InventoryType;
 use App\Models\Item;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -8,22 +10,31 @@ use App\Models\OrderItemsDetail;
 use App\Models\PurchaseOrder;
 use App\Models\Quote;
 
-class ItemsRepository{    
+class ItemsRepository
+{
 
-    public function all(){
+    protected $inventoriesRepository;
+    public function __construct(InventoriesRepository $inventoriesRepository) {
+        $this->inventoriesRepository = $inventoriesRepository;
+    }
+
+    public function all()
+    {
         return Item::get();
     }
 
-    public function item($itemId){
+    public function item($itemId)
+    {
         return Item::find($itemId);
     }
 
-    public function itemsByServiceOrderNumber($serviceOrderNumber){
+    public function itemsByServiceOrderNumber($serviceOrderNumber)
+    {
 
         try {
             $serviceOrder = Order::where('number', $serviceOrderNumber)
                 ->first();
-    
+
             $orderItems = OrderItem::where('service_order_id', $serviceOrder->id)
                 ->first();
 
@@ -45,24 +56,25 @@ class ItemsRepository{
                 $item = $detail->item;
                 echo json_encode($detail);
             }
-            
-
         } catch (\Throwable $th) {
             var_dump($th);
             //throw $th;
         }
     }
 
-    public function serviceOrderItems($serviceOrderNumber){        
+    public function serviceOrderItems($serviceOrderNumber)
+    {
         $serviceOrder = Order::where('number', $serviceOrderNumber)->first();
 
         $details = $serviceOrder
             ?->orderItem
             ?->orderItemDetail
-            ->where('dispatched', false);        
-        
-        $items = ['data' => []];       
-        if ($details == null) { return $items; }
+            ->where('dispatched', false);
+
+        $items = ['data' => []];
+        if ($details == null) {
+            return $items;
+        }
         foreach ($details as $detail) {
             array_push($items['data'], [
                 'id' => $detail->id,
@@ -71,24 +83,29 @@ class ItemsRepository{
                 'quantity' => $detail->quantity,
             ]);
         }
-        
+
         return $items;
     }
 
-    public function dispatch($itemsId){
+    public function dispatch($itemsId)
+    {
 
         try {
-            
-            foreach ($itemsId as $itemId) {
-                $item = OrderItemsDetail::find($itemId);
-                $item->dispatched = true;
-                $item->save();    
-            }
 
-            //TODO: Guardar histórico para inventario
+            foreach ($itemsId as $itemId) {
+                $orderItem = OrderItemsDetail::find($itemId);
+                $orderItem->dispatched = true;
+                $orderItem->save();
+
+                $item = Item::find($itemId);
+                $item->quantity = $orderItem->quantity;
+
+                $this->inventoriesRepository
+                    ->historical($item, InventoryType::Dispatch);
+            }
 
         } catch (\Throwable $th) {
             throw $th;
-        }       
+        }
     }
 }

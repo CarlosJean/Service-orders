@@ -181,7 +181,7 @@ class ServiceOrdersController extends Controller
     public function materialsManagementCreate($orderNumber)
     {
         $serviceOrder = $this->ordersRepository->serviceOrderByNumber($orderNumber);
-        return view('warehouse.management')->with('order', $serviceOrder);
+        return view('warehouse.management')->with('order', $serviceOrder->detail);
     }
 
     public function orderMaterialsStore(AddItemsToOrderRequest $request, $orderNumber)
