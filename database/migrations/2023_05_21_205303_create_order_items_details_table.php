@@ -19,6 +19,7 @@ return new class extends Migration
             $table->bigInteger('order_item_id')
                 ->unsigned();                
             $table->float('quantity');
+            $table->boolean('dispatched');
 
             //Foreign keys
             $table->foreign('item_id')

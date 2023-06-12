@@ -14,6 +14,17 @@ return new class extends Migration
         Schema::create('purchase_order_details', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->unsignedBigInteger('purchase_order_id');
+            $table->unsignedBigInteger('item_id')->nullable();
+            $table->unsignedBigInteger('supplier_id');
+            $table->string('reference')->nullable();
+            $table->float('price');
+            $table->float('quantity');
+            $table->double('total_price');
+
+            $table->foreign('purchase_order_id')->references('id')->on('purchase_orders');
+            $table->foreign('item_id')->references('id')->on('items');
+            $table->foreign('supplier_id')->references('id')->on('suppliers');
         });
     }
 

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\OrderItems>
  */
-class OrderItemsFactory extends Factory
+class OrderItemFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +17,9 @@ class OrderItemsFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'service_order_id' => 1,
+            'requestor' => 1,
+            'status' => 'en espera de entrega'
         ];
     }
 }

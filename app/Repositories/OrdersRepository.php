@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Item;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemsDetail;
@@ -107,7 +108,7 @@ class OrdersRepository
     public function serviceOrderByNumber($orderNumber)
     {
         try {
-            $order = DB::table('orders')
+            $detail = DB::table('orders')
                 ->join('users', 'orders.requestor', '=', 'users.id')
                 ->join('employees as e', 'users.id', '=', 'e.user_id')
                 ->select(
@@ -120,13 +121,21 @@ class OrdersRepository
                     'orders.status',
                     'orders.observations',
                     'orders.technician',
+                    'orders.diagnosis',
+                    'orders.start_date',
                 )
                 ->where('number', $orderNumber)
-                ->first();
-
-            if ($order == null) {
+                ->first();            
+            
+            if ($detail == null) {
                 throw new Exception('No existe una orden de servicio con este número.', 1);
             }
+
+            $items = Order::where('number', $orderNumber)
+                ->first()
+                ->items;
+
+            $order = (object)['detail' => $detail, 'items' => $items];
 
             return $order;
         } catch (\Throwable $th) {
@@ -212,7 +221,7 @@ class OrdersRepository
             if ($order == null) {
                 return new Exception('La orden a la cual intenta agregar materiales no existe.');
             }
-            
+
             $requestor = $this->employeeRepository->employeeByUserId(auth()->id())['id'];
 
             $orderItem = new OrderItem([
@@ -221,18 +230,77 @@ class OrdersRepository
                 'status' => 'en espera de entrega'
             ]);
             $orderItem->save();
-            
-            foreach($items as $item){
+
+            foreach ($items as $item) {
                 $detail = new OrderItemsDetail();
                 $detail->orderItem()->associate($orderItem);
                 $detail->quantity = $item['quantity'];
                 $detail->item_id = $item['id'];
 
                 $detail->save();
-            }         
-                    
+            }
         } catch (\Throwable $th) {
             throw $th;
         }
     }
+
+    public function technicianReport($orderNumber, $technicianReport, $startOrder = false)
+    {
+
+        try {
+            $order = Order::where('number', $orderNumber)
+                ->first();
+
+            $order->diagnosis = $technicianReport;
+
+            if ($startOrder) {
+                $order->start_date = now();
+            }
+
+            $order->save();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function startOrder($serviceOrderNumber)
+    {
+        $order = Order::where('number', $serviceOrderNumber)
+            ->first();
+        $order->start_date = now();
+        $order->save();
+    }
+
+    public function finishOrder($serviceOrderNumber)
+    {
+        $order = Order::where('number', $serviceOrderNumber)
+            ->first();
+        $order->end_date = now();
+        $order->save();
+    }
+
+    public function orderItems($serviceOrderNumber)
+    {
+
+        $orderDetail =  $this->serviceOrderByNumber($serviceOrderNumber);
+
+        $items = Order::where('number', $serviceOrderNumber)
+            ->first()
+            ->items;
+
+        $order = ['detail' => $orderDetail, 'items' => $items];
+
+        return $order;
+    }
+
+    public function approveServiceOrderItemRequest($serviceOrderNumber, $approved){
+        $orderItemsRequest = Order::where('number', $serviceOrderNumber)
+            ->first()
+            ->orderItem;
+        
+        $orderItemsRequest->status = ($approved) 
+            ? 'aprobado por gerente de mantenimiento' 
+            : 'desaprobado por gerente de mantenimiento';
+        $orderItemsRequest->save();
+    }   
 }

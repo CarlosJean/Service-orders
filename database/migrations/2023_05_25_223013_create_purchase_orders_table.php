@@ -14,6 +14,13 @@ return new class extends Migration
         Schema::create('purchase_orders', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('quote_id');
+            $table->string('number');
+            $table->float('total');
+
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('quote_id')->references('id')->on('quotes');
         });
     }
 

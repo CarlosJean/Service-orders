@@ -7,13 +7,13 @@ use App\Http\Requests\AddItemsToOrderRequest;
 use App\Http\Requests\AssignTechnicianToOrderRequest;
 use App\Http\Requests\CreateOrderRequest;
 use App\Http\Requests\DisapproveServiceOrderRequest;
+use App\Http\Requests\TechnicalReportRequest;
 use App\Models\Order;
 use App\Repositories\EmployeeRepository;
 use App\Repositories\OrdersRepository;
 use App\Repositories\ServicesRepository;
 use App\Repositories\DepartmentsRepository;
-
-
+use App\Repositories\ItemsRepository;
 use Illuminate\Http\Request;
 
 class ServiceOrdersController extends Controller
@@ -23,19 +23,20 @@ class ServiceOrdersController extends Controller
     protected $ordersRepository;
     protected $servicesRepository;
     protected $departmentsRepository;
+    protected $itemsRepository;
 
     public function __construct(
         EmployeeRepository $employeeRepository,
         OrdersRepository $ordersRepository,
         ServicesRepository $servicesRepository,
-        DepartmentsRepository $departmentsRepository
-        
+        DepartmentsRepository $departmentsRepository,
+        ItemsRepository $itemsRepository
     ) {
         $this->employeeRepository = $employeeRepository;
         $this->ordersRepository = $ordersRepository;
         $this->servicesRepository = $servicesRepository;
         $this->departmentsRepository = $departmentsRepository;
-
+        $this->itemsRepository = $itemsRepository;
     }
 
     public function index()
@@ -104,7 +105,8 @@ class ServiceOrdersController extends Controller
         return $this->servicesRepository->services();
     }
 
-    public function getDeparments() {      
+    public function getDeparments()
+    {
         return   $this->departmentsRepository->departments();
     }
 
@@ -179,7 +181,7 @@ class ServiceOrdersController extends Controller
     public function materialsManagementCreate($orderNumber)
     {
         $serviceOrder = $this->ordersRepository->serviceOrderByNumber($orderNumber);
-        return view('warehouse.management')->with('order', $serviceOrder);
+        return view('warehouse.management')->with('order', $serviceOrder->detail);
     }
 
     public function orderMaterialsStore(AddItemsToOrderRequest $request, $orderNumber)
@@ -195,7 +197,8 @@ class ServiceOrdersController extends Controller
         }
     }
 
-    public function getServiceOrderByNumber(Request $request){
+    public function getServiceOrderByNumber(Request $request)
+    {
         $orderNumber = $request->input("order_number");
         $order = $this->ordersRepository->serviceOrderByNumber($orderNumber);
 
@@ -204,6 +207,67 @@ class ServiceOrdersController extends Controller
             'technician' => $order->technician,
         ]);
 
-        return $order;                
+        return $order;
+    }
+
+    public function serviceOrderItems(Request $request)
+    {
+        $serviceOrderNumber = $request->input('service_order_number');
+        return $this->itemsRepository
+            ->serviceOrderItems($serviceOrderNumber);
+    }
+
+    public function storeTechnicalReport(TechnicalReportRequest $request)
+    {
+        try {
+            $technicalReport = $request->input('technical_report');
+            $startOrder = $request->boolean('start');
+            $orderNumber = $request->get('order_number');
+
+            $this->ordersRepository->technicianReport($orderNumber, $technicalReport, $startOrder);
+
+            return view('orders.diagnosed_by_technician')->with(['orderNumber' => $orderNumber]);
+        } catch (\Throwable $th) {
+            var_dump($th);
+            //throw $th;
+        }
+    }
+
+    public function startOrder(Request $request)
+    {
+        $serviceOrderNumber = $request->input('order_number');
+        $this->ordersRepository->startOrder($serviceOrderNumber);
+        return view('orders.started_order')->with('orderNumber', $serviceOrderNumber);
+    }
+
+    public function finishOrder(Request $request)
+    {
+        $serviceOrderNumber = $request->input('order_number');
+        $this->ordersRepository->finishOrder($serviceOrderNumber);
+        return view('orders.finished_order')->with('orderNumber', $serviceOrderNumber);
+    }
+
+    public function createItemsRequestApproval($serviceOrderNumber)
+    {
+
+        $order = $this->ordersRepository
+            ->serviceOrderByNumber($serviceOrderNumber);
+
+        return view('items.request_approval')->with(['order' => $order->detail, 'orderItems' => $order->items]);
+    }
+
+    public function updateItemsRequest(Request $request)
+    {
+        $orderNumber = $request->input('service_order_number');
+        $orderItemApproved = $request->boolean('order_items_approved');
+
+        $this->ordersRepository
+            ->approveServiceOrderItemRequest($orderNumber, $orderItemApproved);
+
+        return view('items.request_approval_submitted')
+            ->with([
+                'serviceOrderNumber' => $orderNumber,
+                'approved' => $orderItemApproved
+            ]);
     }
 }

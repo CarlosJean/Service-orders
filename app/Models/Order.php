@@ -10,4 +10,12 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = ['requestor', 'number', 'issue', 'status'];
+
+    public function orderItem(){
+        return $this->hasOne(OrderItem::class, 'service_order_id');
+    }
+
+    public function items(){
+        return $this->hasManyThrough(OrderItemsDetail::class, OrderItem::class,'service_order_id');
+    }
 }

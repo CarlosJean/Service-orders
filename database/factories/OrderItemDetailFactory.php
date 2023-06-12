@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Quote>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\OrderItem>
  */
-class QuoteFactory extends Factory
+class OrderItemDetailFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,10 +17,7 @@ class QuoteFactory extends Factory
     public function definition(): array
     {
         return [
-            'number' => fake()->numerify('######'),
-            'order_id' => 1,
-            'created_by' => 1,
-            'total' => 100,
+            'item_id'
         ];
     }
 }

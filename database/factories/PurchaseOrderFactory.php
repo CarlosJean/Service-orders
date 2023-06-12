@@ -17,7 +17,10 @@ class PurchaseOrderFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'user_id' => 1,
+            'quote_id' => 1, 
+            'number' => fake()->numerify('######'),
+            'total' => fake()->randomFloat(2,10, 10000)
         ];
     }
 }

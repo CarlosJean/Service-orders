@@ -16,7 +16,7 @@ use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\ServiceOrdersController;
 use App\Http\Controllers\SuppliersController;
 use App\Http\Controllers\CategoriesController;
-
+use App\Http\Controllers\InventoriesController;
 use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 
@@ -39,7 +39,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('asignar-tecnico', function(){
+Route::get('asignar-tecnico', function () {
     return view('orders.assign_technician');
 });
 
@@ -80,38 +80,49 @@ Route::get('/departments', [DepartmentsController::class, 'index']);
 Route::post('register-deparment', [DepartmentsController::class, 'store']);
 Route::get('update-deparment/{id?}', [DepartmentsController::class, 'update']);
 
-Route::prefix('ordenes-servicio')->group(function(){
-    Route::get('/',[ServiceOrdersController::class,'index']);
-    Route::get('crear',[ServiceOrdersController::class,'create']);
+Route::prefix('ordenes-servicio')->group(function () {
+    Route::get('/', [ServiceOrdersController::class, 'index']);
+    Route::get('crear', [ServiceOrdersController::class, 'create']);
     Route::get('getOrders', [ServiceOrdersController::class, 'getOrders']);
     Route::get('get-services', [ServiceOrdersController::class, 'getServices']);
     Route::get('get-deparments', [ServiceOrdersController::class, 'getDeparments']);
-
     Route::get('get-employees-by-service/{serviceId}', [ServiceOrdersController::class, 'getEmployeesByService']);
-    Route::post('orden-servicio',[ServiceOrdersController::class,'getServiceOrderByNumber']);
+    Route::post('orden-servicio', [ServiceOrdersController::class, 'getServiceOrderByNumber']);
+    Route::post('materiales', [ServiceOrdersController::class, 'serviceOrderItems']);
     Route::get('{orderNumber}/gestion-materiales', [ServiceOrdersController::class, 'materialsManagementCreate']);
-    Route::get('{orderNumber}',[ServiceOrdersController::class,'show']);
-    Route::post('crear',[ServiceOrdersController::class,'store']);
-    Route::post('asignar-tecnico',[ServiceOrdersController::class,'assignTechnicianUpdate']);
-    Route::post('desaprobar',[ServiceOrdersController::class,'disapproveUpdate']);
-    Route::post('{orderNumber}/gestion-materiales',[ServiceOrdersController::class,'orderMaterialsStore']);
+    Route::get('{orderNumber}/aprobacion-materiales', [ServiceOrdersController::class, 'createItemsRequestApproval']);
+    Route::get('{orderNumber}', [ServiceOrdersController::class, 'show']);
+    Route::post('{orderNumber}/aprobacion-materiales', [ServiceOrdersController::class, 'updateItemsRequest']);
+    Route::post('crear', [ServiceOrdersController::class, 'store']);
+    Route::post('asignar-tecnico', [ServiceOrdersController::class, 'assignTechnicianUpdate']);
+    Route::post('desaprobar', [ServiceOrdersController::class, 'disapproveUpdate']);
+    Route::post('{orderNumber}/gestion-materiales', [ServiceOrdersController::class, 'orderMaterialsStore']);
+    Route::post('reporte-tecnico', [ServiceOrdersController::class, 'storeTechnicalReport']);
+    Route::post('iniciar', [ServiceOrdersController::class, 'startOrder']);
+    Route::post('finalizar', [ServiceOrdersController::class, 'finishOrder']);
 });
 
-Route::prefix('cotizaciones')->group(function(){
-    Route::get('{quoteNumber}', [QuoteController::class, 'getQuoteByNumber']);
+Route::prefix('cotizaciones')->group(function () {
     Route::get('crear', [QuoteController::class, 'create']);
+    Route::get('{quoteNumber}', [QuoteController::class, 'getQuoteByNumber']);
     Route::post('crear', [QuoteController::class, 'store']);
 });
 
-Route::prefix('articulos')->group(function(){
+Route::prefix('articulos')->group(function () {
     Route::get('/', [ItemsController::class, 'getItems']);
+    Route::get('entrega', [ItemsController::class, 'createDispatchMaterials']);
+    Route::post('despachar', [ItemsController::class, 'storeDispatch']);
 });
 
-Route::prefix('suplidores')->group(function(){
-    Route::get('/', [SupplierController::class, 'getSuppliers']);    
+Route::prefix('suplidores')->group(function () {
+    Route::get('/', [SupplierController::class, 'getSuppliers']);
 });
 
-Route::prefix('ordenes-compra')->group(function(){
+Route::prefix('ordenes-compra')->group(function () {
     Route::get('crear', [PurchaseOrderController::class, 'create']);
     Route::post('crear', [PurchaseOrderController::class, 'store']);
+});
+
+Route::prefix('inventario')->group(function () {
+    Route::get('/', [InventoriesController::class, 'index']);
 });
