@@ -61,6 +61,11 @@ Route::get('get-categories', [CategoriesController::class, 'getCategories']);
 Route::post('register-categories', [CategoriesController::class, 'store']);
 Route::get('update-categories/{id?}', [CategoriesController::class, 'update']);
 
+Route::get('items', [ItemsController::class, 'index']);
+Route::get('get-items', [ItemsController::class, 'getItems']);
+Route::post('register-items', [ItemsController::class, 'store']);
+Route::get('update-items/{id?}', [ItemsController::class, 'update']);
+
 Route::get('suppliers', [SuppliersController::class, 'index']);
 Route::get('get-suppliers', [SuppliersController::class, 'getSuppliers']);
 Route::post('register-suppliers', [SuppliersController::class, 'store']);

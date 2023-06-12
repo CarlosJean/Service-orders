@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Repositories\ItemsRepository;
 use Illuminate\Http\Request;
+use App\Http\Requests\RegisterItemsRequest;
 
 class ItemsController extends Controller
 {
@@ -12,6 +13,47 @@ class ItemsController extends Controller
     public function __construct(ItemsRepository $itemsRepository ){
         $this->itemsRepository = $itemsRepository;
     }
+
+    
+    public function index(){
+        return view('inventory.items');
+    }
+
+
+    public function store (RegisterItemsRequest $request){    
+        try {            
+            $description = $request->input('descripcion');
+            $nombre = $request->input('nombre');
+            $medida = $request->input('medida');
+            $precio = $request->input('precio');
+            $cantidad = $request->input('cantidad');
+            $referencia = $request->input('referencia');
+
+
+            $this->itemsRepository->create($description, $nombre, $medida, $precio, $cantidad, $referencia);
+            
+
+            return redirect('items');
+            
+        } catch (\Throwable $th) {
+            var_dump($th);
+            //throw $th;
+        }    
+    }
+      
+    public function update ($id){    
+        try {            
+
+            $this->itemsRepository->update($id);
+           
+            return redirect('items');
+
+
+        } catch (\Throwable $th) {          
+            var_dump($th);
+            //throw $th;
+        }    
+    } 
 
     public function getItems(){
         $items = $this->itemsRepository->all();

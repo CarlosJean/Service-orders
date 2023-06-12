@@ -18,6 +18,11 @@ return new class extends Migration
             $table->float('quantity');
             $table->string('reference')->nullable();
             $table->string('measurement_unit');
+            $table->double('price');
+            $table->string('description');
+            $table->boolean('active');
+
+
         });
     }
 

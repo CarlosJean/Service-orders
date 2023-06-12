@@ -22,6 +22,9 @@ class ItemFactory extends Factory
             'quantity' => fake()->randomDigit(),
             'reference' => fake()->sentence(),
             'measurement_unit' => fake()->sentence(1),
+            'price' => fake()->randomDigit(),
+            'description' => fake()->sentence(1),
+
         ];
     }
 }
