@@ -63,6 +63,6 @@ class InventoriesRepository
 
         $inventories = ['items' => $inventories, 'total_value' => $inventoryValue];
 
-        echo json_encode($inventories);
+        return $inventories;
     }
 }
