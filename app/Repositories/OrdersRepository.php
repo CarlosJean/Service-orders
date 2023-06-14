@@ -2,13 +2,17 @@
 
 namespace App\Repositories;
 
+use App\Models\Employee;
 use App\Models\Item;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemsDetail;
 use App\Models\User;
+use App\Notifications\ServiceOrderCreated;
+use App\Notifications\TechnicianAssigned;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 
 class OrdersRepository
 {
@@ -44,14 +48,26 @@ class OrdersRepository
                 throw new Exception('Debe especificar un inconveniente.', 1);
             }
 
+            $requestorId = auth()->id();
             $order = new Order([
-                'requestor' => auth()->id(),
+                'requestor' => $requestorId,
                 'number' => $orderNumber,
                 'issue' => $issue,
                 'status' => 'pendiente de asignar tecnico'
             ]);
 
             $order->save();
+
+            //Notificar al supervisor y gerente del departamento de mantenimiento
+            $maintenanceSupervisors = Employee::get()
+                ->whereIn('role_id', [2, 3])
+                ->where('department_id', 2);
+
+            $requestor = User::find($requestorId)->name;
+            foreach ($maintenanceSupervisors as $employee) {
+                $employee->user->notify(new ServiceOrderCreated($requestor, $orderNumber));
+            }          
+            
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -125,8 +141,8 @@ class OrdersRepository
                     'orders.start_date',
                 )
                 ->where('number', $orderNumber)
-                ->first();            
-            
+                ->first();
+
             if ($detail == null) {
                 throw new Exception('No existe una orden de servicio con este número.', 1);
             }
@@ -162,6 +178,10 @@ class OrdersRepository
             $order->status = 'tecnico asignado';
 
             $order->save();
+
+            //Notificar al técnico asignado
+            $technicianUser->notify(new TechnicianAssigned($orderNumber));
+            
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -293,14 +313,15 @@ class OrdersRepository
         return $order;
     }
 
-    public function approveServiceOrderItemRequest($serviceOrderNumber, $approved){
+    public function approveServiceOrderItemRequest($serviceOrderNumber, $approved)
+    {
         $orderItemsRequest = Order::where('number', $serviceOrderNumber)
             ->first()
             ->orderItem;
-        
-        $orderItemsRequest->status = ($approved) 
-            ? 'aprobado por gerente de mantenimiento' 
+
+        $orderItemsRequest->status = ($approved)
+            ? 'aprobado por gerente de mantenimiento'
             : 'desaprobado por gerente de mantenimiento';
         $orderItemsRequest->save();
-    }   
+    }
 }

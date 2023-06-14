@@ -73,8 +73,7 @@ class ServiceOrdersController extends Controller
 
             return view('orders.created')->with('orderNumber', $orderNumber);
         } catch (\Throwable $th) {
-            //throw $th;
-
+                        
             if ($th->getCode() == 1) {
                 return back()->withErrors(['error' => $th->getMessage()]);
             }
@@ -93,7 +92,7 @@ class ServiceOrdersController extends Controller
 
         try {
             $serviceOrder = $this->ordersRepository->serviceOrderByNumber($orderNumber);
-            return view('orders.assign_technician')->with('order', $serviceOrder);
+            return view('orders.assign_technician')->with('order', $serviceOrder->detail);
         } catch (\Throwable $th) {
             //throw $th;
             var_dump($th);
@@ -173,7 +172,7 @@ class ServiceOrdersController extends Controller
         $serviceOrder = $this->ordersRepository->serviceOrderByNumber($orderNumber);
 
         return view('orders.show')->with([
-            'order' => $serviceOrder,
+            'order' => $serviceOrder->detail,
             'userRole' => $userRole
         ]);
     }
