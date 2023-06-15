@@ -9,6 +9,8 @@ use App\Models\OrderItem;
 use App\Models\OrderItemsDetail;
 use App\Models\User;
 use App\Notifications\ServiceOrderCreated;
+use App\Notifications\ServiceOrderItemRequest;
+use App\Notifications\ServiceOrderItemsRequestApproved;
 use App\Notifications\TechnicianAssigned;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -242,11 +244,11 @@ class OrdersRepository
                 return new Exception('La orden a la cual intenta agregar materiales no existe.');
             }
 
-            $requestor = $this->employeeRepository->employeeByUserId(auth()->id())['id'];
+            $requestor = $this->employeeRepository->employeeByUserId(auth()->id());
 
             $orderItem = new OrderItem([
                 'service_order_id' => $order->id,
-                'requestor' => $requestor,
+                'requestor' => $requestor['id'],
                 'status' => 'en espera de entrega'
             ]);
             $orderItem->save();
@@ -259,6 +261,16 @@ class OrdersRepository
 
                 $detail->save();
             }
+
+            //Notificación al gerente de mantenimiento
+            $maintenanceManager = Employee::where('department_id', 2)
+                ->where('role_id', 3)
+                ->first()
+                ->user;                
+            $maintenanceSupervisorName = $requestor['names'].' '.$requestor['last_names'];
+            $maintenanceManager
+                ->notify(new ServiceOrderItemRequest($maintenanceSupervisorName,$orderNumber));
+
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -323,5 +335,16 @@ class OrdersRepository
             ? 'aprobado por gerente de mantenimiento'
             : 'desaprobado por gerente de mantenimiento';
         $orderItemsRequest->save();
+
+        $supervisorsWharehouse = Employee::whereIn('role_id', [2,3])
+            ->where('department_id', 3)
+            ->get();
+        
+        $users = [];
+        foreach ($supervisorsWharehouse as $employee) {
+            array_push($users, $employee->user);
+        }
+
+        Notification::send($users, new ServiceOrderItemsRequestApproved($serviceOrderNumber));
     }
 }

@@ -3,18 +3,20 @@
 namespace App\Repositories;
 
 use App\Enums\InventoryType;
+use App\Models\Employee;
 use App\Models\Item;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemsDetail;
 use App\Models\PurchaseOrder;
 use App\Models\Quote;
+use App\Notifications\ServiceOrderItemsDispatch;
 use Exception;
+use Illuminate\Support\Facades\Notification;
 
 class ItemsRepository
 {
-
-
+    
     protected $inventoriesRepository;
     public function __construct(InventoriesRepository $inventoriesRepository) {
         $this->inventoriesRepository = $inventoriesRepository;
@@ -94,6 +96,11 @@ class ItemsRepository
 
         try {
 
+            $serviceOrderNumber = OrderItemsDetail::find($itemsId[0])
+                ->orderItem
+                ->serviceOrder
+                ->number;
+
             foreach ($itemsId as $itemId) {
                 $orderItem = OrderItemsDetail::find($itemId);
                 $orderItem->dispatched = true;
@@ -106,12 +113,20 @@ class ItemsRepository
                     ->historical($item, InventoryType::Dispatch);
             }
 
+            $maintenanceSupervisorAndManager = Employee::get()
+                ->whereIn('role_id', [2,3])
+                ->where('department_id', 2);
+            
+            $users = [];
+            foreach ($maintenanceSupervisorAndManager as $employee) {
+                array_push($users, $employee->user);
+            }
+            Notification::send($users, new ServiceOrderItemsDispatch($serviceOrderNumber));
+
         } catch (\Throwable $th) {
             throw $th;
         }
     }
-
-
     
     public function update($id)
     {
