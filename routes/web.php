@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\EmployeesController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
@@ -126,3 +127,8 @@ Route::prefix('ordenes-compra')->group(function () {
 Route::prefix('inventario')->group(function () {
     Route::get('/', [InventoriesController::class, 'index']);
 });
+
+Route::get('/reestablecer-contraseña', [ResetPasswordController::class, 'resetMyOwnPassword'])
+    ->name('password.reset_my_own');
+
+Route::get('/contraseña/reestablecer/{token}', [ResetPasswordController::class, 'showResetForm']);

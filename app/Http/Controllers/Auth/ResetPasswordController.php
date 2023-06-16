@@ -27,4 +27,12 @@ class ResetPasswordController extends Controller
      * @var string
      */
     protected $redirectTo = RouteServiceProvider::HOME;
+
+    public function resetMyOwnPassword()
+    {
+
+        $email = auth()->user()->email;
+        return view('auth.passwords.reset_my_own')
+            ->with('email', $email);
+    }
 }
