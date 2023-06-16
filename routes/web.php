@@ -131,4 +131,4 @@ Route::prefix('inventario')->group(function () {
 Route::get('/reestablecer-contraseña', [ResetPasswordController::class, 'resetMyOwnPassword'])
     ->name('password.reset_my_own');
 
-Route::get('/contraseña/reestablecer/{token}', [ResetPasswordController::class, 'showResetForm']);
+Route::get('/reestablecer-contraseña/{token}', [ResetPasswordController::class, 'showResetForm']);
