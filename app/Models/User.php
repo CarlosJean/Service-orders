@@ -51,7 +51,7 @@ class User extends Authenticatable
      * @param  string  $token
      */
     public function sendPasswordResetNotification($token): void{
-        $url = url('/contraseña/reestablecer/' . $token.'?email='.$this->email);
+        $url = url('/reestablecer-contraseña/' . $token.'?email='.$this->email);
         $this->notify(new ResetPasswordNotification($url));
     }
 }
