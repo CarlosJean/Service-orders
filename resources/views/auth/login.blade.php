@@ -44,6 +44,11 @@
                     </button>
                 </form>
             </div>
+            <div class="col-12 mt-5">
+                <div class="az-signin-footer">
+                    <p><a href="{{route('password.request')}}">¿Olvidaste la contraseña?</a></p>
+                </div>
+            </div>
         </div>
     </div>
 </div>

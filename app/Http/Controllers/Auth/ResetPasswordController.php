@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Support\Facades\Auth;
 
 class ResetPasswordController extends Controller
 {
@@ -28,11 +29,15 @@ class ResetPasswordController extends Controller
      */
     protected $redirectTo = RouteServiceProvider::HOME;
 
-    public function resetMyOwnPassword()
-    {
 
-        $email = auth()->user()->email;
-        return view('auth.passwords.reset_my_own')
-            ->with('email', $email);
+    public function showSendEmail(){
+
+        if (Auth::check()) {
+            $email = auth()->user()->email;
+            return view('auth.passwords.email_me')
+                ->with('email', $email);
+        }
+
+        return view('auth.passwords.email');
     }
 }

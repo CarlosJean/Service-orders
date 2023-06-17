@@ -60,7 +60,7 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('password.reset_my_own') }}">
+                                <a class="dropdown-item" href="{{ route('password.request') }}">
                                     {{ __('Reestablecer contraseña') }}
                                 </a>
 
