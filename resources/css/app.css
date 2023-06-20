@@ -1,0 +1,12 @@
+nav{
+    height: 60px;
+}
+
+.navbar-dark,
+.navbar[data-bs-theme=dark] {
+  --bs-navbar-color: #ffffff;
+}
+
+.navbar-brand{
+    font-size: 20pt;
+}

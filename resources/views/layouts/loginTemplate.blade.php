@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
 
@@ -10,11 +10,11 @@
     </title>
 
 
-    @vite(['resources/css/azia.min.css','resources/js/app.js'])
+    @vite(['resources/css/azia.min.css','resources/js/app.js','resources/css/login.css'])
 
 </head>
 
-<body class="az-body">
+<body class="vh-100">
     @yield('content')
 </body>
 
