@@ -26,7 +26,7 @@ const loadEmployeesTable = function () {
             { data: 'last_names', title: 'Apellidos' },
             { data: 'identification', title: 'Identificación' },
             { data: 'email', title: 'Correo electrónico' },
-            { data: 'department', title: 'Departmanento' },
+            { data: 'department', title: 'Departamento' },
             { data: 'role', title: 'Rol' },
             { data: 'has_user', title: '¿Tiene usuario asignado?' },
             {
