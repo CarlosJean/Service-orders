@@ -3,43 +3,43 @@
 
     <div class="row">
         <input type="hidden" name="id" value="{{$employee->id}}">
-        <div class="col-6 form-group">
+        <div class="col-md-6 form-group">
             <label for="txtIdentification">Documento de identificación</label>
-            <input type="text" name="identification" id="txtIdentification" class="form-control" placeholder="Escriba el número de identificación" value="<?= old('identification',$employee->identification)?>">
+            <input type="text" name="identification" id="txtIdentification" class="form-control" placeholder="Escriba el número de identificación" value="<?= old('identification', $employee->identification) ?>">
             @if($errors->first('identification'))
             <span class="text-danger">
                 <?= $errors->first('identification') ?>
             </span>
             @endif
         </div>
-        <div class="col-6 form-group">
+        <div class="col-md-6 form-group">
             <label for="txtEmail">Correo electrónico</label>
-            <input type="email" name="email" id="txtEmail" class="form-control" placeholder="Escriba el correo electrónico" value="<?= old('email',$employee->email)?>">
+            <input type="email" name="email" id="txtEmail" class="form-control" placeholder="Escriba el correo electrónico" value="<?= old('email', $employee->email) ?>">
             @if($errors->first('email'))
             <span class="text-danger">
                 <?= $errors->first('email') ?>
             </span>
             @endif
         </div>
-        <div class="col-6 form-group">
+        <div class="col-md-6 form-group">
             <label for="txtNames">Nombres del empleado</label>
-            <input type="text" name="names" id="txtNames" class="form-control" placeholder="Nombres" value="<?= old('names',$employee->names)?>">
+            <input type="text" name="names" id="txtNames" class="form-control" placeholder="Nombres" value="<?= old('names', $employee->names) ?>">
             @if($errors->first('names'))
             <span class="text-danger">
                 <?= $errors->first('names') ?>
             </span>
             @endif
         </div>
-        <div class="col-6 form-group">
+        <div class="col-md-6 form-group">
             <label for="txtLastNames">Apellidos del empleado</label>
-            <input type="text" name="last_names" id="txtLastNames" class="form-control" placeholder="Apellidos" value="<?= old('last_names',$employee->last_names)?>">
+            <input type="text" name="last_names" id="txtLastNames" class="form-control" placeholder="Apellidos" value="<?= old('last_names', $employee->last_names) ?>">
             @if($errors->first('last_names'))
             <span class="text-danger">
                 <?= $errors->first('last_names') ?>
             </span>
             @endif
         </div>
-        <div class="col-6 form-group">
+        <div class="col-md-6 form-group">
             <label for="txtRole">Rol</label>
             <select id="slcRole" name="role_id" class="form-select">
                 <option value="">Seleccione un rol</option>
@@ -57,7 +57,7 @@
             </span>
             @endif
         </div>
-        <div class="col-6 form-group">
+        <div class="col-md-6 form-group">
             <label for="txtDepartment">Departamento</label>
             <select id="slcDepartment" name="department_id" class="form-select">
                 <option value="">Seleccione un departamento</option>
@@ -76,7 +76,7 @@
             @endif
         </div>
         @if($employee?->user?->id == null)
-        <div class="col-6 form-group m-3">
+        <div class="col-md-6 form-group my-3">
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="create_user" checked>
                 <label class="form-check-label" for="flexCheckDefault">
@@ -85,12 +85,10 @@
             </div>
         </div>
         @endif
-        <div class="col-12 form-group">
+        <div class="col-12 form-group px-3 px-md-0 my-2">
             <div class="row justify-content-end">
-                <button class="col-2 btn btn-secondary" type="reset">Limpiar</button>
-                <div class="col-2">
-                    <input type="submit" value="Guardar" class="btn btn-primary w-100">
-                </div>
+                <button class="col-md-2  btn btn-secondary" type="reset">Limpiar</button>
+                <input type="submit" value="Guardar" class="btn btn-primary col-md-2 mt-1 mt-md-0 mx-md-4">
             </div>
         </div>
     </div>
