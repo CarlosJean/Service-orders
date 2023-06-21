@@ -1,0 +1,49 @@
+[data-bs-theme=custom1] {
+    background-color: #002244;
+
+    .navbar-brand,
+    .nav-link {
+        color: #f8fafc;
+    }
+
+    // this is a white icon with 50% opacity
+    .navbar .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml;..");
+    }
+
+    .nav-link:hover, 
+    .nav-link:focus,
+    .dropdown-item.active, 
+    .dropdown-item:active,
+    .navbar-nav
+    .nav-link.active, 
+    .navbar-nav
+    .nav-link.show{
+        color: #5b47fb;
+    }
+
+    .dropdown-item.active, .dropdown-item:active{
+        background-color: transparent;
+    }
+
+    .navbar-nav .nav-link.active, .navbar-nav .nav-link.show{
+        color: #5b47fb;
+    }    
+}
+
+.btn{
+    border-radius:0%
+}
+
+.thead-custom1 th{
+    background-color: #b2b7c1;
+}
+
+.form-control, .form-select{
+    box-shadow: none;
+    border-radius: 0;
+
+    &:focus{
+        box-shadow: none;
+    }
+}

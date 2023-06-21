@@ -22,6 +22,10 @@ class RolesTableSeeder extends Seeder
             'description' => 'Supervisor de cualquier departamento.',
         ]);
         DB::table('roles')->insert([
+            'name' => 'Gerente',
+            'description' => 'Gerente de cualquier departamento.',
+        ]);
+        DB::table('roles')->insert([
             'name' => 'Tecnico',
             'description' => 'Técnico del departamento de mantenimiento.',
         ]);

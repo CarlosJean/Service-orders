@@ -1,5 +1,5 @@
-<form action="registro-empleado" method="post">
-    @csrf        
+<form action="registro-empleado" method="post" class="p-1">
+    @csrf
     <div class="row">
         <div class="col-6 form-group">
             <label for="txtIdentification">Documento de identificación</label>
@@ -21,7 +21,7 @@
         </div>
         <div class="col-6 form-group">
             <label for="txtNames">Nombres del empleado</label>
-            <input type="text" name="names" id="txtNames" class="form-control" placeholder="Nombres"  value="<?= old('names') ?>">
+            <input type="text" name="names" id="txtNames" class="form-control" placeholder="Nombres" value="<?= old('names') ?>">
             @if($errors->first('names'))
             <span class="text-danger">
                 <?= $errors->first('names') ?>
@@ -42,9 +42,9 @@
             <select id="slcRole" name="role_id" class="form-select">
                 <option value="">Seleccione un rol</option>
                 @foreach($roles as $role)
-                @if($role-> id == old('role_id'))                
+                @if($role-> id == old('role_id'))
                 <option value="{{$role['id']}}" selected>{{$role['name']}}</option>
-                @else                
+                @else
                 <option value="{{$role['id']}}">{{$role['name']}}</option>
                 @endif
                 @endforeach
@@ -73,17 +73,17 @@
             </span>
             @endif
         </div>
-        <div class="col-6 form-group">
-            <div class="form-check row px-0">
-                <label class="form-check-label col-11" for="flexCheckDefault">
+        <div class="col-6 form-group m-3">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="create_user" checked>
+                <label class="form-check-label" for="flexCheckDefault">
                     Crear usuario para este empleado
                 </label>
-                <input class="form-check-input col-1" type="checkbox" id="flexCheckDefault" name="create_user" checked>
             </div>
         </div>
         <div class="col-12 form-group">
             <div class="row justify-content-end">
-                <button class="col-2 btn btn-secondary w-100" type="reset">Limpiar</button>
+                <button class="col-2 btn btn-secondary" type="reset">Limpiar</button>
                 <div class="col-2">
                     <input type="submit" value="Guardar" class="btn btn-primary w-100">
                 </div>

@@ -1,4 +1,4 @@
-<form action="registro-empleado" method="post">
+<form action="registro-empleado" method="post" class="p-1">
     @csrf
 
     <div class="row">
@@ -76,18 +76,18 @@
             @endif
         </div>
         @if($employee?->user?->id == null)
-        <div class="col-6 form-group">
-            <div class="form-check row px-0">
-                <label class="form-check-label col-11" for="flexCheckDefault">
+        <div class="col-6 form-group m-3">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="create_user" checked>
+                <label class="form-check-label" for="flexCheckDefault">
                     Crear usuario para este empleado
                 </label>
-                <input class="form-check-input col-1" type="checkbox" id="flexCheckDefault" name="create_user" checked>
             </div>
         </div>
         @endif
         <div class="col-12 form-group">
             <div class="row justify-content-end">
-                <button class="col-2 btn btn-secondary w-100" type="reset">Limpiar</button>
+                <button class="col-2 btn btn-secondary" type="reset">Limpiar</button>
                 <div class="col-2">
                     <input type="submit" value="Guardar" class="btn btn-primary w-100">
                 </div>

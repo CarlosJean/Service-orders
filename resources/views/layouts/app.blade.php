@@ -20,13 +20,16 @@
 
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+        <nav class="navbar navbar-expand-lg" data-bs-theme="custom1">
             <div class="container-fluid">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                    <!-- <span class="navbar-toggler-icon"></span> -->
+                    <span class="navbar-toggler-icon">
+                        <i class="typcn icon typcn-th-menu" style="color:#fff; font-size:28px;"></i>
+                    </span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
@@ -54,11 +57,13 @@
 
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('password.request') }}">
+                                    <i class="typcn typcn-cog-outline"></i>
                                     {{ __('Reestablecer contraseña') }}
                                 </a>
 
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
+                                    <i class="typcn typcn-power-outline"></i>
                                     {{ __('Cerrar sesión') }}
                                 </a>
 

@@ -24,7 +24,7 @@ class MenuRepository
 
         $currentMenuName = '';
         $submenus = $role->submenus
-            ->sortBy('menu_id');
+            ->sortBy(['menu_id', 'order']);
 
         foreach ($submenus as $submenu) {
 
