@@ -2,43 +2,29 @@
 
 @section('content')
 <div class="container">
-    <div class="row">
-        <div class="col-11">
-            <div class="card shadow">
-                <div class="row py-5 px-5 justify-content-between">
-                    <div class="col-3">
-                        <img src="{{url('/drl_manufacturing.png')}}" alt="DRL Manufacturing logo" srcset="" width="100%">
+    <div class="card shadow p-3">
+        <div class="row">
+            <div class="col-md-3">
+                <img src="http://localhost/service-orders/public/drl_manufacturing.png" alt="DRL Manufacturing logo" srcset="" width="100%">
+            </div>
+            <div class="col-md-9">
+                <div class="row align-items-center justify-content-end h-100">
+                    <!-- Nombre de la orden -->
+                    <div class="col-12 text-center text-md-end mt-3 mt-md-0">
+                        <h3><strong>@yield('screenName', 'Ordenes de...')</strong></h3>
                     </div>
-                    <div class="col-4">
-                        <div class="row">
-                            <!-- Nombre de la orden -->
-                            <div class="col-12 text-end">
-                                <h3><strong>@yield('screenName', 'Ordenes de...')</strong></h3>
-                            </div>
-                            <div class="col-12">
-                                <div class="row align-items-center">
-                                    <div class="col-2">
-                                        <p class="my-0">No.</p>
-                                    </div>
-                                    <div class="col-10">
-                                        <!-- Input con el número de orden -->
-                                        @stack('orderNumber')
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="col-4 col-md-1">
+                        <p class="my-0">No.</p>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 px-4">
-                        <hr class="mt-3 opacity-100" />
-                    </div>
-                    <div class="col-12 px-5">
-                        @yield('orderContent')
+                    <div class="col-8 col-md-4">
+                        <!-- Input con el número de orden -->
+                        @stack('orderNumber')
                     </div>
                 </div>
             </div>
-            @yield('orderFooter')
+            <div class="col-12">
+                @yield('orderContent')
+            </div>
         </div>
     </div>
 </div>

@@ -80,9 +80,10 @@ class OrdersRepository
         try {
             $employee = $this->employeeRepository->employeeByUserId($userId);
 
-            $isDepartmentSupervisor = ($employee['role']->id == 2 && $employee['department']->id != 2);
+            $isDepartmentSupervisor = (($employee['role']->id == 2 || $employee['role']->id == 3) && $employee['department']->id != 2);
             $isMaintenanceDepartmentSupervisor = ($employee['role']->id == 2 && $employee['department']->id == 2);
 
+            $orders = [];
             if ($isDepartmentSupervisor) {
                 $orders = $this->departmentSupervisorOrders($userId);
             } else if ($isMaintenanceDepartmentSupervisor) {

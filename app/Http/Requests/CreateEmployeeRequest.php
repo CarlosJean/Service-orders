@@ -23,8 +23,8 @@ class CreateEmployeeRequest extends FormRequest
     {
         return [
             'identification' => 'required|max:15|min:8|regex:/^[0-9]+$/',
-            'names' => 'required',
-            'last_names' => 'required',
+            'names' => 'required|regex:/^[\pL\s\-]+$/u',
+            'last_names' => 'required|regex:/^[\pL\s\-]+$/u',
             'role_id' => 'required',
             'department_id' => 'required',
         ];
@@ -38,7 +38,9 @@ class CreateEmployeeRequest extends FormRequest
             'identification.min' => 'La cantidad mínima de caracteres es de 8.',
             'identification.regex' => 'El campo de identificación acepta números solamente.',
             'names.required' => 'Debe indicar el nombre del empleado.',
+            'names.regex' => 'Se aceptan solo letras y espacios',
             'last_names.required' => 'Debe indicar el apellido del empleado.',
+            'last_names.regex' => 'Se aceptan solo letras y espacios',
             'role_id.required' => 'Debe indicar el rol del empleado.',
             'department_id.required' => 'Debe indicar el departamento del empleado.',
         ];
