@@ -14,6 +14,7 @@
                 <hr>
             </div>
             <div class="col-12">
+                <input type="hidden" name="can_create_new_order" value="{{$canCreateNewOrder}}">
                 <table id="ordersTable" class="table table-striped table-hover">
                     <thead class="thead-custom1"></thead>
                 </table>

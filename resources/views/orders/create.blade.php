@@ -2,7 +2,7 @@
 
 @section('screenName','Orden de servicio')
 @push('orderNumber')
-<input type="text" value="{{$orderNumber}}" readonly id="txt_order_number" class="form-control readonly">
+<input type="text" value="{{$orderNumber}}" readonly id="txt_order_number" class="form-control">
 @endpush
 
 @section('orderContent')

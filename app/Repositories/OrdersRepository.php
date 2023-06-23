@@ -130,6 +130,7 @@ class OrdersRepository
             $detail = DB::table('orders')
                 ->join('users', 'orders.requestor', '=', 'users.id')
                 ->join('employees as e', 'users.id', '=', 'e.user_id')
+                ->join('departments as d', 'e.department_id', '=', 'd.id')
                 ->select(
                     'orders.id',
                     DB::raw('concat(e.names," ",e.last_names) requestor'),
@@ -142,6 +143,7 @@ class OrdersRepository
                     'orders.technician',
                     'orders.diagnosis',
                     'orders.start_date',
+                    DB::raw('d.name department'),
                 )
                 ->where('number', $orderNumber)
                 ->first();

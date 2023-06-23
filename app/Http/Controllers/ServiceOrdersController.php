@@ -41,7 +41,13 @@ class ServiceOrdersController extends Controller
 
     public function index()
     {
-        return view('orders.index');
+        $employee = $this->employeeRepository
+            ->employeeByUserId(auth()->id());
+
+        $canCreateNewOrder = (!($employee['department']->id == 2 
+        && ($employee['department']->id == 2|| $employee['department']->id == 3)));
+
+        return view('orders.index')->with('canCreateNewOrder', $canCreateNewOrder);
     }
 
     public function create()
