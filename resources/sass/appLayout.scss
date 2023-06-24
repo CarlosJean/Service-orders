@@ -15,10 +15,8 @@
     .nav-link:focus,
     .dropdown-item.active, 
     .dropdown-item:active,
-    .navbar-nav
-    .nav-link.active, 
-    .navbar-nav
-    .nav-link.show{
+    .dropdown-item:hover, 
+    .dropdown-item:focus{
         color: #5b47fb;
     }
 
@@ -28,7 +26,7 @@
 
     .navbar-nav .nav-link.active, .navbar-nav .nav-link.show{
         color: #5b47fb;
-    }    
+    }   
 }
 
 .btn{

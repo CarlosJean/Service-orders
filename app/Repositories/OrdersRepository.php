@@ -81,18 +81,21 @@ class OrdersRepository
             $employee = $this->employeeRepository->employeeByUserId($userId);
 
             $isDepartmentSupervisor = (($employee['role']->id == 2 || $employee['role']->id == 3) && $employee['department']->id != 2);
-            $isMaintenanceDepartmentSupervisor = ($employee['role']->id == 2 && $employee['department']->id == 2);
+            $isMaintenanceDepartmentSupervisor = (($employee['role']->id == 2 || $employee['role']->id == 3) && $employee['department']->id == 2);
+            $isMaintenanceTechnician = ($employee['role']->id == 4 && $employee['department']->id == 2);
 
             $orders = [];
             if ($isDepartmentSupervisor) {
                 $orders = $this->departmentSupervisorOrders($userId);
             } else if ($isMaintenanceDepartmentSupervisor) {
                 $orders = $this->maintenanceSupervisorOrders();
+            }elseif ($isMaintenanceTechnician) {
+                $orders = $this->maintenanceTechnicianOrders();
             }
 
             return $orders;
         } catch (\Throwable $th) {
-            //throw $th;
+            throw $th;
         }
     }
 
@@ -349,5 +352,30 @@ class OrdersRepository
         }
 
         Notification::send($users, new ServiceOrderItemsRequestApproved($serviceOrderNumber));
+    }
+
+    public function maintenanceTechnicianOrders()
+    {
+
+        $orders = ['user_role' => 'maintenanceTechnician', 'data' => []];
+
+        $data = DB::table('orders')
+            ->join('users', 'orders.requestor', '=', 'users.id')
+            ->join('employees as e', 'users.id', '=', 'e.user_id')
+            ->select(
+                'orders.id',
+                DB::raw('concat(e.names," ",e.last_names) requestor'),
+                DB::raw('DATE_FORMAT(orders.created_at, "%d/%c/%Y %r") created_at'),
+                'orders.issue',
+                'orders.number as order_number',
+            )
+            ->whereNull('end_date')
+            ->where('technician', auth()->id())
+            ->get();
+
+
+        $orders['data'] = $data;
+
+        return $orders;
     }
 }

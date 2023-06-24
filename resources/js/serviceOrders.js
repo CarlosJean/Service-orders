@@ -19,7 +19,7 @@ const loadServiceOrders = function () {
 
     const dom = (canCreateNewOrder)
         ? "<'row justify-content-end' <'col-sm-12 col-lg-4' f> <'#newServiceOrderButton.col-sm-12 col-lg-2 px-1 px-md-2'> >"
-        : "f"; 
+        : "f";
 
     $.ajax({
         url: 'ordenes-servicio/getOrders',
@@ -62,6 +62,22 @@ const columnsByUserRole = function (userRole) {
                 render: (orderNumber) => `
                     <div class="row mx-1">
                         <a href='ordenes-servicio/${orderNumber}' class='btn btn-primary'>Desaprobar o asignar técnico</a>
+                    </div>
+                `,
+                title: 'Acción'
+            },
+        ]
+    } else if (userRole == 'maintenanceTechnician') {
+        return [
+            { data: 'id', title: 'Id' },
+            { data: 'order_number', title: 'Número de orden' },
+            { data: 'created_at', title: 'Fecha y hora de creación' },
+            { data: 'requestor', title: 'Solicitante' },
+            {
+                data: 'order_number',
+                render: (orderNumber) => `
+                    <div class="row mx-1">
+                        <a href='ordenes-servicio/${orderNumber}' class='btn btn-primary'>Detalles</a>
                     </div>
                 `,
                 title: 'Acción'

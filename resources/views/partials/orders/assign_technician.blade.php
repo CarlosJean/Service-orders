@@ -62,7 +62,7 @@
                     @endif
                 </div>
                 @if($order->status != 'desaprobado' && $order->observations == null)
-                <div class="form-group col-md-2 mt-2 mt-md-0">
+                <div class="form-group col-md-2 mt-2">
                     <input type="submit" value="Desaprobar" class="btn btn-warning w-100">
                 </div>
                 @endif
@@ -70,7 +70,7 @@
         </form>
     </div>
     @endif
-    <div class="col-12 p-md-0 mt-1 mt-md-0">
+    <div class="col-12 p-md-0 mt-1 mt-md-3">
         <div class="row justify-content-center">
             <a class="btn btn-secondary col-3" href="http://localhost/service-orders/public/ordenes-servicio">Volver</a>
         </div>

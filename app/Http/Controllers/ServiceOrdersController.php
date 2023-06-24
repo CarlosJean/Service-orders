@@ -169,9 +169,9 @@ class ServiceOrdersController extends Controller
         $departmentId = $employee['department']->id;
 
         $userRole = '';
-        if ($departmentId = 2 && $roleId == 2) {
+        if ($departmentId == 2 && ($roleId == 2 || $roleId == 3)) {
             $userRole = 'maintenanceSupervisor';
-        } else if ($departmentId = 2 && $roleId == 3) {
+        } else if ($departmentId == 2 && $roleId == 4) {
             $userRole = 'technician';
         }
 
