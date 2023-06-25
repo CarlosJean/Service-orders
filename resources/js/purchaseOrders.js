@@ -1,3 +1,5 @@
+import * as language from './datatables.spanish.json' ;
+
 var table = {};
 
 $("#frmGetQuoteByNumber").on('submit', function (e) {
@@ -46,9 +48,12 @@ $("#frmGetQuoteByNumber").on('submit', function (e) {
                         { title: 'Referencia', data: 'reference' },
                         { title: 'Cantidad', data: 'quantity' },
                         { title: 'Precio', data: 'price' },
-                    ]
+                    ],
+                    dom:'ft',
+                    language,
                 });
                 $("#spnQuoteNotFound").addClass('d-none');
+                $("#dvItems").removeClass('d-none');
             }
         },
         error: function (error) {

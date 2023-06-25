@@ -27,6 +27,13 @@ class ItemsRepository
         return Item::get();
     }
 
+    public function available(){
+        $items = Item::where('quantity', '>', '0')
+            ->get();
+
+        return $items;
+    }
+
     public function item($itemId)
     {
         return Item::find($itemId);

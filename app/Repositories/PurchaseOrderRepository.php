@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Enums\InventoryType;
 use App\Models\detail;
 use App\Models\Item;
 use App\Models\PurchaseOrder;
@@ -11,7 +12,6 @@ use App\Models\OrderItemsDetail;
 use App\Models\PurchaseOrderDetail;
 use App\Models\Quote;
 use Exception;
-use InventoryType;
 
 class PurchaseOrderRepository
 {
@@ -87,12 +87,14 @@ class PurchaseOrderRepository
                         'quantity' => $detail['quantity'],
                         'price' => $detail['price'],
                         'reference' => $detail['reference'],
-                        'measurement_unit' => 'unidad'
+                        'measurement_unit' => 'unidad',
+                        'description' => $detail['reference']
                     ]);
                 } else {
                     $item = Item::find($detail['item_id']);
                     $item->price = $detail['price'];
                     $item->quantity += $detail['quantity'];
+                    $item->description += $detail['reference'];
                 }
 
                 $purchaseOrderDetail = new PurchaseOrderDetail([
@@ -102,7 +104,7 @@ class PurchaseOrderRepository
                     'price' => $detail['price'],
                     'reference' => $detail['reference'],
                     'total_price' => $detail['quantity'] * $detail['price'],
-                    'supplier_id' => $detail['supplier_id'],
+                    'supplier_id' => $detail['supplier_id'],                    
                 ]);
 
                 $purchaseOrderDetail->purchaseOrder()
@@ -124,7 +126,7 @@ class PurchaseOrderRepository
                 $orderItemDetail->quantity = $detail['quantity'];
                 $orderItemDetail->save();
 
-                echo json_encode($orderItemDetail);
+                return $orderItemDetail;
             }
         } catch (\Throwable $th) {
             throw $th;

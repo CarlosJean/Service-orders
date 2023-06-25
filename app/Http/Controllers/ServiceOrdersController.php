@@ -208,8 +208,8 @@ class ServiceOrdersController extends Controller
         $order = $this->ordersRepository->serviceOrderByNumber($orderNumber);
 
         $order = json_encode([
-            'requestor' => $order->requestor,
-            'technician' => $order->technician,
+            'requestor' => $order->detail->requestor,
+            'technician' => $order->detail->technician,
         ]);
 
         return $order;

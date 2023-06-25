@@ -81,14 +81,15 @@ class OrdersRepository
             $employee = $this->employeeRepository->employeeByUserId($userId);
 
             $isDepartmentSupervisor = (($employee['role']->id == 2 || $employee['role']->id == 3) && $employee['department']->id != 2);
-            $isMaintenanceDepartmentSupervisor = (($employee['role']->id == 2 || $employee['role']->id == 3) && $employee['department']->id == 2);
+            $isMaintenanceDepartmentSupervisor = ($employee['role']->id == 2 && $employee['department']->id == 2);
+            $isMaintenanceDepartmentManager = ($employee['role']->id == 3 && $employee['department']->id == 2);
             $isMaintenanceTechnician = ($employee['role']->id == 4 && $employee['department']->id == 2);
 
             $orders = [];
             if ($isDepartmentSupervisor) {
                 $orders = $this->departmentSupervisorOrders($userId);
-            } else if ($isMaintenanceDepartmentSupervisor) {
-                $orders = $this->maintenanceSupervisorOrders();
+            } else if ($isMaintenanceDepartmentSupervisor || $isMaintenanceDepartmentManager) {
+                $orders = $this->maintenanceSupervisorOrders($isMaintenanceDepartmentManager);
             }elseif ($isMaintenanceTechnician) {
                 $orders = $this->maintenanceTechnicianOrders();
             }
@@ -213,26 +214,28 @@ class OrdersRepository
         }
     }
 
-    public function maintenanceSupervisorOrders()
-    {
-
-        $orders = ['user_role' => 'maintenanceSupervisor', 'data' => []];
+    public function maintenanceSupervisorOrders($isManager = false)
+    {        
+        $userRole = (!$isManager) ? 'maintenanceSupervisor' : 'maintenanceManager';
+        $orders = ['user_role' => $userRole, 'data' => []];
 
         $data = DB::table('orders')
             ->join('users', 'orders.requestor', '=', 'users.id')
             ->join('employees as e', 'users.id', '=', 'e.user_id')
+            ->leftJoin('order_items as orderItems', 'orders.id', '=', 'orderItems.service_order_id')
             ->select(
                 'orders.id',
                 DB::raw('concat(e.names," ",e.last_names) requestor'),
                 DB::raw('DATE_FORMAT(orders.created_at, "%d/%c/%Y %r") created_at'),
                 'orders.issue',
                 'orders.number as order_number',
+                'orders.number as order_number',
+                DB::raw('CASE WHEN orderItems.service_order_id IS NULL THEN false ELSE true END items_requested'),
             )
-            ->where('status', 'pendiente de asignar tecnico')
+            ->where('orders.status', 'pendiente de asignar tecnico')
             ->where('assignation_date', null)
             ->where('technician', null)
             ->get();
-
 
         $orders['data'] = $data;
 
@@ -377,5 +380,13 @@ class OrdersRepository
         $orders['data'] = $data;
 
         return $orders;
+    }
+
+    public function ordersWithRequestedItems(){
+        $orders = Order::whereNull('end_date')
+            ->orderItem
+            ->get();
+        
+        echo json_encode($orders);
     }
 }

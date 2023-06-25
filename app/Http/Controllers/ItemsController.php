@@ -59,9 +59,14 @@ class ItemsController extends Controller
         $items = $this->itemsRepository->all();
         return $items;
     }    
+    
+    public function getAvailableItems(){
+        $items = $this->itemsRepository
+            ->available();
+        return $items;
+    }    
 
-    public function createDispatchMaterials(){
-        
+    public function createDispatchMaterials(){        
         return view('items.dispatch');
     }
     

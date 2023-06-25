@@ -39,21 +39,22 @@ class SubmenusTableSeeder extends Seeder
         DB::table('submenus')->insert([
             'name' => 'Ordenes de compra',
             'order' => 1,
-            'menu_id' => 3
+            'menu_id' => 3,
+            'url' => 'ordenes-compra/crear'
         ]);
 
         DB::table('submenus')->insert([
             'name' => 'Cotizaciones',
             'order' => 2,
-            'menu_id' => 3
+            'menu_id' => 3,
+            'url' => 'cotizaciones/crear'
         ]);
 
         DB::table('submenus')->insert([
             'name' => 'Suplidor',
             'order' => 3,
             'menu_id' => 3,
-            'URL' => 'suppliers'
-            
+            'URL' => 'suppliers'            
         ]);
         
         //Menú de inventarios
@@ -110,7 +111,7 @@ class SubmenusTableSeeder extends Seeder
         DB::table('submenus')->insert([
             'name' => 'Gestión de materiales',
             'order' => 4,
-            'menu_id' => 5
+            'menu_id' => 5,
         ]);
         
         //Menú de reportes

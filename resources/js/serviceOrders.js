@@ -43,27 +43,41 @@ const loadServiceOrders = function () {
 };
 
 const columnsByUserRole = function (userRole) {
+
     if (userRole == 'departmentSupervisor') {
         return [
             { data: 'id', title: 'Id', visible: false },
             { data: 'order_number', title: 'Número de orden' },
             { data: 'created_at', title: 'Fecha y hora de creación' },
             { data: 'status', title: 'Estado' },
-            { data: 'technician', title: 'Técnico asignado' },
+            { data: 'technici an', title: 'Técnico asignado' },
         ]
-    } else if (userRole == 'maintenanceSupervisor') {
+    } else if (userRole == 'maintenanceSupervisor' || userRole == 'maintenanceManager') {
         return [
             { data: 'id', title: 'Id' },
             { data: 'order_number', title: 'Número de orden' },
             { data: 'created_at', title: 'Fecha y hora de creación' },
             { data: 'requestor', title: 'Solicitante' },
             {
-                data: 'order_number',
-                render: (orderNumber) => `
-                    <div class="row mx-1">
-                        <a href='ordenes-servicio/${orderNumber}' class='btn btn-primary'>Desaprobar o asignar técnico</a>
-                    </div>
-                `,
+                data: null,
+                render: (data) => {             
+                    console.log(userRole);
+                    const requestedItems = data.items_requested
+                    const orderNumber = data.order_number
+
+                    if (!requestedItems || userRole == 'maintenanceSupervisor') {
+                        return `<div class="row mx-1 justify-content-around">
+                            <a href='ordenes-servicio/${orderNumber}' class='btn btn-primary col-md-5'>Desaprobar o asignar técnico</a>
+                            <a href='ordenes-servicio/${orderNumber}/gestion-materiales' class='btn btn-primary col-md-5 mt-2 mt-md-0'>Gestión de materiales</a>
+                        </div>`;
+                    }else if(requestedItems && userRole == 'maintenanceManager'){
+                        return `<div class="row mx-1 justify-content-between">
+                            <a href='ordenes-servicio/${orderNumber}' class='btn btn-primary col-md-4'>Desaprobar o asignar técnico</a>
+                            <a href='ordenes-servicio/${orderNumber}/gestion-materiales' class='btn btn-primary col-md-3 mt-2 mt-md-0'>Gestión de materiales</a>
+                            <a href='ordenes-servicio/${orderNumber}/aprobacion-materiales' class='btn btn-primary col-md-3 mt-2 mt-md-0'>Aprobar materiales</a>
+                        </div>`;
+                    }
+                },
                 title: 'Acción'
             },
         ]
