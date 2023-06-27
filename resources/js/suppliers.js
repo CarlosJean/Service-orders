@@ -30,16 +30,23 @@ $(document).ready(function () {
                     { data: 'id', title: 'Id' },
                     { data: 'name', title: 'Nombre' },        
                     { data: 'address', title: 'Direccion' },        
-                    { data: 'city', title: 'Ciudad' },        
-                    { data: 'email', title: 'Correo' },        
+                    // { data: 'city', title: 'Ciudad' },        
+                    { data: 'email', title: 'Correo'},        
                     { data: 'cellphone', title: 'Celular' },   
                     { data: 'ident', title: 'RNC/Cedula' },        
+                    { 
+                        title:'Estado' ,
+                        data: 'active', 
+                        render: function(data,type,row) { if(data==0) return "Inactiva"; else return "Activa"; }
+                    },  
                     {
                         title: 'Accion',
                         data: 'id',
-                        render: (Id) => "<a href='update-suppliers/" + Id + "' class='btn btn-primary'>Eliminar</a>"
+                        render: (Id) => "<a href='update-suppliers/" + Id + "' class='btn btn-primary btn-sm'>Activar/Desactivar</a>"
                     },
                 ],
+                columnDefs: [{width: 5, targets: 3}],
+                fixedColumns: true,
                 dom:"<'row justify-content-end'<'col-3'f><'col-12't><'col-12'<'row justify-content-center'<'col-3'p>>>>",
                 language:{
                     url:'https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'

@@ -9,7 +9,7 @@ class ServicesRepository{
     public function services(){
         //return Service::get();
 
-        $services = Service::select('name', 'id','description') ->where('active', 1)
+        $services = Service::select('name', 'id','description','active') 
         ->get();
         
     return $services;
@@ -23,11 +23,15 @@ class ServicesRepository{
 
             $model =  Service::find($id);
 
+            if ($model->active == 1)
             $model->active = 0;
+                else 
+            $model->active = 1;
 
             $model->save();
         } catch (\Throwable $th) {
-            throw $th;
+                       return redirect()->back() ->with('error',  $th->getMessage());
+
         }
     }
     
@@ -52,7 +56,8 @@ class ServicesRepository{
             $model->save();
 
         } catch (\Throwable $th) {
-            throw $th;
+                       return redirect()->back() ->with('error',  $th->getMessage());
+
         }
     }
 

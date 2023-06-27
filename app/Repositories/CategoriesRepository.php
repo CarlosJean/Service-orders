@@ -10,7 +10,7 @@ class CategoriesRepository{
     public function categories(){
         //return Service::get();
 
-        $services = Categories::select('name', 'id','description') ->where('active', 1)
+        $services = Categories::select('name', 'id','description','') 
         ->get();
         
     return $services;
@@ -24,11 +24,16 @@ class CategoriesRepository{
 
             $model =  Categories::find($id);
 
+
+        if ($model->active == 1)
             $model->active = 0;
+        else 
+            $model->active = 1;
 
             $model->save();
         } catch (\Throwable $th) {
-            throw $th;
+                       return redirect()->back() ->with('error',  $th->getMessage());
+
         }
     }
     
@@ -53,7 +58,8 @@ class CategoriesRepository{
             $model->save();
 
         } catch (\Throwable $th) {
-            throw $th;
+                       return redirect()->back() ->with('error',  $th->getMessage());
+
         }
     }
 

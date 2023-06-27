@@ -31,13 +31,16 @@ class SubmenusTableSeeder extends Seeder
         DB::table('submenus')->insert([
             'name' => 'Usuarios',
             'order' => 2,
-            'menu_id' => 2
+            'menu_id' => 2,
+            'url' => 'empleados'
         ]);
         
         DB::table('submenus')->insert([
             'name' => 'Roles',
             'order' => 3,
-            'menu_id' => 2
+            'menu_id' => 2,
+            'URL' => 'roles'
+
         ]);
         
         //Menú de compras
@@ -65,13 +68,17 @@ class SubmenusTableSeeder extends Seeder
         DB::table('submenus')->insert([
             'name' => 'Artículos',
             'order' => 1,
-            'menu_id' => 4
+            'menu_id' => 4,
+            'URL' => 'items'
+
         ]);
         
         DB::table('submenus')->insert([
             'name' => 'Valor de inventario',
             'order' => 2,
-            'menu_id' => 4
+            'menu_id' => 4,
+            'URL' => 'inventory_value'
+
         ]);
         
         DB::table('submenus')->insert([
@@ -122,8 +129,12 @@ class SubmenusTableSeeder extends Seeder
         DB::table('submenus')->insert([
             'name' => 'Reportes',
             'order' => 1,
-            'menu_id' => 6
+            'menu_id' => 6,
+            'URL' => 'reports'
+
         ]);
+
+        
 
         //Menú de administración
         DB::table('submenus')->insert([

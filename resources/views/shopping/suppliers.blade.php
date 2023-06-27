@@ -8,14 +8,14 @@
 @vite(['resources/js/suppliers.js'])
 
 
-<div class="container">
+<div class="container" style="width:90%">
 <!-- Button trigger modal -->
 <!-- <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#exampleModal">
  + Nuevo departamento
 </button>
 <br>
 <br> -->
-<table id="dataTable" class="table table-striped table-bordered nowrap" style="font-size:14px">
+<table id="dataTable" class="table table-striped table-bordered nowrap" style="font-size:9.5px; width:50px">
       <!-- <thead>
           <tr>
           <th>Nombre</th>

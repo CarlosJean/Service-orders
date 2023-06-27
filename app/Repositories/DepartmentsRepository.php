@@ -7,26 +7,43 @@ use Exception;
 
 class DepartmentsRepository
 {
-    public function departments()
+    public function departments($all=false)
     {
-        $departments = Department::select('name', 'id','description') ->where('active', 1)
-            ->get();
-            
+
+        $departments = Department::select('name', 'id','description','active') 
+        ->get();
+        if(!$all) {       
+             $departments = $departments->where('active',1);
+        }
+          
         return $departments;
     }
+
+    // public function getDepartments()
+    // {
+    //     $departments = Department::select('name', 'id','description','active') 
+    //         ->get();
+            
+    //     return $departments;
+    // }
+
 
     
     public function update($id)
     {
         try {
 
-            $deparment =  Department::find($id);
+            $model =  Department::find($id);
 
-            $deparment->active = 0;
+            if ($model->active == 1)
+            $model->active = 0;
+                else 
+            $model->active = 1;
 
-            $deparment->save();
+            $model->save();
         } catch (\Throwable $th) {
-            throw $th;
+                       return redirect()->back() ->with('error',  $th->getMessage());
+
         }
     }
     
@@ -51,7 +68,8 @@ class DepartmentsRepository
             $deparment->save();
 
         } catch (\Throwable $th) {
-            throw $th;
+                       return redirect()->back() ->with('error',  $th->getMessage());
+
         }
     }
 }

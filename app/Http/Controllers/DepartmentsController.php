@@ -23,7 +23,12 @@ class DepartmentsController extends Controller
     {
         $this->deparmentRepository = $deparmentRepository;
     }
-    
+
+
+    public function getDeparments()
+    {
+        return   $this->deparmentRepository->departments(true);
+    }
     
     public function store (RegisterDeparmentRequest $request){    
         try {            
@@ -55,6 +60,10 @@ class DepartmentsController extends Controller
             //throw $th;
         }    
     } 
+
+
+   
+
     
     
   

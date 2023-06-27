@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
     use HasFactory;    
+    protected $fillable = ['name','description','active'];
 
     public function submenus(){
         return $this->belongsToMany(Submenu::class);

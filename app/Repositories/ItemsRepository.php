@@ -119,11 +119,15 @@ class ItemsRepository
 
             $model =  Item::find($id);
 
+            if ($model->active == 1)
             $model->active = 0;
+                else 
+            $model->active = 1;
 
             $model->save();
         } catch (\Throwable $th) {
-            throw $th;
+                       return redirect()->back() ->with('error',  $th->getMessage());
+
         }
     }
     
@@ -151,7 +155,8 @@ class ItemsRepository
             $model->save();
 
         } catch (\Throwable $th) {
-            throw $th;
+                       return redirect()->back() ->with('error',  $th->getMessage());
+
         }
     }
 }
