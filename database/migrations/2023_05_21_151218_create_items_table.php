@@ -15,14 +15,12 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('name')->unique();
-            $table->float('price');
             $table->float('quantity');
             $table->string('reference')->nullable();
             $table->string('measurement_unit');
             $table->string('description');
-            $table->boolean('active')->default(1);
-
-
+            $table->boolean('active')->default(true);
+            $table->double('price');
         });
     }
 

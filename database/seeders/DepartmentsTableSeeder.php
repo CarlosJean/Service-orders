@@ -22,6 +22,10 @@ class DepartmentsTableSeeder extends Seeder
             'description' => 'Departamento de mantenimiento',
         ]);
         DB::table('departments')->insert([
+            'name' => 'Almacén',
+            'description' => 'Departamento de almacén',
+        ]);
+        DB::table('departments')->insert([
             'name' => 'Rodeun',
             'description' => 'Departamento de rodeun',
         ]);

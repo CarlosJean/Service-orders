@@ -7,9 +7,11 @@ use App\Exceptions\UniqueColumnException;
 use App\Models\Employee;
 use App\Models\Service;
 use App\Models\User;
+use App\Notifications\RegisteredUser;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use OutOfRangeException;
+use Illuminate\Support\Str;
 
 class EmployeeRepository
 {
@@ -109,14 +111,20 @@ class EmployeeRepository
             }
 
             if ($createUser) {
+                $userName = $employee->names . ' ' . $employee->last_names;
+                $password =  Str::random(10); 
+
                 $newUser = new User([
-                    'name' => $employee->names . ' ' . $employee->last_names,
+                    'name' => $userName,
                     'email' => $employee->email,
-                    'password' => Hash::make($employee->email),
+                    'password' => Hash::make($password),
                 ]);
                 $newUser->save();
 
                 $newEmployee->user_id = $newUser->id;
+
+                //Enviar notificación al correo
+                $newUser->notify(new RegisteredUser($password));
             }
 
             $newEmployee->save();
@@ -162,13 +170,17 @@ class EmployeeRepository
                 //Si se solicita crear el usuario pero el empleado no tiene entonces se crea 
                 //el nuevo usuario para el empleado.
 
+                $password = Str::random(10);
                 $user = new User([
                     'name' => $employee->names . ' ' . $employee->last_names,
                     'email' => $employee->email,
-                    'password' => Hash::make($employee->email),
+                    'password' => Hash::make($password),
                 ]);
                 $user->save();
                 $updatedEmployee->user_id = $user->id;
+
+                //Enviar notificación al correo
+                $user->notify(new RegisteredUser($password));
             }
 
             $updatedEmployee->save();

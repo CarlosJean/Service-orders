@@ -16,6 +16,6 @@ class OrderItem extends Model
     }
 
     public function serviceOrder(){
-        return $this->hasOne(Order::class);
+        return $this->hasOne(Order::class, 'id');
     }
 }

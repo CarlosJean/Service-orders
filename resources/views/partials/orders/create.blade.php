@@ -1,3 +1,4 @@
+<hr>
 @if($errors->has('error'))
 <div class="alert alert-danger" role="alert">
     {{$errors->first('error')}}
@@ -15,11 +16,13 @@
         </span>
         @endif
     </div>
-    <div class="form-group">
-        <div class="container">
-            <div class="row justify-content-end">
-                <a href="{{url('ordenes-servicio/')}}" class="btn btn-secondary col-2">Volver</a>
-                <input type="submit" value="Crear" class="btn btn-primary col-2 ml-1">
+    <div class="form-group mt-2">
+        <div class="row justify-content-end">
+            <div class="col-md-2">
+                <a href="{{url('ordenes-servicio/')}}" class="btn btn-secondary w-100">Volver</a>
+            </div>
+            <div class="col-md-2 ml-2 mt-2 mt-md-0">
+                <input type="submit" value="Crear" class="btn btn-primary w-100">
             </div>
         </div>
     </div>

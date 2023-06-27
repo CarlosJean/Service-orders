@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\EmployeesController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
@@ -7,7 +8,6 @@ use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\OrdersSupController;
 use App\Http\Controllers\GestionMaterialesController;
 use App\Http\Controllers\GestionMaterialesBTNController;
-use App\Http\Controllers\DepartamentosController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\QuoteController;
@@ -35,9 +35,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('home');
 });
-
 
 Auth::routes();
 
@@ -108,6 +107,7 @@ Route::prefix('ordenes-servicio')->group(function () {
     Route::get('get-services', [ServiceOrdersController::class, 'getServices']);
     Route::get('get-deparments', [ServiceOrdersController::class, 'getDeparments']);
     Route::get('get-employees-by-service/{serviceId}', [ServiceOrdersController::class, 'getEmployeesByService']);
+    Route::get('materiales-solicitados', [ServiceOrdersController::class, 'requestedItems']);
     Route::post('orden-servicio', [ServiceOrdersController::class, 'getServiceOrderByNumber']);
     Route::post('materiales', [ServiceOrdersController::class, 'serviceOrderItems']);
     Route::get('{orderNumber}/gestion-materiales', [ServiceOrdersController::class, 'materialsManagementCreate']);
@@ -131,6 +131,7 @@ Route::prefix('cotizaciones')->group(function () {
 
 Route::prefix('articulos')->group(function () {
     Route::get('/', [ItemsController::class, 'getItems']);
+    Route::get('disponibles', [ItemsController::class, 'getAvailableItems']);
     Route::get('entrega', [ItemsController::class, 'createDispatchMaterials']);
     Route::post('despachar', [ItemsController::class, 'storeDispatch']);
 });
@@ -147,3 +148,8 @@ Route::prefix('ordenes-compra')->group(function () {
 Route::prefix('inventario')->group(function () {
     Route::get('/', [InventoriesController::class, 'index']);
 });
+
+Route::get('/reestablecer-contraseña', [ResetPasswordController::class, 'showSendEmail'])
+    ->name('password.request');
+
+Route::get('/reestablecer-contraseña/{token}', [ResetPasswordController::class, 'showResetForm']);

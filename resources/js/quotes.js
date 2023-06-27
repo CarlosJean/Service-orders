@@ -80,7 +80,9 @@ const totalRow = function () {
     $("#td_total_price").text(totalPrice);
 }
 
-btnFindServiceOrder.on('click', function () {
+frmFindServiceOrder.on('submit', function (e) {
+
+    e.preventDefault();
 
     const orderNumber = txtServiceOrderNumber.val();
     $.ajax({
@@ -106,6 +108,8 @@ btnFindServiceOrder.on('click', function () {
                     <input type="hidden" name="service_order_number" value="${orderNumber}"/>
                 `);
             }
+
+            $("#orderDetails").removeClass('d-none');
 
         },
         error: function (error) {

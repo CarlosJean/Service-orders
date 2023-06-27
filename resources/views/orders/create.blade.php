@@ -5,9 +5,8 @@
 <input type="text" value="{{$orderNumber}}" readonly id="txt_order_number" class="form-control">
 @endpush
 
-
 @section('orderContent')
-@if($departmentId != 2 && $roleId == 2)
+@if($departmentId != 2 && ($roleId == 2 || $roleId == 3))
 @include('partials.orders.create', ['orderNumber' => $orderNumber])
 @endIf
 @endsection

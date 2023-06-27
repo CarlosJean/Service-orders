@@ -1,34 +1,44 @@
-$(document).ready(function () {
-    $.ajax({
-        url: 'getEmployees',
-        type: 'get',
-        dataType: 'json',
-    })
-        .done(function (employees) {
+import * as language from './datatables.spanish.json' ;
 
-            $("#spinner").css('display', 'none');
-
-            $('#employeesTable').DataTable({
-                data: employees,
-                columns: [
-                    { data: 'id', title: 'Id' },
-                    { data: 'names', title: 'Nombres' },
-                    { data: 'last_names', title: 'Apellidos' },
-                    { data: 'identification', title: 'Identificación' },
-                    { data: 'email', title: 'Correo electrónico' },
-                    { data: 'department', title: 'Departmanento' },
-                    { data: 'role', title: 'Rol' },
-                    { data: 'has_user', title: '¿Tiene usuario asignado?' },
-                    {
-                        data: 'id',
-                        render: (employeeId) => "<a href='registro-empleado/" + employeeId + "' class='btn btn-primary'>Actualizar</a>"
-                    },
-                ],
-                dom:"<'row justify-content-end'<'col-3'f><'col-12't><'col-12'<'row justify-content-center'<'col-3'p>>>>",
-                language:{
-                    url:'https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'
-                },
-                responsive:true
-            });
-        });
+$(function () {
+    loadEmployeesTable();
 });
+
+const appendNewEmployeeButton = function () {
+    $("#newEmployeeButton").append(`
+        <a href="registro-empleado" class="btn btn-primary w-100">
+            <i class="typcn icon typcn-plus"></i>
+            Crear nuevo empleado
+        </a>
+    `);
+}
+
+const loadEmployeesTable = function () {
+
+    $('#employeesTable').DataTable({
+        ajax: {
+            url: 'getEmployees',
+            type: 'get',
+            dataType: 'json'
+        },
+        columns: [
+            { data: 'names', title: 'Nombres' },
+            { data: 'last_names', title: 'Apellidos' },
+            { data: 'identification', title: 'Identificación' },
+            { data: 'email', title: 'Correo electrónico' },
+            { data: 'department', title: 'Departamento' },
+            { data: 'role', title: 'Rol' },
+            { data: 'has_user', title: '¿Tiene usuario asignado?' },
+            {
+                data: 'id',
+                render: (employeeId) => "<a href='registro-empleado/" + employeeId + "' class='btn btn-primary'>Actualizar</a>",
+                title: 'Acción'
+            },
+        ],
+        dom: "<'row justify-content-end' <'col-sm-12 col-lg-4' f> <'#newEmployeeButton.col-sm-12 col-lg-2 px-1'> >",
+        responsive: true,
+        language
+    })
+
+    appendNewEmployeeButton();
+};

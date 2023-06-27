@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <title>
-        Sistema de ordenes de servicio | @yield('title','Acceso')
+        DRL Manufacturing | @yield('title','Acceso')
     </title>
 
 
-    @vite(['resources/css/azia.min.css','resources/js/app.js'])
+    @vite(['resources/css/azia.min.css','resources/js/app.js','resources/css/login.css'])
 
 </head>
 
-<body class="az-body">
+<body class="vh-100">
     @yield('content')
 </body>
 

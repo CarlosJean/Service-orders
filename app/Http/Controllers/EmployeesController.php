@@ -93,6 +93,7 @@ class EmployeesController extends Controller
         $employees = $this->employeeRepository
             ->employees();
 
+        $employees = ['data' => $employees];
         echo json_encode($employees);
     }
 

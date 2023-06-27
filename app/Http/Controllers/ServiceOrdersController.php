@@ -41,7 +41,13 @@ class ServiceOrdersController extends Controller
 
     public function index()
     {
-        return view('orders.index');
+        $employee = $this->employeeRepository
+            ->employeeByUserId(auth()->id());
+
+        $canCreateNewOrder = (!($employee['department']->id == 2 
+        && ($employee['department']->id == 2|| $employee['department']->id == 3)));
+
+        return view('orders.index')->with('canCreateNewOrder', $canCreateNewOrder);
     }
 
     public function create()
@@ -73,8 +79,7 @@ class ServiceOrdersController extends Controller
 
             return view('orders.created')->with('orderNumber', $orderNumber);
         } catch (\Throwable $th) {
-            //throw $th;
-
+                        
             if ($th->getCode() == 1) {
                 return back()->withErrors(['error' => $th->getMessage()]);
             }
@@ -93,7 +98,7 @@ class ServiceOrdersController extends Controller
 
         try {
             $serviceOrder = $this->ordersRepository->serviceOrderByNumber($orderNumber);
-            return view('orders.assign_technician')->with('order', $serviceOrder);
+            return view('orders.assign_technician')->with('order', $serviceOrder->detail);
         } catch (\Throwable $th) {
             //throw $th;
             var_dump($th);
@@ -164,16 +169,16 @@ class ServiceOrdersController extends Controller
         $departmentId = $employee['department']->id;
 
         $userRole = '';
-        if ($departmentId = 2 && $roleId == 2) {
+        if ($departmentId == 2 && ($roleId == 2 || $roleId == 3)) {
             $userRole = 'maintenanceSupervisor';
-        } else if ($departmentId = 2 && $roleId == 3) {
+        } else if ($departmentId == 2 && $roleId == 4) {
             $userRole = 'technician';
         }
 
         $serviceOrder = $this->ordersRepository->serviceOrderByNumber($orderNumber);
 
         return view('orders.show')->with([
-            'order' => $serviceOrder,
+            'order' => $serviceOrder->detail,
             'userRole' => $userRole
         ]);
     }
@@ -203,8 +208,8 @@ class ServiceOrdersController extends Controller
         $order = $this->ordersRepository->serviceOrderByNumber($orderNumber);
 
         $order = json_encode([
-            'requestor' => $order->requestor,
-            'technician' => $order->technician,
+            'requestor' => $order->detail->requestor,
+            'technician' => $order->detail->technician,
         ]);
 
         return $order;

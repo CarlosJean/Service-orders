@@ -2,6 +2,29 @@ const slcItems = $("#slc_items");
 const btnAddItem = $("#btn_add_item");
 const txtQuantity = $("#txt_quantity");
 const tblOrderItems = $("#tbl_order_items");
+const frmAddItem = $("#frmAddItem");
+const validationRules = {
+    rules: {
+        item:{
+            required: true
+        },
+        quantity: {
+            required: true,
+            min: 1,
+        },
+    },
+    messages: {
+        item: 'Debe seleccionar un artículo',
+        quantity: {
+            required: 'Debe indicar la cantidad antes de agregarlo al listado',
+            min: 'La cantidad mínima es 1',
+            max: 'No debe exceder la cantidad máxima',
+        },
+    },
+    errorClass: 'text-danger'
+};
+
+const validator = {};
 
 $(function () {
     loadItems();
@@ -9,11 +32,12 @@ $(function () {
         placeholder: 'Seleccione un artículo',
         dropdownParent: $('#materialsManagement'),
     });
+    validator = frmAddItem.validate(validationRules);
 })
 
 const loadItems = function () {
     $.ajax({
-        url: '../../articulos',
+        url: '../../articulos/disponibles',
         type: 'get',
         dataType: 'json',
         success: function (items) {
@@ -46,12 +70,42 @@ slcItems.on('change', function () {
 
     //Se muestra la cantidad disponible en la tabla de la vista.
     $("#td_current_quantity").text(selectedItemQuantity);
+
+    txtQuantity.attr('max', selectedItemQuantity);  
+    $("#txt_quantity").rules('add', {
+        max: selectedItemQuantity
+    });
 });
 
-btnAddItem.on('click', function () {
+$(document).on('click', '.btn_remove_item', function () {
+    const row = $(this).parents()[1];
+    row.remove();
+
+    const hasRows = $("#orderItems").children().length > 0;
+    if (!hasRows) {
+        tblOrderItems.addClass('d-none');
+    }
+});
+
+
+txtQuantity.on('blur', function () {
+    const currentValue = parseInt($(this).val());
+    const maxValue = parseInt($(this).attr('max'));
+
+    if (currentValue > maxValue) {
+        //$(this).val(maxValue);        
+    }
+})
+
+frmAddItem.on('submit', function (e) {
+    e.preventDefault();  
+
+    const formValid = frmAddItem.valid();
+    if(!formValid) return;
+
     //El id del artículo seleccionado en el select de artículos.
     const selectedItemId = $("#slc_items option:selected").val();
-    
+
     const wantedQuantity = txtQuantity.val();
 
     //Se consigue la cantidad disponible del arículo seleccionado
@@ -63,24 +117,17 @@ btnAddItem.on('click', function () {
         <tr>       
             <input type="hidden" name="items[${rowNumber}][id]" value="${item.id}"/>
             <input type="hidden" name="items[${rowNumber}][quantity]" value="${wantedQuantity}"/>
-            <td>${item.name}</td>
+            <td scope="row">${item.name}</td>
             <td>${item.reference}</td>
             <td>${item.measurement_unit}</td>
             <td>${wantedQuantity}</td>
             <td><button class="btn btn-warning btn_remove_item">Remover</button></td>
         </tr>
     `);
-    
+
     txtQuantity.val('');
     tblOrderItems.removeClass('d-none');
-});
 
-$(document).on('click','.btn_remove_item',function(){
-    const row = $(this).parents()[1];
-    row.remove();
-
-    const hasRows = $("#orderItems").children().length > 0;
-    if (!hasRows) {
-        tblOrderItems.addClass('d-none');
-    }
+    //Limpia los mensajes de validación una vez el formulario ha sido enviado
+    validator.resetForm();
 });
