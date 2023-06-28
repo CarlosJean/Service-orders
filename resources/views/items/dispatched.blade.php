@@ -1,13 +1,22 @@
 @extends('layouts.app')
 
 @section('content')
-<di class="container">
-    <div class="row justify-content-center">
-        <div class="card col-6 p-3">
-            <h2>¡Materiales despachados satisfactoriamente!</h2>
-            <hr class="opacity-100">
-            <p>Se despacharon los materiales satisfactoriamente</p>
+<div class="container">
+    <div class="card p-3">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <h2>¡Materiales despachados satisfactoriamente!</h2>
+                <hr>
+            </div>
+            <div class="col-12">
+                <p>Se despacharon los materiales satisfactoriamente</p>
+            </div>
+            <div class="col-12">
+                <div class="row justify-content-end">
+                    <a class="btn btn-primary col-md-4 mx-md-2 mt-2 mt-md-0" href="{{url('/')}}">Ir a la página principal</a>
+                </div>
+            </div>
         </div>
     </div>
-</di>
+</div>
 @endsection

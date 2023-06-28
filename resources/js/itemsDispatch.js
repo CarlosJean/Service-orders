@@ -1,7 +1,14 @@
+import * as language from './datatables.spanish.json' ;
+
 const tblItems = $("#tblItems");
 var itemsTable = null;
 const txtServiceOrder = $("#txtServiceOrder");
 const btnFindOrderItems = $("#btnFindOrderItems");
+
+
+$(function(){
+    $("#dvOrderNumber").addClass('d-none');
+});
 
 //Funciones
 const serviceOrderItems = function (serviceOrderNumber) {
@@ -10,7 +17,14 @@ const serviceOrderItems = function (serviceOrderNumber) {
             url: '../ordenes-servicio/materiales',
             data: { service_order_number: serviceOrderNumber },
             type: 'post',
-            dataType: 'json'
+            dataType: 'json',
+            dataSrc:function(serviceOrderItems){
+                $("#items").removeClass('d-none');
+                return serviceOrderItems.data;
+            },
+            error:function(){
+                $("#items").addClass('d-none');
+            }
         },
         processing: true,
         columns: [
@@ -33,9 +47,7 @@ const serviceOrderItems = function (serviceOrderNumber) {
         },
         dom: 'ftp',
         destroy: true,
-        language: {
-            url: "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
-        }
+        language,
     });
 };
 

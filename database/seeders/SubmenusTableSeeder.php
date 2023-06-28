@@ -112,6 +112,7 @@ class SubmenusTableSeeder extends Seeder
             'name' => 'Gestión de materiales',
             'order' => 4,
             'menu_id' => 5,
+            'url' => 'articulos/despachar',
         ]);
         
         //Menú de reportes
