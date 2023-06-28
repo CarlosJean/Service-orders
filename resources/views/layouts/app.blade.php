@@ -83,4 +83,6 @@
     </div>
 </body>
 
+@include('layouts.alert')
+
 </html>

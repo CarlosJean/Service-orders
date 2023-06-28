@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Repositories\InventoriesRepository;
 use Illuminate\Http\Request;
+use App\Http\Requests\InventoryValueRequest;
 
 class InventoriesController extends Controller
 {
@@ -16,9 +17,13 @@ class InventoriesController extends Controller
     }
 
     public function index(Request $request){
-        $fromDate = $request->query('fromDate');
-        $toDate = $request->query('toDate');
+        return view('inventory.inventory_value');
 
-        $this->inventoriesRepository->getByDate($fromDate, $toDate);
+    }
+
+    public function getInventory(InventoryValueRequest $request){
+        $fromDate = $request->input('fromDate');
+        $toDate = $request->input('fromDate');
+        return $data = $this->inventoriesRepository->getByDate($fromDate, $toDate);
     }
 }

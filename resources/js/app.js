@@ -5,9 +5,11 @@ import jquery from 'jquery';
 window.$ = jquery;
 
 // DataTables
+
 import DataTable from 'datatables.net-bs5';
 import 'datatables.net-responsive-bs5';
 import 'datatables.net-select-dt';
+import  'datatables.net-dt';
 
 import '../css/createOrder.css';
 import '../css/assignTechnician.css';

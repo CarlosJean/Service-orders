@@ -18,6 +18,9 @@ use App\Http\Controllers\SuppliersController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\InventoriesController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\RoleController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,11 +57,28 @@ Route::get('services', [ServicesController::class, 'index']);
 Route::post('register-services', [ServicesController::class, 'store']);
 Route::get('update-services/{id?}', [ServicesController::class, 'update']);
 
+Route::get('roles', [RoleController::class, 'index']);
+Route::get('get-roles', [RoleController::class, 'getRoles']);
+Route::post('register-role', [RoleController::class, 'store']);
+Route::get('update-role/{id?}', [RoleController::class, 'update']);
+Route::get('get-menu', [RoleController::class, 'getMenus']);
+Route::get('get-submenu-by-menu/{Id?}', [RoleController::class, 'getSubmenuByMenu']);
+Route::post('register-roles-submenu', [RoleController::class, 'storeRolSubmenu']);
+
+
+Route::get('inventory_value', [InventoriesController::class, 'index']);
+Route::post('inventory_value', [InventoriesController::class, 'getInventory']);
+
+
 
 Route::get('categories', [CategoriesController::class, 'index']);
 Route::get('get-categories', [CategoriesController::class, 'getCategories']);
 Route::post('register-categories', [CategoriesController::class, 'store']);
 Route::get('update-categories/{id?}', [CategoriesController::class, 'update']);
+
+Route::get('reports', [ReportsController::class, 'index']);
+Route::post('get-report', [ReportsController::class, 'getReport']);
+
 
 Route::get('items', [ItemsController::class, 'index']);
 Route::get('get-items', [ItemsController::class, 'getItems']);
@@ -76,6 +96,7 @@ Route::get('/GestionMateriales', [GestionMaterialesController::class, 'index']);
 Route::get('/GestionMaterialesBTN', [GestionMaterialesBTNController::class, 'index']);
 
 Route::get('/departments', [DepartmentsController::class, 'index']);
+Route::get('get-deparments', [DepartmentsController::class, 'getDeparments']);
 Route::post('register-deparment', [DepartmentsController::class, 'store']);
 Route::get('update-deparment/{id?}', [DepartmentsController::class, 'update']);
 

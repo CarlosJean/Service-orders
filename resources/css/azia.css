@@ -8745,11 +8745,10 @@ a.text-dark:hover, a.text-dark:focus {
     padding: 3px 10px 3px 20px;
     border-color: transparent;
     border-radius: 0;
-    background-color: #5b47fb;
-    color: #2a52be;
+    color: black;
     line-height: 1.45; }
   .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
-    color: #2a52be;
+    color: red;
     opacity: .5;
     font-size: 12px;
     display: inline-block;

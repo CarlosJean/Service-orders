@@ -45,7 +45,7 @@ class InventoriesRepository
         $to = date($toDate);
 
         $inventories = DB::table('inventories')
-            ->whereDate('inventories.created_at', '>=', $from)
+           // ->whereDate('inventories.created_at', '>=', $from)
             ->whereDate('inventories.created_at', '<=', $to)
             ->join('items', 'inventories.item_id', '=', 'items.id')
             ->select(
@@ -53,10 +53,10 @@ class InventoriesRepository
                 'items.name',
                 'items.reference',
                 DB::raw('round(sum(inventories.quantity),2) quantity'),
-                DB::raw('round(avg(inventories.price),2) price'),
-                'inventories.created_at',
+                DB::raw('round(avg(inventories.price),2) price')
+            
             )
-            ->groupBy('items.id', 'items.name', 'items.reference', 'inventories.created_at')
+            ->groupBy('items.id', 'items.name', 'items.reference')
             ->get();
         
         $inventoryValue = collect($inventories)->sum('price');

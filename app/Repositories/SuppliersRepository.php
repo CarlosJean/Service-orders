@@ -9,7 +9,7 @@ class SuppliersRepository
 {
     public function suppliers()
     {
-        $suppliers = Suppliers::select('id','name', 'address','city','email','cellphone','ident','identType') ->where('active', 1)
+        $suppliers = Suppliers::select('id','name', 'address','city','email','cellphone','ident','identType','active')
             ->get();
             
         return $suppliers;
@@ -20,13 +20,17 @@ class SuppliersRepository
     {
         try {
 
-            $suppliers =  Suppliers::find($id);
+            $model =  Suppliers::find($id);
 
-            $suppliers->active = 0;
+            if ($model->active == 1)
+            $model->active = 0;
+                else 
+            $model->active = 1;
 
-            $suppliers->save();
+            $model->save();
         } catch (\Throwable $th) {
-            throw $th;
+                       return redirect()->back() ->with('error',  $th->getMessage());
+
         }
     }
     
@@ -58,7 +62,8 @@ class SuppliersRepository
         } catch (\Throwable $th) {
           //  var_dump($suppliers);
 
-            throw $th;
+                       return redirect()->back() ->with('error',  $th->getMessage());
+
         }
     }
 }
