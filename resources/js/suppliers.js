@@ -1,7 +1,39 @@
 import applyStyle from '../js/azia.js';
 
+document.getElementById ("tipoidentificacion").addEventListener ("change", setIdent
+, false);
+
+function setIdent(){
+   var selectedIdent = $('#tipoidentificacion').val()
+
+   $('#inIdent').val('')
+
+    if(selectedIdent=="RNC")
+    {
+        $("#inIdent").prop('readonly', false);
+        $('#ident').text('RNC (formato: x-xx-xxxxx-x)')
+        $("#inIdent").prop('pattern', "^\\d{1}-\\d{2}-\\d{5}-\\d{1}$");
+        $("#inIdent").prop('maxlength', 12);
+    }
+else if(selectedIdent=="Cedula"){
+    $("#inIdent").prop('readonly', false);
+    $('#ident').text('Cedula (formato: xxx-xxxxxxx-x)')
+    $("#inIdent").prop('pattern', "^\\d{3}-\\d{7}-\\d{1}$");
+    $("#inIdent").prop('maxlength', 13);
+
+    }
+else {
+    $("#inIdent").prop('readonly', true);
+
+    $('#ident').text('RNC o Cedula')
+}
+
+}
+
+
 
 $(document).ready(function () {
+
 
     $(".btn").click(function(){
         $("#myModal").modal('show');

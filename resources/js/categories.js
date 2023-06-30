@@ -40,7 +40,9 @@ $(document).ready(function () {
                     },
                 ],
                 dom:"<'row justify-content-end'<'col-3'f><'col-12't><'col-12'<'row justify-content-center'<'col-3'p>>>>",
-                language
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+                }
             });
         });
 

@@ -113,6 +113,11 @@ $(document).ready(function () {
 
 
                 columns: [
+                    
+                    { data: 'id', title: 'id' },
+                    { data: 'name', title: 'nombre' },      
+                    { data: 'description', title: 'descripcion' },  
+                    { data: 'submenus', title: 'Submenus asignados' },        
                     { 
                         title:'Estado' ,
                         data: 'active', 
@@ -132,11 +137,6 @@ $(document).ready(function () {
 
                         //render: (data, type, row) => '<button type="button" class="btn btn-primary asigMenu" value='+data+"-"+row.name+' id="asigMenu'+data+'" data-bs-toggle="modal" data-bs-target="#asignarMenu">Asignar menu</button>'
                     },
-                    { data: 'id', title: 'id' },
-                    { data: 'name', title: 'nombre' },      
-                    { data: 'description', title: 'descripcion' },  
-                    { data: 'submenus', title: 'Submenus asignados' },        
-      
                  
                 ],
                 dom:"<'row justify-content-end'<'col-3'f><'col-12't><'col-12'<'row justify-content-center'<'col-3'p>>>>",

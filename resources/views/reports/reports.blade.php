@@ -37,9 +37,9 @@
         <option>Reporte de compras</option>
         <option>Reporte costo por servicios</option>
         <option>Reporte servicios</option>
-        <option>Reporte de aprobaciones</option>
+        <!-- <option>Reporte de aprobaciones</option> -->
         <option>Reporte de usuarios registrados</option>
-        <option>Reporte de ajuste de inventario</option>
+        <!-- <option>Reporte de ajuste de inventario</option> -->
        
  </select>
 

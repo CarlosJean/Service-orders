@@ -152,6 +152,7 @@ function getReport(){
                     columns: [
     
                         { data: 'number', title: 'Numero orden servicio' },
+                        { data: 'cantidad_articulos', title: 'total articulos' },
                         { data: 'total_cost', title: 'Costo total' },
                        // { data: 'name', title: 'Mombre' },     
                         // { data: 'Descripción', title: 'Descripción' },        

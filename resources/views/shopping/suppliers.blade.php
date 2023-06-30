@@ -15,7 +15,7 @@
 </button>
 <br>
 <br> -->
-<table id="dataTable" class="table table-striped table-bordered nowrap" style="font-size:9.5px; width:50px">
+<table id="dataTable" class="table table-striped table-bordered nowrap" style="font-size:10px;">
       <!-- <thead>
           <tr>
           <th>Nombre</th>
@@ -33,7 +33,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Crear nuevo suplidor</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -44,7 +44,7 @@
           <div class="col-6">
             <label for="">Tipo de identificación</label>
             <div class="form-group">
-            <select class="form-control" name="tipoidentificacion">
+            <select class="form-control" name="tipoidentificacion" id="tipoidentificacion" required>
                  <option>Seleccione una opción</option>
                  <option>RNC</option>
                  <option>Cedula</option>
@@ -53,30 +53,30 @@
           </div>
 
           <div class="col-6">
-            <label for="">RNC o Cedula</label>
+            <label for="" id="ident">RNC o Cedula</label>
             <div class="form-group">
-              <input type="text" class="form-control" name="rnc">
+              <input type="text" class="form-control" name="rnc" id="inIdent"  required readonly="readonly" >
             </div>
           </div>
 
           <div class="col-12">
             <label for="">Nombre</label>
             <div class="form-group">
-              <input type="text" class="form-control" name="nombre">
+              <input type="text" class="form-control" name="nombre" required>
             </div>
           </div>
 
           <div class="col-12">
             <label for="">Dirección</label>
             <div class="form-group">
-              <input type="text" class="form-control" name="direccion">
+              <input type="text" class="form-control" name="direccion" required>
             </div>
           </div>
 
           <div class="col-12">
             <label for="">Ciudad</label>
             <div class="form-group">
-            <select class="form-control" name="municipio">
+            <select class="form-control" name="municipio" required>
             <option>Seleccione la ciudad</option>
             <option>Agua Santa del Yuna, Duarte</option>
                  <option>Consuelo, San Pedro de Macorís</option>
@@ -90,14 +90,14 @@
           <div class="col-12">
             <label for="">Correo Electronico</label>
             <div class="form-group">
-              <input type="text" class="form-control" name="correo">
+              <input type="email" class="form-control" name="correo" required>
             </div>
           </div>
 
           <div class="col-12">
-            <label for="">Celular</label>
+            <label for="">Celular (formato: xxx-xxx-xxxx)</label>
             <div class="form-group">
-              <input type="text" class="form-control" name="celular">
+              <input type="text" class="form-control" maxlength="12" name="celular" required minlength="12" pattern="^\d{3}-\d{3}-\d{4}$">
             </div>
           </div> 
 
@@ -107,7 +107,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
         <button class="btn btn-primary" name="submit">Guardar</button>
       </div>
       </form>
