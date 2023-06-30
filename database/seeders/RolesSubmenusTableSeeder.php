@@ -13,6 +13,8 @@ class RolesSubmenusTableSeeder extends Seeder
      */
     public function run(): void
     {
+
+        //Administrador de sistema
         DB::table('role_submenu')->insert([
             'role_id' => 1,
             'submenu_id' => 1,
@@ -28,77 +30,11 @@ class RolesSubmenusTableSeeder extends Seeder
         ]);
         DB::table('role_submenu')->insert([
             'role_id' => 1,
-            'submenu_id' => 4,
-        ]);
-        DB::table('role_submenu')->insert([
-            'role_id' => 1,
-            'submenu_id' => 5,
-        ]);
-        DB::table('role_submenu')->insert([
-            'role_id' => 1,
             'submenu_id' => 6,
-        ]);
-
-        DB::table('role_submenu')->insert([
-            'role_id' => 1,
-            'submenu_id' => 12,
-        ]);
-
-        DB::table('role_submenu')->insert([
-            'role_id' => 1,
-            'submenu_id' => 13,
-        ]);
-        DB::table('role_submenu')->insert([
-            'role_id' => 1,
-            'submenu_id' => 15,
-        ]);
-        DB::table('role_submenu')->insert([
-            'role_id' => 2,
-            'submenu_id' => 1,
-        ]);
-        DB::table('role_submenu')->insert([
-            'role_id' => 3,
-            'submenu_id' => 1,
-        ]);
-        DB::table('role_submenu')->insert([
-            'role_id' => 1,
-            'submenu_id' => 11,
         ]);
         DB::table('role_submenu')->insert([
             'role_id' => 1,
             'submenu_id' => 7,
-        ]);
-        DB::table('role_submenu')->insert([
-            'role_id' => 2,
-            'submenu_id' => 13,
-        ]);
-        DB::table('role_submenu')->insert([
-            'role_id' => 3,
-            'submenu_id' => 13,
-        ]);
-        DB::table('role_submenu')->insert([
-            'role_id' => 4,
-            'submenu_id' => 1,
-        ]);
-        DB::table('role_submenu')->insert([
-            'role_id' => 4,
-            'submenu_id' => 13,
-        ]);
-        DB::table('role_submenu')->insert([
-            'role_id' => 2,
-            'submenu_id' => 5,
-        ]);
-        DB::table('role_submenu')->insert([
-            'role_id' => 3,
-            'submenu_id' => 5,
-        ]);
-        DB::table('role_submenu')->insert([
-            'role_id' => 2,
-            'submenu_id' => 4,
-        ]);
-        DB::table('role_submenu')->insert([
-            'role_id' => 3,
-            'submenu_id' => 4,
         ]);
         DB::table('role_submenu')->insert([
             'role_id' => 1,
@@ -110,14 +46,90 @@ class RolesSubmenusTableSeeder extends Seeder
         ]);
         DB::table('role_submenu')->insert([
             'role_id' => 1,
-            'submenu_id' => 16,
+            'submenu_id' => 12,
+        ]);
+        DB::table('role_submenu')->insert([
+            'role_id' => 1,
+            'submenu_id' => 11,
+        ]);
+        
+        //Supervisor
+        DB::table('role_submenu')->insert([
+            'role_id' => 2,
+            'submenu_id' => 1,
         ]);
         DB::table('role_submenu')->insert([
             'role_id' => 2,
-            'submenu_id' => 14,
+            'submenu_id' => 4,
+        ]);
+        DB::table('role_submenu')->insert([
+            'role_id' => 2,
+            'submenu_id' => 5,
+        ]);
+        DB::table('role_submenu')->insert([
+            'role_id' => 2,
+            'submenu_id' => 13,
+        ]);
+
+        //Gerente
+        DB::table('role_submenu')->insert([
+            'role_id' => 3,
+            'submenu_id' => 1,
         ]);
         DB::table('role_submenu')->insert([
             'role_id' => 3,
+            'submenu_id' => 4,
+        ]);
+        DB::table('role_submenu')->insert([
+            'role_id' => 3,
+            'submenu_id' => 5,
+        ]);
+        DB::table('role_submenu')->insert([
+            'role_id' => 3,
+            'submenu_id' => 13,
+        ]);
+
+
+        DB::table('role_submenu')->insert([
+            'role_id' => 4,
+            'submenu_id' => 1,
+        ]);
+        DB::table('role_submenu')->insert([
+            'role_id' => 4,
+            'submenu_id' => 13,
+        ]);
+
+        //Operador almacén
+        DB::table('role_submenu')->insert([
+            'role_id' => 5,
+            'submenu_id' => 1,
+        ]);
+        DB::table('role_submenu')->insert([
+            'role_id' => 5,
+            'submenu_id' => 4,
+        ]);
+        DB::table('role_submenu')->insert([
+            'role_id' => 5,
+            'submenu_id' => 5,
+        ]);
+        DB::table('role_submenu')->insert([
+            'role_id' => 5,
+            'submenu_id' => 6,
+        ]);
+        DB::table('role_submenu')->insert([
+            'role_id' => 5,
+            'submenu_id' => 7,
+        ]);
+        DB::table('role_submenu')->insert([
+            'role_id' => 5,
+            'submenu_id' => 8,
+        ]);
+        DB::table('role_submenu')->insert([
+            'role_id' => 5,
+            'submenu_id' => 10,
+        ]);
+        DB::table('role_submenu')->insert([
+            'role_id' => 5,
             'submenu_id' => 14,
         ]);
     }

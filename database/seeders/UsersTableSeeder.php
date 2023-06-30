@@ -14,20 +14,16 @@ class UsersTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('users')->insert(
-            [
-                'name' => 'Jean Holguin',
-                'email' => 'holguinjean1@gmail.com',
-                'password' => Hash::make('holguinjean1@gmail.com'),
-            ]
-        );
-        DB::table('users')->insert(
-            [
-                'name' => 'Jhosua Brown',
-                'email' => 'jhosuabrown@gmail.com',
-                'password' => Hash::make('jhosuabrown@gmail.com'),
-            ]
-        );        
+        DB::table('users')->insert([
+            'name' => 'Jean Holguin',
+            'email' => 'holguinjean1@gmail.com',
+            'password' => Hash::make('holguinjean1@gmail.com'),
+        ]);
+        DB::table('users')->insert([
+            'name' => 'Jhosua Brown',
+            'email' => 'jhosuabrown@gmail.com',
+            'password' => Hash::make('jhosuabrown@gmail.com'),
+        ]);
         DB::table('users')->insert([
             'name' => 'yhoel',
             'email' => 'yhoel@gmail.com',
@@ -37,6 +33,16 @@ class UsersTableSeeder extends Seeder
             'name' => 'Xavier Vasquez',
             'email' => 'xavier@gmail.com',
             'password' => Hash::make('xavier@gmail.com'),
+        ]);
+        DB::table('users')->insert([
+            'name' => 'Jane Doe',
+            'email' => 'janedoe@gmail.com',
+            'password' => Hash::make('janedoe@gmail.com'),
+        ]);
+        DB::table('users')->insert([
+            'name' => 'John Doe',
+            'email' => 'johndoe@gmail.com',
+            'password' => Hash::make('johndoe@gmail.com'),
         ]);
     }
 }

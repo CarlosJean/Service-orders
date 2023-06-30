@@ -77,12 +77,6 @@ class SubmenusTableSeeder extends Seeder
         ]);
         
         DB::table('submenus')->insert([
-            'name' => 'Ajustes de inventario',
-            'order' => 3,
-            'menu_id' => 4
-        ]);
-        
-        DB::table('submenus')->insert([
             'name' => 'Categorías',
             'order' => 4,
             'menu_id' => 4,
@@ -127,15 +121,6 @@ class SubmenusTableSeeder extends Seeder
             'order' => 1,
             'menu_id' => 6,
             'URL' => 'reports'
-
-        ]);
-
-        //Menú de administración
-        DB::table('submenus')->insert([
-            'name' => 'Empleados',
-            'order' => 1,
-            'menu_id' => 7,
-            'url' => 'empleados'
         ]);
     }
 }
