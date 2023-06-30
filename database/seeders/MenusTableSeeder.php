@@ -13,13 +13,11 @@ class MenusTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('menus')->insert(
-            [
-                'name' => 'Dashboard',
-                'icon' => 'typcn typcn-chart-bar-outline',
-                'order' => 1,
-            ]
-        );
+        DB::table('menus')->insert([
+            'name' => 'Dashboard',
+            'icon' => 'typcn typcn-chart-bar-outline',
+            'order' => 1,
+        ]);
 
         DB::table('menus')->insert([
             'name' => 'Personas',
@@ -49,12 +47,6 @@ class MenusTableSeeder extends Seeder
             'name' => 'Reportes',
             'icon' => 'typcn typcn-bookmark',
             'order' => 6,
-        ]);
-        
-        DB::table('menus')->insert([
-            'name' => 'Administración',
-            'icon' => 'typcn typcn-bookmark',
-            'order' => 7,
         ]);
     }
 }

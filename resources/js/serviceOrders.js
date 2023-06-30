@@ -50,7 +50,7 @@ const columnsByUserRole = function (userRole) {
             { data: 'order_number', title: 'Número de orden' },
             { data: 'created_at', title: 'Fecha y hora de creación' },
             { data: 'status', title: 'Estado' },
-            { data: 'technici an', title: 'Técnico asignado' },
+            { data: 'technician', title: 'Técnico asignado' },
         ]
     } else if (userRole == 'maintenanceSupervisor' || userRole == 'maintenanceManager') {
         return [

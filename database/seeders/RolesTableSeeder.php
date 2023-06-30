@@ -29,5 +29,9 @@ class RolesTableSeeder extends Seeder
             'name' => 'Tecnico',
             'description' => 'Técnico del departamento de mantenimiento.',
         ]);
+        DB::table('roles')->insert([
+            'name' => 'Operador almacen',
+            'description' => 'Operador de almacén.',
+        ]);
     }
 }

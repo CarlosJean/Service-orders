@@ -13,7 +13,7 @@
                     <div class="col-12 text-center text-md-end mt-3 mt-md-0">
                         <h3><strong>@yield('screenName', 'Ordenes de...')</strong></h3>
                     </div>
-                    <div class="col-4 col-md-1">
+                    <div class="col-4 col-md-1" id="dvOrderNumber">
                         <p class="my-0">No.</p>
                     </div>
                     <div class="col-8 col-md-4">

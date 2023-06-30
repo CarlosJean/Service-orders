@@ -271,6 +271,9 @@ class OrdersRepository
                 $detail->save();
             }
 
+            $order->status = "en espera de materiales";
+            $order->save();
+
             //Notificación al gerente de mantenimiento
             $maintenanceManager = Employee::where('department_id', 2)
                 ->where('role_id', 3)

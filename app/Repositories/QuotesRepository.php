@@ -81,6 +81,9 @@ class QuotesRepository
                 $newQuoteDetail->quote()->associate($newQuote);
                 $newQuoteDetail->save();
             }
+
+            $serviceOrder->status = "en espera de materiales";
+            $serviceOrder->save();
         } catch (\Throwable $th) {
             throw $th;
         }

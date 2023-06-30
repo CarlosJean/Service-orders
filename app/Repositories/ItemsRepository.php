@@ -16,9 +16,10 @@ use Illuminate\Support\Facades\Notification;
 
 class ItemsRepository
 {
-    
+
     protected $inventoriesRepository;
-    public function __construct(InventoriesRepository $inventoriesRepository) {
+    public function __construct(InventoriesRepository $inventoriesRepository)
+    {
         $this->inventoriesRepository = $inventoriesRepository;
     }
 
@@ -27,7 +28,8 @@ class ItemsRepository
         return Item::get();
     }
 
-    public function available(){
+    public function available()
+    {
         $items = Item::where('quantity', '>', '0')
             ->get();
 
@@ -121,20 +123,26 @@ class ItemsRepository
             }
 
             $maintenanceSupervisorAndManager = Employee::get()
-                ->whereIn('role_id', [2,3])
+                ->whereIn('role_id', [2, 3])
                 ->where('department_id', 2);
-            
+
             $users = [];
             foreach ($maintenanceSupervisorAndManager as $employee) {
                 array_push($users, $employee->user);
             }
             Notification::send($users, new ServiceOrderItemsDispatch($serviceOrderNumber));
 
+            $serviceOrder = Order::where('number', $serviceOrderNumber)
+                ->first();
+
+            $serviceOrder->status = "en espera de resolucion";
+            $serviceOrder->save();
+            
         } catch (\Throwable $th) {
             throw $th;
         }
     }
-    
+
     public function update($id)
     {
         try {
@@ -142,18 +150,17 @@ class ItemsRepository
             $model =  Item::find($id);
 
             if ($model->active == 1)
-            $model->active = 0;
-                else 
-            $model->active = 1;
+                $model->active = 0;
+            else
+                $model->active = 1;
 
             $model->save();
         } catch (\Throwable $th) {
-                       return redirect()->back() ->with('error',  $th->getMessage());
-
+            return redirect()->back()->with('error',  $th->getMessage());
         }
     }
-    
-    public function create($description, $nombre,$medida, $precio, $cantidad, $referencia)
+
+    public function create($description, $nombre, $medida, $precio, $cantidad, $referencia)
     {
         try {
 
@@ -168,17 +175,15 @@ class ItemsRepository
             $model = new Item([
                 'description' => $description,
                 'name' => $nombre,
-                'measurement_unit' =>$medida,
-                'price' =>$precio, 
-                'quantity' =>$cantidad,
-                'reference' =>$referencia
+                'measurement_unit' => $medida,
+                'price' => $precio,
+                'quantity' => $cantidad,
+                'reference' => $referencia
             ]);
 
             $model->save();
-
         } catch (\Throwable $th) {
-                       return redirect()->back() ->with('error',  $th->getMessage());
-
+            return redirect()->back()->with('error',  $th->getMessage());
         }
     }
 }
