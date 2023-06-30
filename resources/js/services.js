@@ -1,5 +1,6 @@
 
 import applyStyle from '../js/azia.js';
+import * as language from './datatables.spanish.json' ;
 
 
 $(document).ready(function () {
@@ -40,9 +41,7 @@ $(document).ready(function () {
                     },
                 ],
                 dom:"<'row justify-content-end'<'col-3'f><'col-12't><'col-12'<'row justify-content-center'<'col-3'p>>>>",
-                language:{
-                    url:'https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'
-                }
+                language
             });
         });
 
