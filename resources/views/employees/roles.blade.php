@@ -9,9 +9,9 @@
 
 
 <div class="container">
-<div class="table-responsive">
+<div class="table">
 
-<table id="dataTable" class="table table-striped table-bordered nowrap" style="font-size:14px">
+<table id="dataTable" class="table table-striped table-bordered" style="font-size:11px; table-layout: fixed; width: 100%">
   </table>
   </div>
 </div>
@@ -37,7 +37,7 @@
         </div>
         <div class="row" style="margin-top:5px">        
         <div class="col-12">
-        <select name="slcMenus" id="slcMenus" class="form-select slcMenus" style="width: 100%">
+        <select name="slcMenus" id="slcMenus" class="form-select slcMenus" style="width: 100%" required>
           <option value="">Seleccione un menu</option>
        </select>
         </div>
@@ -47,7 +47,7 @@
 
         <div class="row" style="margin-top:5px">        
         <div class="col-12">
-        <select multiple name="slcSubmenu[]" id="slcSubmenu" class="form-select slcSubmenu" style="width: 100%; margin-top:5px">
+        <select multiple name="slcSubmenu[]" id="slcSubmenu" class="form-select slcSubmenu" style="width: 100%; margin-top:5px" required>
        </select>
         </div>
       </div>
@@ -77,7 +77,7 @@
         <div class="col-12">
           <label for="">Nombre</label>
           <div class="form-group">
-            <input type="text" class="form-control" name="nombre">
+            <input type="text" class="form-control" name="nombre" required>
           </div>
         </div>
         <input type="hidden" class="form-control" name="id">
@@ -85,7 +85,7 @@
         <div class="col-12">
           <label for="">Descripción</label>
           <div class="form-group">
-            <input type="text" class="form-control" name="descripcion">
+            <input type="text" class="form-control" name="descripcion" required>
           </div>
         </div>
         

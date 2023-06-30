@@ -42,15 +42,15 @@
         <div class="col-12">
           <label for="">Nombre</label>
           <div class="form-group">
-            <input type="text" class="form-control" name="nombre">
+            <input type="text" class="form-control" name="nombre" required>
           </div>
         </div>
-        <input type="hidden" class="form-control" name="id">
+        <input type="hidden" class="form-control" name="id" >
 
         <div class="col-12">
           <label for="">Descripción</label>
           <div class="form-group">
-            <input type="text" class="form-control" name="descripcion">
+            <input type="text" class="form-control" name="descripcion" required>
           </div>
         </div>
         

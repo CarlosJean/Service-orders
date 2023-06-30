@@ -6,3 +6,11 @@
 .navbar-brand{
     font-size: 20pt;
 }
+
+table.dataTable thead tr {
+  background-color: #b2b7c1;
+}
+
+td {
+  word-wrap: break-word;
+}

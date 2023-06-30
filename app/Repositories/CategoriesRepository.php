@@ -10,7 +10,7 @@ class CategoriesRepository{
     public function categories(){
         //return Service::get();
 
-        $services = Categories::select('name', 'id','description','') 
+        $services = Categories::select('name', 'id','description','active') 
         ->get();
         
     return $services;
