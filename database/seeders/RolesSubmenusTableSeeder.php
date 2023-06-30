@@ -38,15 +38,11 @@ class RolesSubmenusTableSeeder extends Seeder
         ]);
         DB::table('role_submenu')->insert([
             'role_id' => 1,
-            'submenu_id' => 8,
-        ]);
-        DB::table('role_submenu')->insert([
-            'role_id' => 1,
             'submenu_id' => 9,
         ]);
         DB::table('role_submenu')->insert([
             'role_id' => 1,
-            'submenu_id' => 12,
+            'submenu_id' => 10,
         ]);
         DB::table('role_submenu')->insert([
             'role_id' => 1,
