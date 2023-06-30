@@ -223,6 +223,8 @@ class OrdersRepository
             ->join('users', 'orders.requestor', '=', 'users.id')
             ->join('employees as e', 'users.id', '=', 'e.user_id')
             ->leftJoin('order_items as orderItems', 'orders.id', '=', 'orderItems.service_order_id')
+            ->leftJoin('users as u2', 'orders.technician', '=', 'u2.id')
+            ->leftjoin('employees as e2', 'u2.id', '=', 'e2.user_id')
             ->select(
                 'orders.id',
                 DB::raw('concat(e.names," ",e.last_names) requestor'),
@@ -231,10 +233,11 @@ class OrdersRepository
                 'orders.number as order_number',
                 'orders.number as order_number',
                 DB::raw('CASE WHEN orderItems.service_order_id IS NULL THEN false ELSE true END items_requested'),
+                DB::raw('concat(e2.names," ",e2.last_names) technician'),
+                'orders.status',
+                DB::raw('orderItems.status order_items_status')
             )
-            ->where('orders.status', 'pendiente de asignar tecnico')
-            ->where('assignation_date', null)
-            ->where('technician', null)
+            ->whereNull('end_date')
             ->get();
 
         $orders['data'] = $data;
