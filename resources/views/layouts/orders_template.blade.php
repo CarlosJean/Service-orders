@@ -5,7 +5,7 @@
     <div class="card shadow p-3">
         <div class="row">
             <div class="col-md-3">
-                <img src="http://localhost/service-orders/public/drl_manufacturing.png" alt="DRL Manufacturing logo" srcset="" width="100%">
+                <img src="{{url('/drl_manufacturing.png')}}" alt="DRL Manufacturing logo" srcset="" width="100%">
             </div>
             <div class="col-md-9">
                 <div class="row align-items-center justify-content-end h-100">
