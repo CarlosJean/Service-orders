@@ -25,11 +25,11 @@
     </form>
     @endif
 
-    <div class="col-12 mb-2">
+    <div class="col-12 mb-2 mt-1">
         <div class="container">
             <div class="row justify-content-end">
                 <div class="col-md-3 p-0 px-md-1">
-                    <a href="{{url('../')}}" class="btn btn-secondary w-100">Volver</a>
+                    <a href="{{url('ordenes-servicio')}}" class="btn btn-secondary w-100">Volver</a>
                 </div>
                 <div class="col-md-3 p-0 pl-md-2">
                     @if($order->diagnosis == null && $order->start_date == null)

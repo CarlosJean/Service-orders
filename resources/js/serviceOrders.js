@@ -58,10 +58,12 @@ const columnsByUserRole = function (userRole) {
             { data: 'order_number', title: 'Número de orden' },
             { data: 'created_at', title: 'Fecha y hora de creación' },
             { data: 'requestor', title: 'Solicitante' },
+            { data: 'technician', title: 'Técnico' },
+            { data: 'status', title: 'Estado' },
             {
                 data: null,
                 render: (data) => {
-                    console.log(data);
+
                     const requestedItems = data.items_requested
                     const orderNumber = data.order_number
                     const technician = data.technician
@@ -70,17 +72,19 @@ const columnsByUserRole = function (userRole) {
 
                     return `
                         <div class="row mx-1 justify-content-around">
-                            ${
-                                (status == 'pendiente de asignar tecnico' || technician == null) 
-                                ? `<a href='ordenes-servicio/${orderNumber}' class='btn btn-primary col-md-5'>Desaprobar o asignar técnico</a>`
-                                : ``
-                            }
-                            <a href='ordenes-servicio/${orderNumber}/gestion-materiales' class='btn btn-primary col-md-5 mt-2 mt-md-0'>Gestión de materiales</a>
-                            ${
-                                (requestedItems && userRole == 'maintenanceManager' && orderItemsStatus == 'en espera de entrega') 
-                                ? `<a href='ordenes-servicio/${orderNumber}/aprobacion-materiales' class='btn btn-primary col-md-5 mt-2 mt-md-0'>Aprobar materiales</a>`
-                                : ``
-                            }
+                            ${(status == 'pendiente de asignar tecnico' || technician == null)
+                            ? `<a href='ordenes-servicio/${orderNumber}' class='btn btn-primary'>Aprobar/Desaprobar</a>`
+                            : ``}
+
+                            ${(technician != null) ? `<a href='ordenes-servicio/${orderNumber}/gestion-materiales' class='btn btn-primary mt-2 mt-md-0'>Gestión de materiales</a>` : ``}
+                            
+                            ${(requestedItems
+                            && userRole == 'maintenanceManager'
+                            && orderItemsStatus == 'en espera de entrega'
+                            && technician != null)
+                            ? `<a href='ordenes-servicio/${orderNumber}/aprobacion-materiales' class='btn btn-primary mt-2 mt-md-0'>Aprobar materiales</a>`
+                            : ``
+                        }
                         </div>
                     `;
                 },

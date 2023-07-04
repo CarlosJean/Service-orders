@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\NoServiceOrderItemsException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddItemsToOrderRequest;
 use App\Http\Requests\AssignTechnicianToOrderRequest;
@@ -44,8 +45,8 @@ class ServiceOrdersController extends Controller
         $employee = $this->employeeRepository
             ->employeeByUserId(auth()->id());
 
-        $canCreateNewOrder = (!($employee['department']->id == 2 
-        && ($employee['department']->id == 2|| $employee['department']->id == 3)));
+        $canCreateNewOrder = (!($employee['department']->id == 2
+            && ($employee['department']->id == 2 || $employee['department']->id == 3)));
 
         return view('orders.index')->with('canCreateNewOrder', $canCreateNewOrder);
     }
@@ -79,7 +80,7 @@ class ServiceOrdersController extends Controller
 
             return view('orders.created')->with('orderNumber', $orderNumber);
         } catch (\Throwable $th) {
-                        
+
             if ($th->getCode() == 1) {
                 return back()->withErrors(['error' => $th->getMessage()]);
             }
@@ -186,7 +187,13 @@ class ServiceOrdersController extends Controller
     public function materialsManagementCreate($orderNumber)
     {
         $serviceOrder = $this->ordersRepository->serviceOrderByNumber($orderNumber);
-        return view('warehouse.management')->with('order', $serviceOrder->detail);
+        $serviceOrderItems =  $this->ordersRepository
+            ->orderItems($orderNumber);
+
+        return view('warehouse.management')->with([
+            'order' => $serviceOrder->detail,
+            'orderItems' => $serviceOrderItems['items'],
+        ]);
     }
 
     public function orderMaterialsStore(AddItemsToOrderRequest $request, $orderNumber)
@@ -196,6 +203,8 @@ class ServiceOrdersController extends Controller
             $this->ordersRepository->storeItemsOrder($orderNumber, $items);
 
             return view('orders.order_items_created')->with('orderNumber', $orderNumber);
+        } catch(NoServiceOrderItemsException $ex){
+            return back()->withErrors($ex->getMessage());
         } catch (\Throwable $th) {
             var_dump($th);
             //throw $th;

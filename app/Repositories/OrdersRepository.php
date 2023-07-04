@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Exceptions\NoServiceOrderItemsException;
 use App\Models\Employee;
 use App\Models\Item;
 use App\Models\Order;
@@ -68,8 +69,7 @@ class OrdersRepository
             $requestor = User::find($requestorId)->name;
             foreach ($maintenanceSupervisors as $employee) {
                 $employee->user->notify(new ServiceOrderCreated($requestor, $orderNumber));
-            }          
-            
+            }
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -90,7 +90,7 @@ class OrdersRepository
                 $orders = $this->departmentSupervisorOrders($userId);
             } else if ($isMaintenanceDepartmentSupervisor || $isMaintenanceDepartmentManager) {
                 $orders = $this->maintenanceSupervisorOrders($isMaintenanceDepartmentManager);
-            }elseif ($isMaintenanceTechnician) {
+            } elseif ($isMaintenanceTechnician) {
                 $orders = $this->maintenanceTechnicianOrders();
             }
 
@@ -109,13 +109,12 @@ class OrdersRepository
                 ->leftJoin('users', 'orders.technician', '=', 'users.id')
                 ->leftJoin('employees', 'users.id', '=', 'employees.user_id')
                 ->where('requestor', $userId)
-                ->where('status', '!=', 'finalizada')
                 ->select(
                     'orders.id',
                     'number as order_number',
                     DB::raw('DATE_FORMAT(orders.created_at, "%d/%c/%Y %r") created_at'),
                     DB::raw('UCASE(status) as status'),
-                    DB::raw('(CASE WHEN orders.technician is null THEN "Sin asignar" ELSE employees.names+" "+employees.last_names END) technician')
+                    DB::raw('(CASE WHEN orders.technician is null THEN "Sin asignar" ELSE CONCAT(employees.names, " ", employees.last_names) END) technician')
                 )
                 ->get();
 
@@ -190,7 +189,6 @@ class OrdersRepository
 
             //Notificar al técnico asignado
             $technicianUser->notify(new TechnicianAssigned($orderNumber));
-            
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -215,7 +213,7 @@ class OrdersRepository
     }
 
     public function maintenanceSupervisorOrders($isManager = false)
-    {        
+    {
         $userRole = (!$isManager) ? 'maintenanceSupervisor' : 'maintenanceManager';
         $orders = ['user_role' => $userRole, 'data' => []];
 
@@ -248,6 +246,9 @@ class OrdersRepository
     public function storeItemsOrder($orderNumber, $items)
     {
         try {
+            if ($items == null) {
+                throw new NoServiceOrderItemsException('No se especificaron los materiales requeridos para esta orden de servicio.');            }
+
             //Encontramos la orden
             $order = Order::where('number', $orderNumber)
                 ->first();
@@ -256,14 +257,21 @@ class OrdersRepository
                 return new Exception('La orden a la cual intenta agregar materiales no existe.');
             }
 
-            $requestor = $this->employeeRepository->employeeByUserId(auth()->id());
+            $orderItem = $order?->orderItem;
 
-            $orderItem = new OrderItem([
-                'service_order_id' => $order->id,
-                'requestor' => $requestor['id'],
-                'status' => 'en espera de entrega'
-            ]);
-            $orderItem->save();
+            $requestor = $this->employeeRepository
+                ->employeeByUserId(auth()->id());
+
+            if (!$orderItem) {
+                $orderItem = new OrderItem([
+                    'service_order_id' => $order->id,
+                    'requestor' => $requestor['id'],
+                    'status' => 'en espera de entrega'
+                ]);
+                $orderItem->save();
+            }
+
+            $this->deleteItemFromServiceOrder($orderItem->orderItemDetail);
 
             foreach ($items as $item) {
                 $detail = new OrderItemsDetail();
@@ -281,13 +289,18 @@ class OrdersRepository
             $maintenanceManager = Employee::where('department_id', 2)
                 ->where('role_id', 3)
                 ->first()
-                ->user;                
-            $maintenanceSupervisorName = $requestor['names'].' '.$requestor['last_names'];
+                ->user;
+            $maintenanceSupervisorName = $requestor['names'] . ' ' . $requestor['last_names'];
             $maintenanceManager
-                ->notify(new ServiceOrderItemRequest($maintenanceSupervisorName,$orderNumber));
-
+                ->notify(new ServiceOrderItemRequest($maintenanceSupervisorName, $orderNumber));
         } catch (\Throwable $th) {
             throw $th;
+        }
+    }
+    
+    private function deleteItemFromServiceOrder($items){
+        foreach ($items as $item) {
+            $item->delete();
         }
     }
 
@@ -315,6 +328,7 @@ class OrdersRepository
         $order = Order::where('number', $serviceOrderNumber)
             ->first();
         $order->start_date = now();
+        $order->status = 'orden iniciada';
         $order->save();
     }
 
@@ -322,6 +336,7 @@ class OrdersRepository
     {
         $order = Order::where('number', $serviceOrderNumber)
             ->first();
+        $order->status = 'orden finalizada';
         $order->end_date = now();
         $order->save();
     }
@@ -351,10 +366,10 @@ class OrdersRepository
             : 'desaprobado por gerente de mantenimiento';
         $orderItemsRequest->save();
 
-        $supervisorsWharehouse = Employee::whereIn('role_id', [2,3])
+        $supervisorsWharehouse = Employee::whereIn('role_id', [2, 3])
             ->where('department_id', 3)
             ->get();
-        
+
         $users = [];
         foreach ($supervisorsWharehouse as $employee) {
             array_push($users, $employee->user);
@@ -388,11 +403,12 @@ class OrdersRepository
         return $orders;
     }
 
-    public function ordersWithRequestedItems(){
+    public function ordersWithRequestedItems()
+    {
         $orders = Order::whereNull('end_date')
             ->orderItem
             ->get();
-        
+
         echo json_encode($orders);
     }
 }
