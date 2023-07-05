@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Exceptions\NotFoundModelException;
 use App\Exceptions\NoUserEmailException;
 use App\Exceptions\UniqueColumnException;
 use App\Models\Employee;
@@ -44,6 +45,10 @@ class EmployeeRepository
             $employeeModel =  Employee::where('user_id', $userId)
                 ->first();
 
+            if ($employeeModel == null) {
+                throw new NotFoundModelException('No se encontró el usuario buscado.');
+            }
+
             $employee = array(
                 'id' => $employeeModel->id,
                 'roleId' => $employeeModel->role_id,
@@ -58,8 +63,8 @@ class EmployeeRepository
 
             return $employee;
         } catch (\Throwable $th) {
-            var_dump($th);
-            //throw $th;
+            //var_dump($th);
+            throw $th;
         }
     }
 

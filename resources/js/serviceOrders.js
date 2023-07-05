@@ -82,13 +82,13 @@ const columnsByUserRole = function (userRole) {
                             && userRole == 'maintenanceManager'
                             && orderItemsStatus == 'en espera de entrega'
                             && technician != null)
-                            ? `<a href='ordenes-servicio/${orderNumber}/aprobacion-materiales' class='btn btn-primary mt-2 mt-md-0'>Aprobar materiales</a>`
+                            ? `<a href='ordenes-servicio/${orderNumber}/aprobacion-materiales' class='btn btn-primary mt-2'>Aprobar materiales</a>`
                             : ``
                         }
                         </div>
                     `;
                 },
-                title: 'Acción'
+                title: 'Acciones'
             },
         ]
     } else if (userRole == 'maintenanceTechnician') {

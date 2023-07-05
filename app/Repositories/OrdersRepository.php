@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Exceptions\NoServiceOrderItemsException;
+use App\Exceptions\NotFoundModelException;
 use App\Models\Employee;
 use App\Models\Item;
 use App\Models\Order;
@@ -247,7 +248,8 @@ class OrdersRepository
     {
         try {
             if ($items == null) {
-                throw new NoServiceOrderItemsException('No se especificaron los materiales requeridos para esta orden de servicio.');            }
+                throw new NoServiceOrderItemsException('No se especificaron los materiales requeridos para esta orden de servicio.');
+            }
 
             //Encontramos la orden
             $order = Order::where('number', $orderNumber)
@@ -297,8 +299,9 @@ class OrdersRepository
             throw $th;
         }
     }
-    
-    private function deleteItemFromServiceOrder($items){
+
+    private function deleteItemFromServiceOrder($items)
+    {
         foreach ($items as $item) {
             $item->delete();
         }
@@ -410,5 +413,94 @@ class OrdersRepository
             ->get();
 
         echo json_encode($orders);
+    }
+
+    public function pendings()
+    {
+
+        try {
+            $userId = auth()->id();
+            $employee = $this->employeeRepository->employeeByUserId($userId);
+
+            if ($employee == null) {
+                throw new NotFoundModelException('No se encontró el empleado con el usuario número ' . $userId);
+            }
+
+            $orders = [];
+            if (($employee['roleId'] == 2 || $employee['roleId'] == 3)
+                && $employee['department']->id != 2
+            ) {
+                $orders = $this->departmentSupervisorPendings($userId);
+            }
+
+            return $orders;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    private function departmentSupervisorPendings($userId)
+    {
+        $orders = DB::table('orders')
+            ->leftJoin('users', 'orders.technician', '=', 'users.id')
+            ->leftJoin('employees', 'users.id', '=', 'employees.user_id')
+            ->where('requestor', $userId)
+            ->where('status', '!=', 'desaprobado')
+            ->where('status', '!=', 'orden finalizada')
+            ->select(
+                'number as number',
+                DB::raw('DATE_FORMAT(orders.created_at, "%d/%c/%Y %r") created_at'),
+                DB::raw('UCASE(status) as status'),
+                DB::raw('(CASE WHEN orders.technician is null THEN "Sin asignar" ELSE CONCAT(employees.names, " ", employees.last_names) END) technician')
+            )
+            ->take(5)
+            ->get();
+
+        return $orders;
+    }
+    
+    public function approved()
+    {
+
+        try {
+            $userId = auth()->id();
+            $employee = $this->employeeRepository->employeeByUserId($userId);
+
+            if ($employee == null) {
+                throw new NotFoundModelException('No se encontró el empleado con el usuario número ' . $userId);
+            }
+
+            $orders = [];
+            if (($employee['roleId'] == 2 || $employee['roleId'] == 3)
+            && $employee['department']->id != 2
+            ) {
+                $orders = $this->departmentSupervisorApproveds($userId);
+            }
+            
+            return $orders;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+    
+    private function departmentSupervisorApproveds($userId)
+    {
+        $orders = DB::table('orders')
+            ->leftJoin('users', 'orders.technician', '=', 'users.id')
+            ->leftJoin('employees', 'users.id', '=', 'employees.user_id')
+            ->where('requestor', $userId)
+            ->where('status', '!=', 'desaprobado')
+            ->select(
+                'number as number',
+                DB::raw('DATE_FORMAT(orders.created_at, "%d/%c/%Y %r") created_at'),
+                DB::raw('DATE_FORMAT(orders.start_date, "%d/%c/%Y %r") start_date'),
+                DB::raw('DATE_FORMAT(orders.end_date, "%d/%c/%Y %r") end_date'),
+                DB::raw('UCASE(status) as status'),
+                DB::raw('(CASE WHEN orders.technician is null THEN "Sin asignar" ELSE CONCAT(employees.names, " ", employees.last_names) END) technician'),
+            )
+            ->take(5)
+            ->get();
+
+        return $orders;
     }
 }

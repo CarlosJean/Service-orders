@@ -81,7 +81,7 @@
           <div class="col-md-12 mt-3 mt-md-0">
             <div class="container">
               <div class="row justify-content-end">
-                <button class="btn btn-secondary col-md-2 justify-self-end" id="btn_add_to_list" type="button">Agregar al listado</button>
+                <button class="btn btn-secondary col-md-2 justify-self-end mt-2" id="btn_add_to_list" type="button">Agregar al listado</button>
               </div>
             </div>
           </div>
