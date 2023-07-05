@@ -56,18 +56,6 @@ class RolesSubmenusTableSeeder extends Seeder
         ]);
         DB::table('role_submenu')->insert([
             'role_id' => 2,
-            'submenu_id' => 4,
-        ]);
-        DB::table('role_submenu')->insert([
-            'role_id' => 2,
-            'submenu_id' => 5,
-        ]);
-        DB::table('role_submenu')->insert([
-            'role_id' => 2,
-            'submenu_id' => 13,
-        ]);
-        DB::table('role_submenu')->insert([
-            'role_id' => 2,
             'submenu_id' => 12,
         ]);
 
@@ -75,18 +63,6 @@ class RolesSubmenusTableSeeder extends Seeder
         DB::table('role_submenu')->insert([
             'role_id' => 3,
             'submenu_id' => 1,
-        ]);
-        DB::table('role_submenu')->insert([
-            'role_id' => 3,
-            'submenu_id' => 4,
-        ]);
-        DB::table('role_submenu')->insert([
-            'role_id' => 3,
-            'submenu_id' => 5,
-        ]);
-        DB::table('role_submenu')->insert([
-            'role_id' => 3,
-            'submenu_id' => 13,
         ]);
         DB::table('role_submenu')->insert([
             'role_id' => 3,
@@ -100,10 +76,6 @@ class RolesSubmenusTableSeeder extends Seeder
         DB::table('role_submenu')->insert([
             'role_id' => 4,
             'submenu_id' => 12,
-        ]);
-        DB::table('role_submenu')->insert([
-            'role_id' => 4,
-            'submenu_id' => 13,
         ]);
 
         //Operador almacén
@@ -133,7 +105,7 @@ class RolesSubmenusTableSeeder extends Seeder
         ]);
         DB::table('role_submenu')->insert([
             'role_id' => 5,
-            'submenu_id' => 10,
+            'submenu_id' => 13,
         ]);
         DB::table('role_submenu')->insert([
             'role_id' => 5,
