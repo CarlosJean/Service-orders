@@ -16,7 +16,7 @@
         
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header">{{ __('Ordenes aprovados') }}</div>
+                <div class="card-header">{{ __('Ordenes aprobados') }}</div>
 
                 <div class="card-body">
                     @include('dashboards.approved_service_orders')

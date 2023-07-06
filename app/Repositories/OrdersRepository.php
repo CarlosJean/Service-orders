@@ -431,6 +431,10 @@ class OrdersRepository
                 && $employee['department']->id != 2
             ) {
                 $orders = $this->departmentSupervisorPendings($userId);
+            } else if (($employee['roleId'] == 2 || $employee['roleId'] == 3)
+                && $employee['department']->id == 2
+            ) {
+                $orders = $this->maintenanceSupervisorsPendingOrders();
             }
 
             return $orders;
@@ -458,7 +462,26 @@ class OrdersRepository
 
         return $orders;
     }
-    
+
+    private function maintenanceSupervisorsPendingOrders()
+    {
+        $orders = DB::table('orders')
+            ->leftJoin('users', 'orders.technician', '=', 'users.id')
+            ->leftJoin('employees', 'users.id', '=', 'employees.user_id')
+            ->whereNull('technician')
+            ->orWhereNull('end_date')
+            ->select(
+                'number as number',
+                DB::raw('DATE_FORMAT(orders.created_at, "%d/%c/%Y %r") created_at'),
+                DB::raw('UCASE(status) as status'),
+                DB::raw('(CASE WHEN orders.technician is null THEN "Sin asignar" ELSE CONCAT(employees.names, " ", employees.last_names) END) technician')
+            )
+            ->take(5)
+            ->get();
+
+        return $orders;
+    }
+
     public function approved()
     {
 
@@ -472,17 +495,21 @@ class OrdersRepository
 
             $orders = [];
             if (($employee['roleId'] == 2 || $employee['roleId'] == 3)
-            && $employee['department']->id != 2
+                && $employee['department']->id != 2
             ) {
                 $orders = $this->departmentSupervisorApproveds($userId);
+            } else if (($employee['roleId'] == 2 || $employee['roleId'] == 3)
+                && $employee['department']->id == 2
+            ) {
+                $orders = $this->maintenanceSupervisorApproveds();
             }
-            
+
             return $orders;
         } catch (\Throwable $th) {
             throw $th;
         }
     }
-    
+
     private function departmentSupervisorApproveds($userId)
     {
         $orders = DB::table('orders')
@@ -490,6 +517,26 @@ class OrdersRepository
             ->leftJoin('employees', 'users.id', '=', 'employees.user_id')
             ->where('requestor', $userId)
             ->where('status', '!=', 'desaprobado')
+            ->select(
+                'number as number',
+                DB::raw('DATE_FORMAT(orders.created_at, "%d/%c/%Y %r") created_at'),
+                DB::raw('DATE_FORMAT(orders.start_date, "%d/%c/%Y %r") start_date'),
+                DB::raw('DATE_FORMAT(orders.end_date, "%d/%c/%Y %r") end_date'),
+                DB::raw('UCASE(status) as status'),
+                DB::raw('(CASE WHEN orders.technician is null THEN "Sin asignar" ELSE CONCAT(employees.names, " ", employees.last_names) END) technician'),
+            )
+            ->take(5)
+            ->get();
+
+        return $orders;
+    }
+
+    private function maintenanceSupervisorApproveds()
+    {
+        $orders = DB::table('orders')
+            ->leftJoin('users', 'orders.technician', '=', 'users.id')
+            ->leftJoin('employees', 'users.id', '=', 'employees.user_id')
+            ->whereNotNull('technician')
             ->select(
                 'number as number',
                 DB::raw('DATE_FORMAT(orders.created_at, "%d/%c/%Y %r") created_at'),

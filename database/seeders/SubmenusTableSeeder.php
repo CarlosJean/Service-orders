@@ -18,7 +18,7 @@ class SubmenusTableSeeder extends Seeder
             'order' => 1,
             'menu_id' => null,
             'icon' => 'typcn typcn-chart-bar-outline',
-            'URL' => 'orders'
+            'URL' => '/'
         ]);
         
         //Menú de personas
