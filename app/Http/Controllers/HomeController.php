@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\EmployeeRepository;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -11,7 +12,7 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(protected EmployeeRepository $employeeRepository)
     {
         $this->middleware('auth');
     }
@@ -23,6 +24,22 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $userId = auth()->id();
+
+        $employee = $this->employeeRepository->employeeByUserId($userId);
+
+        $isDepartmentSupervisor = (($employee['roleId'] == 2 || $employee['roleId'] == 3) 
+        && $employee['department']->id != 2);
+        
+        $isMaintenanceSupervisor = (($employee['roleId'] == 2 || $employee['roleId'] == 3) 
+        && $employee['department']->id == 2);
+
+        $isWarehouseEmployee = ($employee['roleId'] == 5 && $employee['department']->id == 3);
+
+        return view('home')->with([
+            'isDepartmentSupervisor' => $isDepartmentSupervisor,
+            'isMaintenanceSupervisor' => $isMaintenanceSupervisor,
+            'isWarehouseEmployee' => $isWarehouseEmployee,
+        ]);
     }
 }
