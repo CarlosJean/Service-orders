@@ -457,6 +457,7 @@ class OrdersRepository
                 DB::raw('UCASE(status) as status'),
                 DB::raw('(CASE WHEN orders.technician is null THEN "Sin asignar" ELSE CONCAT(employees.names, " ", employees.last_names) END) technician')
             )
+            ->orderBy('orders.created_at')
             ->take(5)
             ->get();
 
@@ -476,6 +477,7 @@ class OrdersRepository
                 DB::raw('UCASE(status) as status'),
                 DB::raw('(CASE WHEN orders.technician is null THEN "Sin asignar" ELSE CONCAT(employees.names, " ", employees.last_names) END) technician')
             )
+            ->orderBy('orders.created_at')
             ->take(5)
             ->get();
 
@@ -525,6 +527,7 @@ class OrdersRepository
                 DB::raw('UCASE(status) as status'),
                 DB::raw('(CASE WHEN orders.technician is null THEN "Sin asignar" ELSE CONCAT(employees.names, " ", employees.last_names) END) technician'),
             )
+            ->orderBy('orders.created_at')
             ->take(5)
             ->get();
 
@@ -545,6 +548,7 @@ class OrdersRepository
                 DB::raw('UCASE(status) as status'),
                 DB::raw('(CASE WHEN orders.technician is null THEN "Sin asignar" ELSE CONCAT(employees.names, " ", employees.last_names) END) technician'),
             )
+            ->orderBy('orders.created_at')
             ->take(5)
             ->get();
 
@@ -590,6 +594,7 @@ class OrdersRepository
                     DB::raw('UCASE(order_items.status) as status'),
                     DB::raw('CONCAT(employees.names, " ", employees.last_names) name'),
                 )
+                ->orderBy('order_items.created_at')
                 ->take(5)
                 ->get();
 
@@ -613,6 +618,7 @@ class OrdersRepository
                     DB::raw('UCASE(order_items.status) as status'),
                     DB::raw('CONCAT(employees.names, " ", employees.last_names) name'),
                 )
+                ->orderBy('order_items.created_at')
                 ->take(5)
                 ->get();
 
@@ -661,6 +667,7 @@ class OrdersRepository
                     DB::raw('UCASE(order_items.status) as status'),
                     DB::raw('CONCAT(employees.names, " ", employees.last_names) name'),
                 )
+                ->orderBy('order_items.updated_at')
                 ->take(5)
                 ->get();
 
@@ -684,6 +691,7 @@ class OrdersRepository
                     DB::raw('UCASE(order_items.status) as status'),
                     DB::raw('CONCAT(employees.names, " ", employees.last_names) name'),
                 )
+                ->orderBy('order_items.updated_at')
                 ->take(5)
                 ->get();
 
