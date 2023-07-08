@@ -16,6 +16,10 @@ class Quote extends Model
         'total',
     ];
 
+    protected $attributes = [
+        'retrieved' => false,
+    ];
+
     public function details(){
         return $this->hasMany(QuoteDetail::class);
     }

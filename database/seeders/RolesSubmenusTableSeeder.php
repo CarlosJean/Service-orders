@@ -80,35 +80,35 @@ class RolesSubmenusTableSeeder extends Seeder
 
         //Operador almacén
         DB::table('role_submenu')->insert([
-            'role_id' => 5,
+            'role_id' => 7,
             'submenu_id' => 1,
         ]);
         DB::table('role_submenu')->insert([
-            'role_id' => 5,
+            'role_id' => 7,
             'submenu_id' => 4,
         ]);
         DB::table('role_submenu')->insert([
-            'role_id' => 5,
+            'role_id' => 7,
             'submenu_id' => 5,
         ]);
         DB::table('role_submenu')->insert([
-            'role_id' => 5,
+            'role_id' => 7,
             'submenu_id' => 6,
         ]);
         DB::table('role_submenu')->insert([
-            'role_id' => 5,
+            'role_id' => 7,
             'submenu_id' => 7,
         ]);
         DB::table('role_submenu')->insert([
-            'role_id' => 5,
+            'role_id' => 7,
             'submenu_id' => 8,
         ]);
         DB::table('role_submenu')->insert([
-            'role_id' => 5,
+            'role_id' => 7,
             'submenu_id' => 13,
         ]);
         DB::table('role_submenu')->insert([
-            'role_id' => 5,
+            'role_id' => 7,
             'submenu_id' => 14,
         ]);
     }

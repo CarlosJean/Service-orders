@@ -61,6 +61,10 @@ class QuoteController extends Controller
     }
 
     public function getQuoteByNumber($quoteNumber){
-        return $this->quotesRepository->quoteByNumber($quoteNumber);        
+        try {
+            return $this->quotesRepository->quoteByNumber($quoteNumber);        
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
     }    
 }

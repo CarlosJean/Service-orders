@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\systemRoles;
 use App\Repositories\EmployeeRepository;
 use Illuminate\Http\Request;
 
@@ -28,20 +29,18 @@ class HomeController extends Controller
 
         $employee = $this->employeeRepository->employeeByUserId($userId);
 
-        $isDepartmentSupervisor = (($employee['roleId'] == 2 || $employee['roleId'] == 3) 
-        && $employee['department']->id != 2);
-        
-        $isMaintenanceSupervisor = (($employee['roleId'] == 2 || $employee['roleId'] == 3) 
-        && $employee['department']->id == 2);
-
-        $isWarehouseEmployee = ($employee['roleId'] == 5 && $employee['department']->id == 3);
-        $isMaintenanceTechnician = ($employee['roleId'] == 4 && $employee['department']->id == 2);
+        $isDepartmentSupervisor = ($employee['system_role'] == systemRoles::DepartmentSupervisor || $employee['system_role'] == systemRoles::DepartmentManager);        
+        $isMaintenanceSupervisor = ($employee['system_role'] == SystemRoles::MaintenanceSupervisor || $employee['system_role'] == SystemRoles::MaintenanceManager);        
+        $isWarehouseEmployee = ($employee['system_role'] == systemRoles::Warehouseman);        
+        $isMaintenanceTechnician = ($employee['system_role'] == SystemRoles::MaintenanceTechnician);
+        $isSystemAdmin = ($employee['system_role'] == systemRoles::SystemAdmin);
 
         return view('home')->with([
             'isDepartmentSupervisor' => $isDepartmentSupervisor,
             'isMaintenanceSupervisor' => $isMaintenanceSupervisor,
             'isWarehouseEmployee' => $isWarehouseEmployee,
             'isMaintenanceTechnician' => $isMaintenanceTechnician,
+            'isSystemAdmin' => $isSystemAdmin,
         ]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\SystemRoles;
 use App\Exceptions\NoServiceOrderItemsException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddItemsToOrderRequest;
@@ -45,8 +46,8 @@ class ServiceOrdersController extends Controller
         $employee = $this->employeeRepository
             ->employeeByUserId(auth()->id());
 
-        $canCreateNewOrder = (!($employee['department']->id == 2
-            && ($employee['department']->id == 2 || $employee['department']->id == 3)));
+        $canCreateNewOrder = ($employee['system_role'] == SystemRoles::DepartmentSupervisor 
+        || $employee['system_role'] == SystemRoles::DepartmentManager);
 
         return view('orders.index')->with('canCreateNewOrder', $canCreateNewOrder);
     }
@@ -60,13 +61,12 @@ class ServiceOrdersController extends Controller
         $orderNumber = $this->ordersRepository->orderNumber();
 
         $employee = $this->employeeRepository->employeeByUserId($userId);
-        $departmentId =  $employee['department']->id;
-        $roleId =  $employee['role']->id;
+        $isDepartmentSupervisor = ($employee['system_role'] == SystemRoles::DepartmentSupervisor
+        || $employee['system_role'] == SystemRoles::DepartmentManager);
 
         return view('orders.create', [
             'orderNumber' => $orderNumber,
-            'departmentId' => $departmentId,
-            'roleId' => $roleId,
+            'isDepartmentSupervisor' => $isDepartmentSupervisor,
         ]);
     }
 
@@ -170,9 +170,9 @@ class ServiceOrdersController extends Controller
         $departmentId = $employee['department']->id;
 
         $userRole = '';
-        if ($departmentId == 2 && ($roleId == 2 || $roleId == 3)) {
+        if ($employee['system_role'] == SystemRoles::MaintenanceSupervisor || $employee['system_role'] == SystemRoles::MaintenanceManager) {
             $userRole = 'maintenanceSupervisor';
-        } else if ($departmentId == 2 && $roleId == 4) {
+        } else if ($employee['system_role'] == SystemRoles::MaintenanceTechnician) {
             $userRole = 'technician';
         }
 

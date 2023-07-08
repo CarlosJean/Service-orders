@@ -20,8 +20,7 @@ return new class extends Migration
             $table->bigInteger('order_id')
                 ->unsigned()
                 ->nullable();
-            $table->boolean('retrieved')
-                ->nullable();
+            $table->boolean('retrieved');
             $table->float('total');
 
             //Foreign keys

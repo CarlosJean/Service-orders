@@ -68,4 +68,10 @@ class MenuRepository
             throw $th;
         }
     }
+
+    public function userHasSubmenu($roleId, $path){        
+        $roleSubmenus = Role::find($roleId)->submenus->where('url', $path);
+        $hasPath = count($roleSubmenus) > 0;
+        return $hasPath;
+    }
 }

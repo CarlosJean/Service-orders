@@ -41,7 +41,6 @@ class PurchaseOrderRepository
 
     public function storePurchaseOrder($quoteNumber, $purchaseOrderNumber, $details)
     {
-
         try {
             $quote = Quote::where('number', $quoteNumber)?->first();
             if ($quote == null) {
@@ -117,6 +116,9 @@ class PurchaseOrderRepository
                 $item->quantity = $detail['quantity'];
                 $this->inventoriesRepository->historical($item, InventoryType::Entry);
 
+                $quote->retrieved = true;
+                $quote->save();
+                
                 //Si la cotización no está asociada a una orden de servicio entonces el programa finaliza
                 if ($quote->order == null) return;
 

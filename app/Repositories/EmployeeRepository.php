@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Enums\SystemRole;
 use App\Exceptions\NotFoundModelException;
 use App\Exceptions\NoUserEmailException;
 use App\Exceptions\UniqueColumnException;
@@ -59,6 +60,7 @@ class EmployeeRepository
                 'email' => $employeeModel->email,
                 'department' => $employeeModel->department,
                 'role' => $employeeModel->role,
+                'system_role' => $employeeModel->system_role
             );
 
             return $employee;

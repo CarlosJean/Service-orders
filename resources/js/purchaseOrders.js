@@ -11,14 +11,12 @@ $("#frmGetQuoteByNumber").on('submit', function (e) {
         url: `../cotizaciones/${quoteNumber}`,
         dataType: 'json',
         success: function (quote) {
-
-            console.log(quote);
-            $("#frmPurchaseOrder input[name='quote_number']").val(quote[0].number);
-
             if (quote == null) {
                 $("#spnQuoteNotFound").text('No existe una cotización con este número.')
                 $("#spnQuoteNotFound").removeClass('d-none');
             } else {
+                $("#frmPurchaseOrder input[name='quote_number']").val(quote[0].number);
+
                 table = $('#tblQuotes').DataTable({
                     columnDefs: [{
                         orderable: false,
@@ -57,7 +55,7 @@ $("#frmGetQuoteByNumber").on('submit', function (e) {
             }
         },
         error: function (error) {
-            $("#spnQuoteNotFound").text('No existe una cotización con este número.')
+            $("#spnQuoteNotFound").text(error.responseText)
             $("#spnQuoteNotFound").removeClass('d-none');
         }
     });

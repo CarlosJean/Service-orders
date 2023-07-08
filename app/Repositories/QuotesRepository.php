@@ -95,6 +95,14 @@ class QuotesRepository
         $quoteFound = Quote::where('number', $quoteNumber)
             ?->first();
 
+        if (!$quoteFound) { 
+            throw new Exception('No existe una cotización con el número '.$quoteNumber.'.');
+        }
+
+        if ($quoteFound?->retrieved) {
+            throw new Exception('Esta cotización ya ha sido despachada.');
+        }
+
         foreach ($quoteFound?->details as $detail) {
             array_push($quote, [
                 'quote_id' => $quoteFound?->id,

@@ -2,10 +2,10 @@
 
 namespace App\Repositories;
 
+use App\Enums\SystemRoles;
 use App\Exceptions\NoServiceOrderItemsException;
 use App\Exceptions\NotFoundModelException;
 use App\Models\Employee;
-use App\Models\Item;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemsDetail;
@@ -81,10 +81,10 @@ class OrdersRepository
         try {
             $employee = $this->employeeRepository->employeeByUserId($userId);
 
-            $isDepartmentSupervisor = (($employee['role']->id == 2 || $employee['role']->id == 3) && $employee['department']->id != 2);
-            $isMaintenanceDepartmentSupervisor = ($employee['role']->id == 2 && $employee['department']->id == 2);
-            $isMaintenanceDepartmentManager = ($employee['role']->id == 3 && $employee['department']->id == 2);
-            $isMaintenanceTechnician = ($employee['role']->id == 4 && $employee['department']->id == 2);
+            $isDepartmentSupervisor = ($employee['system_role'] == SystemRoles::DepartmentSupervisor || $employee['system_role'] == SystemRoles::DepartmentManager);
+            $isMaintenanceDepartmentSupervisor = ($employee['system_role'] == SystemRoles::MaintenanceSupervisor);
+            $isMaintenanceDepartmentManager = ($employee['system_role'] == SystemRoles::MaintenanceManager);
+            $isMaintenanceTechnician = ($employee['system_role'] == SystemRoles::MaintenanceTechnician);
 
             $orders = [];
             if ($isDepartmentSupervisor) {
@@ -424,18 +424,14 @@ class OrdersRepository
 
             if ($employee == null) {
                 throw new NotFoundModelException('No se encontró el empleado con el usuario número ' . $userId);
-            }
-
+            }            
+            
             $orders = [];
-            if (($employee['roleId'] == 2 || $employee['roleId'] == 3)
-                && $employee['department']->id != 2
-            ) {
+            if ($employee['system_role'] == SystemRoles::DepartmentSupervisor || $employee['system_role'] == SystemRoles::DepartmentManager) {
                 $orders = $this->departmentSupervisorPendings($userId);
-            } else if (($employee['roleId'] == 2 || $employee['roleId'] == 3)
-                && $employee['department']->id == 2
-            ) {
+            } else if ($employee['system_role'] == SystemRoles::MaintenanceSupervisor || $employee['system_role'] == SystemRoles::MaintenanceManager) {
                 $orders = $this->maintenanceSupervisorsPendingOrders();
-            } else if ($employee['roleId'] == 4 && $employee['department']->id == 2) {
+            } else if ($employee['system_role'] == SystemRoles::MaintenanceTechnician) {
                 $orders = $this->maintenanceTechnicianPendingOrders($userId);
             }
 
@@ -518,15 +514,11 @@ class OrdersRepository
             }
 
             $orders = [];
-            if (($employee['roleId'] == 2 || $employee['roleId'] == 3)
-                && $employee['department']->id != 2
-            ) {
+            if ($employee['system_role'] == SystemRoles::DepartmentSupervisor || $employee['system_role'] == SystemRoles::DepartmentManager) {
                 $orders = $this->departmentSupervisorApproveds($userId);
-            } else if (($employee['roleId'] == 2 || $employee['roleId'] == 3)
-                && $employee['department']->id == 2
-            ) {
+            } else if ($employee['system_role'] == SystemRoles::MaintenanceSupervisor || $employee['system_role'] == SystemRoles::MaintenanceManager) {
                 $orders = $this->maintenanceSupervisorApproveds();
-            } else if ($employee['roleId'] == 4 && $employee['department']->id == 2) {
+            } else if ($employee['system_role'] == SystemRoles::MaintenanceTechnician) {
                 $orders = $this->maintenanceTechnicianApprovedOrders($userId);
             }
 
@@ -612,11 +604,9 @@ class OrdersRepository
             }
 
             $orders = [];
-            if ($employee['roleId'] == 5 && $employee['department']->id == 3) {
+            if ($employee['system_role'] == SystemRoles::Warehouseman) {
                 $orders = $this->noItemsDispatchedServiceOrders();
-            } else if (($employee['roleId'] == 2 || $employee['roleId'] == 3)
-                && $employee['department']->id == 2
-            ) {
+            } else if ($employee['system_role'] == SystemRoles::MaintenanceSupervisor || $employee['system_role'] == SystemRoles::MaintenanceManager) {
                 $orders = $this->maintenanceSupervisorNoItemsDispatched();
             }
 
@@ -685,11 +675,9 @@ class OrdersRepository
             }
 
             $orders = [];
-            if ($employee['roleId'] == 5 && $employee['department']->id == 3) {
+            if ($employee['system_role'] == SystemRoles::Warehouseman) {
                 $orders = $this->itemsDispatchedServiceOrders();
-            } else if (($employee['roleId'] == 2 || $employee['roleId'] == 3)
-                && $employee['department']->id == 2
-            ) {
+            } else if ($employee['system_role'] == SystemRoles::MaintenanceSupervisor || $employee['system_role'] == SystemRoles::MaintenanceManager) {
                 $orders = $this->maintenanceSupervisorItemsDispatchedServiceOrders();
             }
 
