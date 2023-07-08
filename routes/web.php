@@ -152,3 +152,7 @@ Route::get('/reestablecer-contraseña', [ResetPasswordController::class, 'showSe
     ->name('password.request');
 
 Route::get('/reestablecer-contraseña/{token}', [ResetPasswordController::class, 'showResetForm']);
+
+Route::fallback(function(){
+    return view('errors.not_found');
+});

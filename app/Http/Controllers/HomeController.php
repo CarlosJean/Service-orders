@@ -35,11 +35,13 @@ class HomeController extends Controller
         && $employee['department']->id == 2);
 
         $isWarehouseEmployee = ($employee['roleId'] == 5 && $employee['department']->id == 3);
+        $isMaintenanceTechnician = ($employee['roleId'] == 4 && $employee['department']->id == 2);
 
         return view('home')->with([
             'isDepartmentSupervisor' => $isDepartmentSupervisor,
             'isMaintenanceSupervisor' => $isMaintenanceSupervisor,
             'isWarehouseEmployee' => $isWarehouseEmployee,
+            'isMaintenanceTechnician' => $isMaintenanceTechnician,
         ]);
     }
 }

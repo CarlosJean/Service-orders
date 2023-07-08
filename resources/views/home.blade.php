@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-between">
 
-        @if($isDepartmentSupervisor || $isMaintenanceSupervisor)
+        @if($isDepartmentSupervisor || $isMaintenanceSupervisor || $isMaintenanceTechnician)
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header"><strong>{{ __('Ordenes pendientes') }}</strong></div>
@@ -17,7 +17,11 @@
 
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header"><strong>{{ __('Ordenes aprobados') }}</strong></div>
+                <div class="card-header">
+                    <strong>                        
+                        @if($isMaintenanceTechnician) {{ __('Ordenes finalizadas') }} @else {{ __('Ordenes aprobadas') }} @endif
+                    </strong>
+                </div>
 
                 <div class="card-body">
                     @include('dashboards.approved_service_orders')

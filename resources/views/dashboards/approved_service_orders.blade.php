@@ -13,7 +13,7 @@
         @foreach($serviceOrders as $serviceOrder)
         <tr>
             <td>{{$serviceOrder->number}}</td>
-            <td>{{$serviceOrder->technician}}</td>
+            <td>{{$serviceOrder->name}}</td>
             <td>{{$serviceOrder->created_at}}</td>
             <td>{{$serviceOrder->start_date}}</td>
             <td>{{$serviceOrder->end_date}}</td>

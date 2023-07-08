@@ -435,6 +435,8 @@ class OrdersRepository
                 && $employee['department']->id == 2
             ) {
                 $orders = $this->maintenanceSupervisorsPendingOrders();
+            } else if ($employee['roleId'] == 4 && $employee['department']->id == 2) {
+                $orders = $this->maintenanceTechnicianPendingOrders($userId);
             }
 
             return $orders;
@@ -455,7 +457,7 @@ class OrdersRepository
                 'number as number',
                 DB::raw('DATE_FORMAT(orders.created_at, "%d/%c/%Y %r") created_at'),
                 DB::raw('UCASE(status) as status'),
-                DB::raw('(CASE WHEN orders.technician is null THEN "Sin asignar" ELSE CONCAT(employees.names, " ", employees.last_names) END) technician')
+                DB::raw('(CASE WHEN orders.technician is null THEN "Sin asignar" ELSE CONCAT(employees.names, " ", employees.last_names) END) name')
             )
             ->orderBy('orders.created_at')
             ->take(5)
@@ -475,7 +477,27 @@ class OrdersRepository
                 'number as number',
                 DB::raw('DATE_FORMAT(orders.created_at, "%d/%c/%Y %r") created_at'),
                 DB::raw('UCASE(status) as status'),
-                DB::raw('(CASE WHEN orders.technician is null THEN "Sin asignar" ELSE CONCAT(employees.names, " ", employees.last_names) END) technician')
+                DB::raw('(CASE WHEN orders.technician is null THEN "Sin asignar" ELSE CONCAT(employees.names, " ", employees.last_names) END) name')
+            )
+            ->orderBy('orders.created_at')
+            ->take(5)
+            ->get();
+
+        return $orders;
+    }
+
+    private function maintenanceTechnicianPendingOrders($userid)
+    {
+        $orders = DB::table('orders')
+            ->leftJoin('users', 'orders.requestor', '=', 'users.id')
+            ->leftJoin('employees', 'users.id', '=', 'employees.user_id')
+            ->where('technician', '=', $userid)
+            ->WhereNull('end_date')
+            ->select(
+                'number as number',
+                DB::raw('DATE_FORMAT(orders.created_at, "%d/%c/%Y %r") created_at'),
+                DB::raw('UCASE(status) as status'),
+                DB::raw('CONCAT(employees.names, " ", employees.last_names) name')
             )
             ->orderBy('orders.created_at')
             ->take(5)
@@ -504,6 +526,8 @@ class OrdersRepository
                 && $employee['department']->id == 2
             ) {
                 $orders = $this->maintenanceSupervisorApproveds();
+            } else if ($employee['roleId'] == 4 && $employee['department']->id == 2) {
+                $orders = $this->maintenanceTechnicianApprovedOrders($userId);
             }
 
             return $orders;
@@ -525,7 +549,7 @@ class OrdersRepository
                 DB::raw('DATE_FORMAT(orders.start_date, "%d/%c/%Y %r") start_date'),
                 DB::raw('DATE_FORMAT(orders.end_date, "%d/%c/%Y %r") end_date'),
                 DB::raw('UCASE(status) as status'),
-                DB::raw('(CASE WHEN orders.technician is null THEN "Sin asignar" ELSE CONCAT(employees.names, " ", employees.last_names) END) technician'),
+                DB::raw('(CASE WHEN orders.technician is null THEN "Sin asignar" ELSE CONCAT(employees.names, " ", employees.last_names) END) name'),
             )
             ->orderBy('orders.created_at')
             ->take(5)
@@ -546,7 +570,29 @@ class OrdersRepository
                 DB::raw('DATE_FORMAT(orders.start_date, "%d/%c/%Y %r") start_date'),
                 DB::raw('DATE_FORMAT(orders.end_date, "%d/%c/%Y %r") end_date'),
                 DB::raw('UCASE(status) as status'),
-                DB::raw('(CASE WHEN orders.technician is null THEN "Sin asignar" ELSE CONCAT(employees.names, " ", employees.last_names) END) technician'),
+                DB::raw('(CASE WHEN orders.technician is null THEN "Sin asignar" ELSE CONCAT(employees.names, " ", employees.last_names) END) name'),
+            )
+            ->orderBy('orders.created_at')
+            ->take(5)
+            ->get();
+
+        return $orders;
+    }
+
+    private function maintenanceTechnicianApprovedOrders($userId)
+    {
+        $orders = DB::table('orders')
+            ->leftJoin('users', 'orders.requestor', '=', 'users.id')
+            ->leftJoin('employees', 'users.id', '=', 'employees.user_id')
+            ->where('technician', $userId)
+            ->WhereNotNull('end_date')
+            ->select(
+                'number as number',
+                DB::raw('DATE_FORMAT(orders.created_at, "%d/%c/%Y %r") created_at'),
+                DB::raw('DATE_FORMAT(orders.start_date, "%d/%c/%Y %r") start_date'),
+                DB::raw('DATE_FORMAT(orders.end_date, "%d/%c/%Y %r") end_date'),
+                DB::raw('UCASE(status) as status'),
+                DB::raw('CONCAT(employees.names, " ", employees.last_names) name'),
             )
             ->orderBy('orders.created_at')
             ->take(5)
