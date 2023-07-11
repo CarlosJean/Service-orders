@@ -23,6 +23,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\CanApproveItems;
 use App\Http\Middleware\CanCreateServiceOrders;
+use App\Http\Middleware\CanDoWarehouseWorks;
 use App\Http\Middleware\CanManageEmployees;
 use App\Http\Middleware\CanManageItems;
 use App\Http\Middleware\CanViewServiceOrder;
@@ -140,10 +141,13 @@ Route::prefix('ordenes-servicio')->group(function () {
 });
 
 Route::prefix('cotizaciones')->group(function () {
+    Route::get('/', [QuoteController::class, 'index'])
+        ->middleware([Authenticate::class, CanDoWarehouseWorks::class]);
     Route::get('crear', [QuoteController::class, 'create'])
         ->middleware([Authenticate::class, CanDoWarehouseWorks::class]);
     Route::get('{quoteNumber}', [QuoteController::class, 'getQuoteByNumber']);
     Route::post('crear', [QuoteController::class, 'store']);
+    Route::post('activas', [QuoteController::class, 'actives']);
 });
 
 Route::prefix('articulos')->group(function () {

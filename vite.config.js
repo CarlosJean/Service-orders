@@ -18,6 +18,7 @@ export default defineConfig({
                 'resources/js/materialsManagement.js',
                 'resources/js/purchaseOrders.js',
                 'resources/js/itemsDispatch.js',
+                'resources/js/quotesIndex.js',
             ],
             refresh: true,
         }),

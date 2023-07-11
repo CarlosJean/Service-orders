@@ -23,7 +23,7 @@ class QuoteController extends Controller
      */
     public function index()
     {
-        //
+        return view('quotes.index');
     }
 
     /**
@@ -66,5 +66,9 @@ class QuoteController extends Controller
         } catch (\Throwable $th) {
             return $th->getMessage();
         }
-    }    
+    }
+
+    public function actives(){
+        return $this->quotesRepository->getActiveQuotes();
+    }
 }

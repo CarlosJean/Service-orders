@@ -49,7 +49,7 @@ class SubmenusTableSeeder extends Seeder
             'name' => 'Cotizaciones',
             'order' => 2,
             'menu_id' => 3,
-            'url' => 'cotizaciones/crear'
+            'url' => 'cotizaciones'
         ]);
 
         DB::table('submenus')->insert([

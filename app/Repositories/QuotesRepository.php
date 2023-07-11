@@ -90,13 +90,14 @@ class QuotesRepository
     }
 
 
-    public function quoteByNumber($quoteNumber){        
+    public function quoteByNumber($quoteNumber)
+    {
         $quote = [];
         $quoteFound = Quote::where('number', $quoteNumber)
             ?->first();
 
-        if (!$quoteFound) { 
-            throw new Exception('No existe una cotización con el número '.$quoteNumber.'.');
+        if (!$quoteFound) {
+            throw new Exception('No existe una cotización con el número ' . $quoteNumber . '.');
         }
 
         if ($quoteFound?->retrieved) {
@@ -120,5 +121,25 @@ class QuotesRepository
         }
 
         return $quote;
+    }
+
+    public function getActiveQuotes()
+    {
+
+        $quotes = DB::table('quotes')
+            ->join('orders', 'quotes.order_id', '=', 'orders.id')
+            ->join('users', 'orders.requestor', '=', 'users.id')
+            ->join('employees', 'users.id', '=', 'employees.user_id')
+            ->where('retrieved', '=', false)
+            ->select(
+                'quotes.id',
+                DB::raw('DATE_FORMAT(quotes.created_at, "%d/%m/%Y %r") date'),
+                'orders.number as order_number',
+                DB::raw('CONCAT(employees.names, " ", employees.last_names) requestor'),
+                'quotes.number as quote_number',
+            )
+            ->get();
+
+        return $quotes;
     }
 }
