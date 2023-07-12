@@ -8,7 +8,9 @@ $("#frmGetQuoteByNumber").on('submit', function (e) {
     const quoteNumber = $("#frmGetQuoteByNumber input[name='quote_number']").val();
 
     $.ajax({
-        url: `../cotizaciones/${quoteNumber}`,
+        url: `../cotizaciones/obtener-por-numero`,
+        type: 'post',
+        data:{quoteNumber},
         dataType: 'json',
         success: function (quote) {
             if (quote == null) {

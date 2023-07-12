@@ -145,7 +145,9 @@ Route::prefix('cotizaciones')->group(function () {
         ->middleware([Authenticate::class, CanDoWarehouseWorks::class]);
     Route::get('crear', [QuoteController::class, 'create'])
         ->middleware([Authenticate::class, CanDoWarehouseWorks::class]);
-    Route::get('{quoteNumber}', [QuoteController::class, 'getQuoteByNumber']);
+    Route::get('{quoteNumber}', [QuoteController::class, 'show'])
+        ->middleware([Authenticate::class, CanDoWarehouseWorks::class]);
+    Route::post('obtener-por-numero', [QuoteController::class, 'getQuoteByNumber']);
     Route::post('crear', [QuoteController::class, 'store']);
     Route::post('activas', [QuoteController::class, 'actives']);
 });

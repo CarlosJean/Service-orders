@@ -10,7 +10,7 @@
     <div class="card p-3">
         <div class="row justify-content-center">
             <div class="col-12">
-                <h2><strong>Cotizaciones</strong></h2>
+                <h2><strong>Cotizaciones pendientes</strong></h2>
                 <hr>
             </div>
             <div class="col-12">

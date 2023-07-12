@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\NotFoundModelException;
 use App\Models\Quote;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\QuoteRequest;
@@ -60,15 +61,39 @@ class QuoteController extends Controller
         }
     }
 
-    public function getQuoteByNumber($quoteNumber){
+    public function getQuoteByNumber(Request $request)
+    {
         try {
-            return $this->quotesRepository->quoteByNumber($quoteNumber);        
+            $quoteNumber = $request->input('quoteNumber');
+            return $this->quotesRepository->quoteByNumber($quoteNumber);
         } catch (\Throwable $th) {
             return $th->getMessage();
         }
     }
 
-    public function actives(){
+    public function actives()
+    {
         return $this->quotesRepository->getActiveQuotes();
+    }
+
+    public function show($quoteNumber)
+    {
+        try {
+            $quote = $this->quotesRepository->getQuote($quoteNumber);
+    
+            foreach ($quote['detail'] as $detail) {
+                $detail->quantity = number_format($detail->quantity, 2, '.', ',');
+                $detail->price = number_format($detail->price, 2, '.', ',');
+            }
+    
+            $quote['totals']['quantity'] = number_format($quote['totals']['quantity'], 2, '.', ',');
+            $quote['totals']['price'] = number_format($quote['totals']['price'], 2, '.', ',');
+            
+            return view('quotes.show')->with('quote', $quote);
+        } catch(NotFoundModelException){
+            return view('errors.not_found')->with('redirect', './');
+        }catch (\Throwable $th) {
+            //throw $th;
+        }
     }
 }
