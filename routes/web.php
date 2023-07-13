@@ -17,6 +17,7 @@ use App\Http\Controllers\ServiceOrdersController;
 use App\Http\Controllers\SuppliersController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\InventoriesController;
+use App\Http\Controllers\MaterialRequestsController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\RoleController;
@@ -183,6 +184,13 @@ Route::get('/reestablecer-contraseña', [ResetPasswordController::class, 'showSe
     ->name('password.request');
 
 Route::get('/reestablecer-contraseña/{token}', [ResetPasswordController::class, 'showResetForm']);
+
+
+Route::prefix('solicitud-materiales')->group(function () {
+    Route::get('/', [MaterialRequestsController::class, 'index'])
+        ->middleware([Authenticate::class, CanDoWarehouseWorks::class]);
+    Route::post('pendientes', [MaterialRequestsController::class, 'pending']);
+});
 
 Route::fallback(function () {
     return view('errors.not_found');
