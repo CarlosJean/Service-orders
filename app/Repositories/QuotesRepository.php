@@ -50,6 +50,8 @@ class QuotesRepository
             $serviceOrder = Order::where('number', $orderNumber)->first();
             if ($serviceOrder != null) {
                 $newQuote->order_id = $serviceOrder->id;
+                $serviceOrder->status = "en espera de materiales";
+                $serviceOrder->save();
             }
             $newQuote->save();
 
@@ -82,9 +84,6 @@ class QuotesRepository
                 $newQuoteDetail->quote()->associate($newQuote);
                 $newQuoteDetail->save();
             }
-
-            $serviceOrder->status = "en espera de materiales";
-            $serviceOrder->save();
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -151,7 +150,7 @@ class QuotesRepository
             $quoteFound = Quote::where('number', $quoteNumber)->first();
 
             if (!$quoteFound) {
-                throw new NotFoundModelException('No se encontró la cotización con el número '.$quoteNumber.'.');
+                throw new NotFoundModelException('No se encontró la cotización con el número ' . $quoteNumber . '.');
             }
 
             $quote = [
