@@ -42,7 +42,7 @@ class SubmenusTableSeeder extends Seeder
             'name' => 'Ordenes de compra',
             'order' => 1,
             'menu_id' => 3,
-            'url' => 'ordenes-compra/crear'
+            'url' => 'ordenes-compra'
         ]);
 
         DB::table('submenus')->insert([

@@ -164,8 +164,13 @@ Route::prefix('suplidores')->group(function () {
 });
 
 Route::prefix('ordenes-compra')->group(function () {
+    Route::get('/', [PurchaseOrderController::class, 'index'])
+        ->middleware([Authenticate::class, CanDoWarehouseWorks::class]);
     Route::get('crear', [PurchaseOrderController::class, 'create'])
         ->middleware([Authenticate::class, CanDoWarehouseWorks::class]);
+    Route::get('{number}', [PurchaseOrderController::class, 'show'])
+        ->middleware([Authenticate::class, CanDoWarehouseWorks::class]);
+    Route::post('/', [PurchaseOrderController::class, 'getPurchaseOrders']);
     Route::post('crear', [PurchaseOrderController::class, 'store']);
 });
 
