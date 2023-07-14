@@ -2,12 +2,12 @@
 
 namespace App\Enums;
 
-Enum SystemRoles{
-    case DepartmentSupervisor;
-    case DepartmentManager;
-    case MaintenanceManager;
-    case MaintenanceSupervisor;
-    case MaintenanceTechnician;
-    case SystemAdmin;
-    case Warehouseman;
+Enum SystemRoles : string{
+    case DepartmentSupervisor = 'departmentsupervisor';
+    case DepartmentManager = 'departmentmanager';
+    case MaintenanceManager = 'maintenancemanager';
+    case MaintenanceSupervisor = 'maintenancesupervisor';
+    case MaintenanceTechnician = 'maintenancetechnician';
+    case SystemAdmin = 'systemadmin';
+    case Warehouseman = 'warehouseman';
 }

@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 
-use App\Enums\SystemRole;
 use App\Exceptions\NotFoundModelException;
 use App\Exceptions\NoUserEmailException;
 use App\Exceptions\UniqueColumnException;
@@ -232,5 +231,16 @@ class EmployeeRepository
             ->where('department_id', $departmentId);
         
         return $employees;
+    }
+    
+    public function employeeSystemRole($userId){
+
+        $employee = $this->employeeByUserId($userId);
+
+        $employeeId = $employee['id'];
+        $systemRole = Employee::find($employeeId)        
+            ->getSystemRoleAttribute();
+
+        return $systemRole;
     }
 }

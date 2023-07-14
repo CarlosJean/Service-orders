@@ -112,6 +112,13 @@ class SubmenusTableSeeder extends Seeder
             'name' => 'Gestión de materiales',
             'order' => 4,
             'menu_id' => 5,
+            'url' => 'solicitud-materiales',
+        ]);
+
+        DB::table('submenus')->insert([
+            'name' => 'Despachar materiales',
+            'order' => 4,
+            'menu_id' => 5,
             'url' => 'articulos/despachar',
         ]);
         

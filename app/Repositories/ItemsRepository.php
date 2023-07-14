@@ -105,18 +105,20 @@ class ItemsRepository
 
         try {
 
-            $serviceOrderNumber = OrderItemsDetail::find($itemsId[0])
-                ->orderItem
+            $orderItem = OrderItemsDetail::find($itemsId[0])
+                ->orderItem;
+
+            $serviceOrderNumber = $orderItem
                 ->serviceOrder
                 ->number;
 
             foreach ($itemsId as $itemId) {
-                $orderItem = OrderItemsDetail::find($itemId);
-                $orderItem->dispatched = true;
-                $orderItem->save();
+                $orderItemDetail = OrderItemsDetail::find($itemId);
+                $orderItemDetail->dispatched = true;
+                $orderItemDetail->save();
 
                 $item = Item::find($itemId);
-                $item->quantity = $orderItem->quantity;
+                $item->quantity = $orderItemDetail->quantity;
 
                 $this->inventoriesRepository
                     ->historical($item, InventoryType::Dispatch);
@@ -132,12 +134,14 @@ class ItemsRepository
             }
             Notification::send($users, new ServiceOrderItemsDispatch($serviceOrderNumber));
 
+            $orderItem->dispatched_by = auth()?->id();
+            $orderItem->save();
+            
             $serviceOrder = Order::where('number', $serviceOrderNumber)
                 ->first();
 
             $serviceOrder->status = "en espera de resolucion";
             $serviceOrder->save();
-            
         } catch (\Throwable $th) {
             throw $th;
         }

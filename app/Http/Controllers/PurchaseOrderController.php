@@ -21,11 +21,14 @@ class PurchaseOrderController extends Controller
         return view('purchase_orders.index');
     }
 
-    public function create()
+    public function create($quoteNumber = null)
     {
         $purchaseOrderNumber = $this->purchaseOrderRepository
             ->purchaseOrderNumber();
-        return view('purchase_orders.create')->with('purchaseOrderNumber', $purchaseOrderNumber);
+        return view('purchase_orders.create')->with([
+            'purchaseOrderNumber' => $purchaseOrderNumber,
+            'quoteNumber' => $quoteNumber,
+        ]);
     }
 
     public function quoteByNumber(Request $request)
@@ -69,7 +72,7 @@ class PurchaseOrderController extends Controller
             ->getPurchaseOrders();
 
         foreach ($purchaseOrders as $purchaseOrder) {
-            $purchaseOrder->total = 'RD$ '.number_format($purchaseOrder->total,2);
+            $purchaseOrder->total = 'RD$ ' . number_format($purchaseOrder->total, 2);
         }
 
         return $purchaseOrders;

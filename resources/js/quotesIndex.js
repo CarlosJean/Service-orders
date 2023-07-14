@@ -37,6 +37,11 @@ const activeQuotes = function () {
                 data: 'quote_number',
                 render: (quoteNumber) => "<a href='cotizaciones/" + quoteNumber + "' class='btn btn-primary'>Detalles</a>"
             },
+            {
+                title: 'Accion 2',
+                data: 'quote_number',
+                render: (quoteNumber) => "<a href='ordenes-compra/crear/" + quoteNumber + "' class='btn btn-primary'>Orden de compra</a>"
+            },
         ],
         dom: "<'row justify-content-end' <'col-sm-12 col-lg-5' f> <'#newQuoteButton.col-sm-12 col-lg-2 px-1 px-md-3'> >",
         destroy: true,

@@ -66,8 +66,8 @@ class ItemsController extends Controller
         return $items;
     }    
 
-    public function createDispatchMaterials(){        
-        return view('items.dispatch');
+    public function createDispatchMaterials($serviceOrderNumber = null){
+        return view('items.dispatch')->with('serviceOrderNumber', $serviceOrderNumber);
     }
     
     public function createDeliveryOfMaterials(Request $request){

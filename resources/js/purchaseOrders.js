@@ -1,6 +1,17 @@
 import * as language from './datatables.spanish.json' ;
 
 var table = {};
+var url = `../cotizaciones/obtener-por-numero`;
+
+$(function(){
+    const quoteNumber = $("#txtQuoteNumber").val();
+
+    console.log(quoteNumber);
+
+    if (quoteNumber != '') {
+        url = `../../cotizaciones/obtener-por-numero`;
+    }
+});
 
 $("#frmGetQuoteByNumber").on('submit', function (e) {
     e.preventDefault();
@@ -8,7 +19,7 @@ $("#frmGetQuoteByNumber").on('submit', function (e) {
     const quoteNumber = $("#frmGetQuoteByNumber input[name='quote_number']").val();
 
     $.ajax({
-        url: `../cotizaciones/obtener-por-numero`,
+        url,
         type: 'post',
         data:{quoteNumber},
         dataType: 'json',
@@ -51,6 +62,7 @@ $("#frmGetQuoteByNumber").on('submit', function (e) {
                     ],
                     dom:'ft',
                     language,
+                    destroy: true,
                 });
                 $("#spnQuoteNotFound").addClass('d-none');
                 $("#dvItems").removeClass('d-none');
@@ -59,7 +71,7 @@ $("#frmGetQuoteByNumber").on('submit', function (e) {
         error: function (error) {
             $("#spnQuoteNotFound").text(error.responseText)
             $("#spnQuoteNotFound").removeClass('d-none');
-        }
+        },
     });
 
 });

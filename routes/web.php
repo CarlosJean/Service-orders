@@ -124,7 +124,8 @@ Route::prefix('ordenes-servicio')->group(function () {
     Route::get('get-deparments', [ServiceOrdersController::class, 'getDeparments']);
     Route::get('get-employees-by-service/{serviceId}', [ServiceOrdersController::class, 'getEmployeesByService']);
     Route::post('orden-servicio', [ServiceOrdersController::class, 'getServiceOrderByNumber']);
-    Route::post('materiales', [ServiceOrdersController::class, 'serviceOrderItems']);
+    Route::post('materiales', [ServiceOrdersController::class, 'serviceOrderItems'])
+        ->name('materiales_orden_servicio');
     Route::get('{orderNumber}/gestion-materiales', [ServiceOrdersController::class, 'materialsManagementCreate'])
         ->middleware([Authenticate::class, CanManageItems::class]);
     Route::get('{orderNumber}/aprobacion-materiales', [ServiceOrdersController::class, 'createItemsRequestApproval'])
@@ -156,8 +157,8 @@ Route::prefix('cotizaciones')->group(function () {
 Route::prefix('articulos')->group(function () {
     Route::get('/', [ItemsController::class, 'getItems']);
     Route::get('disponibles', [ItemsController::class, 'getAvailableItems']);
-    Route::get('despachar', [ItemsController::class, 'createDispatchMaterials']);
-    Route::post('despachar', [ItemsController::class, 'storeDispatch']);
+    Route::get('despachar/{serviceOrderNumber?}', [ItemsController::class, 'createDispatchMaterials']);
+    Route::post('despachar', [ItemsController::class, 'storeDispatch'])->name('dispatchItems');
 });
 
 Route::prefix('suplidores')->group(function () {
@@ -167,7 +168,7 @@ Route::prefix('suplidores')->group(function () {
 Route::prefix('ordenes-compra')->group(function () {
     Route::get('/', [PurchaseOrderController::class, 'index'])
         ->middleware([Authenticate::class, CanDoWarehouseWorks::class]);
-    Route::get('crear', [PurchaseOrderController::class, 'create'])
+    Route::get('crear/{quoteNumber?}', [PurchaseOrderController::class, 'create'])
         ->middleware([Authenticate::class, CanDoWarehouseWorks::class]);
     Route::get('{number}', [PurchaseOrderController::class, 'show'])
         ->middleware([Authenticate::class, CanDoWarehouseWorks::class]);
@@ -188,7 +189,7 @@ Route::get('/reestablecer-contraseña/{token}', [ResetPasswordController::class,
 
 Route::prefix('solicitud-materiales')->group(function () {
     Route::get('/', [MaterialRequestsController::class, 'index'])
-        ->middleware([Authenticate::class, CanDoWarehouseWorks::class]);
+        ->middleware([Authenticate::class, HasPermissionToSubmenu::class]);
     Route::post('pendientes', [MaterialRequestsController::class, 'pending']);
 });
 

@@ -63,7 +63,7 @@ class PurchaseOrderRepository
                 ->user_id;
 
             $orderItem = $quote->orderItem;
-            if ($orderItem != null) {
+            if ($orderItem == null) {
                 $orderItem = new OrderItem([
                     'service_order_id' => $quote->order_id,
                     'requestor' => $maintenanceSupervisor,
