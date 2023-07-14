@@ -1,6 +1,17 @@
 import * as language from './datatables.spanish.json' ;
 
 var table = {};
+var url = `../cotizaciones/obtener-por-numero`;
+
+$(function(){
+    const quoteNumber = $("#txtQuoteNumber").val();
+
+    console.log(quoteNumber);
+
+    if (quoteNumber != '') {
+        url = `../../cotizaciones/obtener-por-numero`;
+    }
+});
 
 $("#frmGetQuoteByNumber").on('submit', function (e) {
     e.preventDefault();
@@ -8,17 +19,17 @@ $("#frmGetQuoteByNumber").on('submit', function (e) {
     const quoteNumber = $("#frmGetQuoteByNumber input[name='quote_number']").val();
 
     $.ajax({
-        url: `../cotizaciones/${quoteNumber}`,
+        url,
+        type: 'post',
+        data:{quoteNumber},
         dataType: 'json',
         success: function (quote) {
-
-            console.log(quote);
-            $("#frmPurchaseOrder input[name='quote_number']").val(quote[0].number);
-
             if (quote == null) {
                 $("#spnQuoteNotFound").text('No existe una cotización con este número.')
                 $("#spnQuoteNotFound").removeClass('d-none');
             } else {
+                $("#frmPurchaseOrder input[name='quote_number']").val(quote[0].number);
+
                 table = $('#tblQuotes').DataTable({
                     columnDefs: [{
                         orderable: false,
@@ -51,15 +62,16 @@ $("#frmGetQuoteByNumber").on('submit', function (e) {
                     ],
                     dom:'ft',
                     language,
+                    destroy: true,
                 });
                 $("#spnQuoteNotFound").addClass('d-none');
                 $("#dvItems").removeClass('d-none');
             }
         },
         error: function (error) {
-            $("#spnQuoteNotFound").text('No existe una cotización con este número.')
+            $("#spnQuoteNotFound").text(error.responseText)
             $("#spnQuoteNotFound").removeClass('d-none');
-        }
+        },
     });
 
 });

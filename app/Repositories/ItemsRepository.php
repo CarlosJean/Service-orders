@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Enums\InventoryType;
+use App\Exceptions\NotFoundModelException;
 use App\Models\Employee;
 use App\Models\Item;
 use App\Models\Order;
@@ -77,27 +78,35 @@ class ItemsRepository
 
     public function serviceOrderItems($serviceOrderNumber)
     {
-        $serviceOrder = Order::where('number', $serviceOrderNumber)->first();
-
-        $details = $serviceOrder
-            ?->orderItem
-            ?->orderItemDetail
-            ->where('dispatched', false);
-
-        $items = ['data' => []];
-        if ($details == null) {
+        try {
+            $serviceOrder = Order::where('number', $serviceOrderNumber)->first();
+    
+            if ($serviceOrder == null) {
+                throw new NotFoundModelException('No se encontró la orden de servicio número '.$serviceOrderNumber.'.');
+            }
+    
+            $details = $serviceOrder
+                ?->orderItem
+                ?->orderItemDetail
+                ->where('dispatched', false);
+    
+            $items = ['data' => []];
+            if ($details == null) {
+                return $items;
+            }
+            foreach ($details as $detail) {
+                array_push($items['data'], [
+                    'id' => $detail->id,
+                    'name' => $detail->item->name,
+                    'reference' => $detail->item->reference,
+                    'quantity' => $detail->quantity,
+                ]);
+            }
+    
             return $items;
+        } catch (\Throwable $th) {
+            throw $th;
         }
-        foreach ($details as $detail) {
-            array_push($items['data'], [
-                'id' => $detail->id,
-                'name' => $detail->item->name,
-                'reference' => $detail->item->reference,
-                'quantity' => $detail->quantity,
-            ]);
-        }
-
-        return $items;
     }
 
     public function dispatch($itemsId)
@@ -105,18 +114,20 @@ class ItemsRepository
 
         try {
 
-            $serviceOrderNumber = OrderItemsDetail::find($itemsId[0])
-                ->orderItem
+            $orderItem = OrderItemsDetail::find($itemsId[0])
+                ->orderItem;
+
+            $serviceOrderNumber = $orderItem
                 ->serviceOrder
                 ->number;
 
             foreach ($itemsId as $itemId) {
-                $orderItem = OrderItemsDetail::find($itemId);
-                $orderItem->dispatched = true;
-                $orderItem->save();
+                $orderItemDetail = OrderItemsDetail::find($itemId);
+                $orderItemDetail->dispatched = true;
+                $orderItemDetail->save();
 
                 $item = Item::find($itemId);
-                $item->quantity = $orderItem->quantity;
+                $item->quantity = $orderItemDetail->quantity;
 
                 $this->inventoriesRepository
                     ->historical($item, InventoryType::Dispatch);
@@ -132,12 +143,14 @@ class ItemsRepository
             }
             Notification::send($users, new ServiceOrderItemsDispatch($serviceOrderNumber));
 
+            $orderItem->dispatched_by = auth()?->id();
+            $orderItem->save();
+            
             $serviceOrder = Order::where('number', $serviceOrderNumber)
                 ->first();
 
             $serviceOrder->status = "en espera de resolucion";
             $serviceOrder->save();
-            
         } catch (\Throwable $th) {
             throw $th;
         }

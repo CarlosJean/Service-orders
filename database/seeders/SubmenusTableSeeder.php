@@ -18,7 +18,7 @@ class SubmenusTableSeeder extends Seeder
             'order' => 1,
             'menu_id' => null,
             'icon' => 'typcn typcn-chart-bar-outline',
-            'URL' => 'orders'
+            'URL' => '/'
         ]);
         
         //Menú de personas
@@ -49,14 +49,14 @@ class SubmenusTableSeeder extends Seeder
             'name' => 'Ordenes de compra',
             'order' => 1,
             'menu_id' => 3,
-            'url' => 'ordenes-compra/crear'
+            'url' => 'ordenes-compra'
         ]);
 
         DB::table('submenus')->insert([
             'name' => 'Cotizaciones',
             'order' => 2,
             'menu_id' => 3,
-            'url' => 'cotizaciones/crear'
+            'url' => 'cotizaciones'
         ]);
 
         DB::table('submenus')->insert([
@@ -117,6 +117,13 @@ class SubmenusTableSeeder extends Seeder
         
         DB::table('submenus')->insert([
             'name' => 'Gestión de materiales',
+            'order' => 4,
+            'menu_id' => 5,
+            'url' => 'solicitud-materiales',
+        ]);
+
+        DB::table('submenus')->insert([
+            'name' => 'Despachar materiales',
             'order' => 4,
             'menu_id' => 5,
             'url' => 'articulos/despachar',

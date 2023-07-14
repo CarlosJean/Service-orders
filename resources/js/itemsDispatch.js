@@ -4,47 +4,42 @@ const tblItems = $("#tblItems");
 var itemsTable = null;
 const txtServiceOrder = $("#txtServiceOrder");
 const btnFindOrderItems = $("#btnFindOrderItems");
-
+var findServiceOrderItemsUrl = '../ordenes-servicio/materiales';
 
 $(function(){
     $("#dvOrderNumber").addClass('d-none');
+    const serviceOrderNumber = txtServiceOrder.val();
+    if (serviceOrderNumber != "") {
+        findServiceOrderItemsUrl = '../../ordenes-servicio/materiales';
+        btnFindOrderItems.trigger('click');
+    }
 });
 
 //Funciones
 const serviceOrderItems = function (serviceOrderNumber) {
     itemsTable = tblItems.DataTable({
         ajax: {
-            url: '../ordenes-servicio/materiales',
+            url:findServiceOrderItemsUrl,
             data: { service_order_number: serviceOrderNumber },
             type: 'post',
             dataType: 'json',
             dataSrc:function(serviceOrderItems){
                 $("#items").removeClass('d-none');
+                $("#errorMessage").add('d-none');
                 return serviceOrderItems.data;
             },
-            error:function(){
+            error:function(error){
+                $("#errorMessage").text(error.responseJSON.message);
                 $("#items").addClass('d-none');
+                $("#errorMessage").removeClass('d-none');
             }
         },
         processing: true,
         columns: [
-            { title: '', data: null, defaultContent: "" },
-            { title: 'Id', data: "id" },
             { title: 'Artículo', data: "name" },
             { title: 'Referencia', data: 'reference' },
             { title: 'Cantidad', data: 'quantity' },
         ],
-        columnDefs: [
-            {
-                orderable: false,
-                className: 'select-checkbox',
-                targets: 0
-            }
-        ],
-        select: {
-            style: 'multi',
-            selector: 'td:first-child'
-        },
         dom: 'ftp',
         destroy: true,
         language,
@@ -52,7 +47,7 @@ const serviceOrderItems = function (serviceOrderNumber) {
 };
 
 $("#btnDispatch").on('click', function () {
-    var selectedRowsData = itemsTable?.rows('.selected')?.data();
+    var selectedRowsData = itemsTable?.rows()?.data();
 
     console.log(selectedRowsData);
     if (selectedRowsData == undefined) {

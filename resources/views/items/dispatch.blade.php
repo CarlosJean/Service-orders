@@ -7,11 +7,12 @@
 <form class="row align-items-end">
   <div class="form-group col-md-4 mr-md-0">
     <label for="txtServiceOrder" class="mr-3">Número de orden de servicio</label>
-    <input type="text" class="form-control mb-2 mr-sm-2" id="txtServiceOrder" placeholder="Ingrese un número de orden de servicio">
+    <input type="text" class="form-control mb-2 mr-sm-2" id="txtServiceOrder" placeholder="Ingrese un número de orden de servicio" value="{{$serviceOrderNumber}}">
   </div>
   <div class="form-group col-md-2">
     <button type="submit" class="btn btn-primary mb-2 w-100" id="btnFindOrderItems">Buscar orden de servicio</button>
   </div>
+  <span id="errorMessage" class="text-danger d-none"></span>
 </form>
 
 <section id="items" class="d-none">
@@ -22,7 +23,7 @@
     <table id="tblItems" class="table table-striped"></table>
   </div>
   
-  <form action="./despachar" method="post" id="frmDispatchItems">
+  <form action="{{route('dispatchItems')}}" method="post" id="frmDispatchItems">
     @csrf
     <input type="hidden" name="items">
   </form>

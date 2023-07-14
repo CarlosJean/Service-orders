@@ -14,8 +14,8 @@
             @csrf
             <div class="row align-items-end">
                 <div class="form-group col-md-6">
-                    <label for="" class="sr only col-md-3" id="txtQuoteNumber">Número de cotización</label>
-                    <input type="text" name="quote_number" id="" class="form-control col-4">
+                    <label for="txtQuoteNumber" class="sr only col-md-3">Número de cotización</label>
+                    <input type="text" name="quote_number" id="txtQuoteNumber" class="form-control col-4" value="{{$quoteNumber}}">
                 </div>
                 <div class="col-5">
                     <input type="submit" value="Buscar" class="btn btn-primary col-md-4">

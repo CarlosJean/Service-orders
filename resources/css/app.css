@@ -14,3 +14,26 @@ table.dataTable thead tr {
 td {
   word-wrap: break-word;
 }
+
+.tile{
+  height: 100px;
+}
+
+.tile:hover{
+  opacity: .9;
+}
+
+.tile#userRegistration{
+  background-color: #3d8bfd;
+  color: #fff;
+}
+
+.tile#roles{
+  background-color: #146c43;
+  color: #fff;
+}
+
+.tile#departments{
+  background-color: #1aa179;
+  color: #fff;
+}

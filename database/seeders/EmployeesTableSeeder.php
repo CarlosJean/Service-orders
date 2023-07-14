@@ -46,7 +46,7 @@ class EmployeesTableSeeder extends Seeder
             'identification' => '00154678948',
             'email' => 'yhoel@gmail.com',
             'department_id' => 4,
-            'role_id' => 3,
+            'role_id' => 4,
             'user_id' => 3,
         ]);
         DB::table('employees')->insert([
@@ -55,7 +55,7 @@ class EmployeesTableSeeder extends Seeder
             'identification' => '00154678945',
             'email' => 'xavier@gmail.com',
             'department_id' => 2,
-            'role_id' => 4,
+            'role_id' => 6,
             'user_id' => 4,
         ]);
         DB::table('employees')->insert([
@@ -64,7 +64,7 @@ class EmployeesTableSeeder extends Seeder
             'identification' => '00154674123',
             'email' => 'johndoe@gmail.com',
             'department_id' => 3,
-            'role_id' => 5,
+            'role_id' => 7,
             'user_id' => 6,
         ]);
     }

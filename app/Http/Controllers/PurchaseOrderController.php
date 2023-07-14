@@ -16,27 +16,38 @@ class PurchaseOrderController extends Controller
         $this->purchaseOrderRepository = $purchaseOrderRepository;
     }
 
-    public function create(){
+    public function index()
+    {
+        return view('purchase_orders.index');
+    }
+
+    public function create($quoteNumber = null)
+    {
         $purchaseOrderNumber = $this->purchaseOrderRepository
             ->purchaseOrderNumber();
-        return view('purchase_orders.create')->with('purchaseOrderNumber', $purchaseOrderNumber);
+        return view('purchase_orders.create')->with([
+            'purchaseOrderNumber' => $purchaseOrderNumber,
+            'quoteNumber' => $quoteNumber,
+        ]);
     }
-    
-    public function quoteByNumber(Request $request){
+
+    public function quoteByNumber(Request $request)
+    {
         $quoteNumber = $request->input('quote_number');
         var_dump($quoteNumber);
         return back()
             ->withInput()
-            ->with('quoteNumber', $quoteNumber);        
+            ->with('quoteNumber', $quoteNumber);
     }
-    
-    public function store(PurchaseOrderRequest $request){
+
+    public function store(PurchaseOrderRequest $request)
+    {
 
         try {
             $quoteNumber = $request->input('quote_number');
             $purchaseOrderNumber = $request->input('purchase_order_number');
             $details = $request->input('items');
-    
+
             $this->purchaseOrderRepository
                 ->storePurchaseOrder($quoteNumber, $purchaseOrderNumber, $details);
 
@@ -47,4 +58,23 @@ class PurchaseOrderController extends Controller
         }
     }
 
+    public function show($number)
+    {
+        $purchaseOrder = $this->purchaseOrderRepository
+            ->getPurchaseOrder($number);
+
+        return view('purchase_orders.show')->with('purchaseOrder', $purchaseOrder);
+    }
+
+    public function getPurchaseOrders()
+    {
+        $purchaseOrders = $this->purchaseOrderRepository
+            ->getPurchaseOrders();
+
+        foreach ($purchaseOrders as $purchaseOrder) {
+            $purchaseOrder->total = 'RD$ ' . number_format($purchaseOrder->total, 2);
+        }
+
+        return $purchaseOrders;
+    }
 }

@@ -2,8 +2,10 @@
 
 namespace App\Repositories;
 
+use App\Enums\SystemRoles;
+use App\Exceptions\NoServiceOrderItemsException;
+use App\Exceptions\NotFoundModelException;
 use App\Models\Employee;
-use App\Models\Item;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemsDetail;
@@ -68,8 +70,7 @@ class OrdersRepository
             $requestor = User::find($requestorId)->name;
             foreach ($maintenanceSupervisors as $employee) {
                 $employee->user->notify(new ServiceOrderCreated($requestor, $orderNumber));
-            }          
-            
+            }
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -80,17 +81,17 @@ class OrdersRepository
         try {
             $employee = $this->employeeRepository->employeeByUserId($userId);
 
-            $isDepartmentSupervisor = (($employee['role']->id == 2 || $employee['role']->id == 3) && $employee['department']->id != 2);
-            $isMaintenanceDepartmentSupervisor = ($employee['role']->id == 2 && $employee['department']->id == 2);
-            $isMaintenanceDepartmentManager = ($employee['role']->id == 3 && $employee['department']->id == 2);
-            $isMaintenanceTechnician = ($employee['role']->id == 4 && $employee['department']->id == 2);
+            $isDepartmentSupervisor = ($employee['system_role'] == SystemRoles::DepartmentSupervisor || $employee['system_role'] == SystemRoles::DepartmentManager);
+            $isMaintenanceDepartmentSupervisor = ($employee['system_role'] == SystemRoles::MaintenanceSupervisor);
+            $isMaintenanceDepartmentManager = ($employee['system_role'] == SystemRoles::MaintenanceManager);
+            $isMaintenanceTechnician = ($employee['system_role'] == SystemRoles::MaintenanceTechnician);
 
             $orders = [];
             if ($isDepartmentSupervisor) {
                 $orders = $this->departmentSupervisorOrders($userId);
             } else if ($isMaintenanceDepartmentSupervisor || $isMaintenanceDepartmentManager) {
                 $orders = $this->maintenanceSupervisorOrders($isMaintenanceDepartmentManager);
-            }elseif ($isMaintenanceTechnician) {
+            } elseif ($isMaintenanceTechnician) {
                 $orders = $this->maintenanceTechnicianOrders();
             }
 
@@ -109,13 +110,12 @@ class OrdersRepository
                 ->leftJoin('users', 'orders.technician', '=', 'users.id')
                 ->leftJoin('employees', 'users.id', '=', 'employees.user_id')
                 ->where('requestor', $userId)
-                ->where('status', '!=', 'finalizada')
                 ->select(
                     'orders.id',
                     'number as order_number',
                     DB::raw('DATE_FORMAT(orders.created_at, "%d/%c/%Y %r") created_at'),
                     DB::raw('UCASE(status) as status'),
-                    DB::raw('(CASE WHEN orders.technician is null THEN "Sin asignar" ELSE employees.names+" "+employees.last_names END) technician')
+                    DB::raw('(CASE WHEN orders.technician is null THEN "Sin asignar" ELSE CONCAT(employees.names, " ", employees.last_names) END) technician')
                 )
                 ->get();
 
@@ -190,7 +190,6 @@ class OrdersRepository
 
             //Notificar al técnico asignado
             $technicianUser->notify(new TechnicianAssigned($orderNumber));
-            
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -215,7 +214,7 @@ class OrdersRepository
     }
 
     public function maintenanceSupervisorOrders($isManager = false)
-    {        
+    {
         $userRole = (!$isManager) ? 'maintenanceSupervisor' : 'maintenanceManager';
         $orders = ['user_role' => $userRole, 'data' => []];
 
@@ -248,6 +247,10 @@ class OrdersRepository
     public function storeItemsOrder($orderNumber, $items)
     {
         try {
+            if ($items == null) {
+                throw new NoServiceOrderItemsException('No se especificaron los materiales requeridos para esta orden de servicio.');
+            }
+
             //Encontramos la orden
             $order = Order::where('number', $orderNumber)
                 ->first();
@@ -256,14 +259,21 @@ class OrdersRepository
                 return new Exception('La orden a la cual intenta agregar materiales no existe.');
             }
 
-            $requestor = $this->employeeRepository->employeeByUserId(auth()->id());
+            $orderItem = $order?->orderItem;
 
-            $orderItem = new OrderItem([
-                'service_order_id' => $order->id,
-                'requestor' => $requestor['id'],
-                'status' => 'en espera de entrega'
-            ]);
-            $orderItem->save();
+            $requestor = $this->employeeRepository
+                ->employeeByUserId(auth()->id());
+
+            if (!$orderItem) {
+                $orderItem = new OrderItem([
+                    'service_order_id' => $order->id,
+                    'requestor' => $requestor['id'],
+                    'status' => 'en espera de entrega'
+                ]);
+                $orderItem->save();
+            }
+
+            $this->deleteItemFromServiceOrder($orderItem->orderItemDetail);
 
             foreach ($items as $item) {
                 $detail = new OrderItemsDetail();
@@ -281,13 +291,19 @@ class OrdersRepository
             $maintenanceManager = Employee::where('department_id', 2)
                 ->where('role_id', 3)
                 ->first()
-                ->user;                
-            $maintenanceSupervisorName = $requestor['names'].' '.$requestor['last_names'];
+                ->user;
+            $maintenanceSupervisorName = $requestor['names'] . ' ' . $requestor['last_names'];
             $maintenanceManager
-                ->notify(new ServiceOrderItemRequest($maintenanceSupervisorName,$orderNumber));
-
+                ->notify(new ServiceOrderItemRequest($maintenanceSupervisorName, $orderNumber));
         } catch (\Throwable $th) {
             throw $th;
+        }
+    }
+
+    private function deleteItemFromServiceOrder($items)
+    {
+        foreach ($items as $item) {
+            $item->delete();
         }
     }
 
@@ -315,6 +331,7 @@ class OrdersRepository
         $order = Order::where('number', $serviceOrderNumber)
             ->first();
         $order->start_date = now();
+        $order->status = 'orden iniciada';
         $order->save();
     }
 
@@ -322,22 +339,27 @@ class OrdersRepository
     {
         $order = Order::where('number', $serviceOrderNumber)
             ->first();
+        $order->status = 'orden finalizada';
         $order->end_date = now();
         $order->save();
     }
 
     public function orderItems($serviceOrderNumber)
     {
+        try {
+            $orderDetail =  $this->serviceOrderByNumber($serviceOrderNumber);
+    
+            $items = Order::where('number', $serviceOrderNumber)
+                ->first()
+                ->items;
+    
+            $order = ['detail' => $orderDetail, 'items' => $items];
+    
+            return $order;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
 
-        $orderDetail =  $this->serviceOrderByNumber($serviceOrderNumber);
-
-        $items = Order::where('number', $serviceOrderNumber)
-            ->first()
-            ->items;
-
-        $order = ['detail' => $orderDetail, 'items' => $items];
-
-        return $order;
     }
 
     public function approveServiceOrderItemRequest($serviceOrderNumber, $approved)
@@ -351,10 +373,10 @@ class OrdersRepository
             : 'desaprobado por gerente de mantenimiento';
         $orderItemsRequest->save();
 
-        $supervisorsWharehouse = Employee::whereIn('role_id', [2,3])
+        $supervisorsWharehouse = Employee::whereIn('role_id', [2, 3])
             ->where('department_id', 3)
             ->get();
-        
+
         $users = [];
         foreach ($supervisorsWharehouse as $employee) {
             array_push($users, $employee->user);
@@ -388,11 +410,333 @@ class OrdersRepository
         return $orders;
     }
 
-    public function ordersWithRequestedItems(){
+    public function ordersWithRequestedItems()
+    {
         $orders = Order::whereNull('end_date')
             ->orderItem
             ->get();
-        
+
         echo json_encode($orders);
+    }
+
+    public function pendings()
+    {
+
+        try {
+            $userId = auth()->id();
+            $employee = $this->employeeRepository->employeeByUserId($userId);
+
+            if ($employee == null) {
+                throw new NotFoundModelException('No se encontró el empleado con el usuario número ' . $userId);
+            }            
+            
+            $orders = [];
+            if ($employee['system_role'] == SystemRoles::DepartmentSupervisor || $employee['system_role'] == SystemRoles::DepartmentManager) {
+                $orders = $this->departmentSupervisorPendings($userId);
+            } else if ($employee['system_role'] == SystemRoles::MaintenanceSupervisor || $employee['system_role'] == SystemRoles::MaintenanceManager) {
+                $orders = $this->maintenanceSupervisorsPendingOrders();
+            } else if ($employee['system_role'] == SystemRoles::MaintenanceTechnician) {
+                $orders = $this->maintenanceTechnicianPendingOrders($userId);
+            }
+
+            return $orders;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    private function departmentSupervisorPendings($userId)
+    {
+        $orders = DB::table('orders')
+            ->leftJoin('users', 'orders.technician', '=', 'users.id')
+            ->leftJoin('employees', 'users.id', '=', 'employees.user_id')
+            ->where('requestor', $userId)
+            ->where('status', '!=', 'desaprobado')
+            ->where('status', '!=', 'orden finalizada')
+            ->select(
+                'number as number',
+                DB::raw('DATE_FORMAT(orders.created_at, "%d/%c/%Y %r") created_at'),
+                DB::raw('UCASE(status) as status'),
+                DB::raw('(CASE WHEN orders.technician is null THEN "Sin asignar" ELSE CONCAT(employees.names, " ", employees.last_names) END) name')
+            )
+            ->orderBy('orders.created_at')
+            ->take(5)
+            ->get();
+
+        return $orders;
+    }
+
+    private function maintenanceSupervisorsPendingOrders()
+    {
+        $orders = DB::table('orders')
+            ->leftJoin('users', 'orders.technician', '=', 'users.id')
+            ->leftJoin('employees', 'users.id', '=', 'employees.user_id')
+            ->whereNull('technician')
+            ->orWhereNull('end_date')
+            ->select(
+                'number as number',
+                DB::raw('DATE_FORMAT(orders.created_at, "%d/%c/%Y %r") created_at'),
+                DB::raw('UCASE(status) as status'),
+                DB::raw('(CASE WHEN orders.technician is null THEN "Sin asignar" ELSE CONCAT(employees.names, " ", employees.last_names) END) name')
+            )
+            ->orderBy('orders.created_at')
+            ->take(5)
+            ->get();
+
+        return $orders;
+    }
+
+    private function maintenanceTechnicianPendingOrders($userid)
+    {
+        $orders = DB::table('orders')
+            ->leftJoin('users', 'orders.requestor', '=', 'users.id')
+            ->leftJoin('employees', 'users.id', '=', 'employees.user_id')
+            ->where('technician', '=', $userid)
+            ->WhereNull('end_date')
+            ->select(
+                'number as number',
+                DB::raw('DATE_FORMAT(orders.created_at, "%d/%c/%Y %r") created_at'),
+                DB::raw('UCASE(status) as status'),
+                DB::raw('CONCAT(employees.names, " ", employees.last_names) name')
+            )
+            ->orderBy('orders.created_at')
+            ->take(5)
+            ->get();
+
+        return $orders;
+    }
+
+    public function approved()
+    {
+
+        try {
+            $userId = auth()->id();
+            $employee = $this->employeeRepository->employeeByUserId($userId);
+
+            if ($employee == null) {
+                throw new NotFoundModelException('No se encontró el empleado con el usuario número ' . $userId);
+            }
+
+            $orders = [];
+            if ($employee['system_role'] == SystemRoles::DepartmentSupervisor || $employee['system_role'] == SystemRoles::DepartmentManager) {
+                $orders = $this->departmentSupervisorApproveds($userId);
+            } else if ($employee['system_role'] == SystemRoles::MaintenanceSupervisor || $employee['system_role'] == SystemRoles::MaintenanceManager) {
+                $orders = $this->maintenanceSupervisorApproveds();
+            } else if ($employee['system_role'] == SystemRoles::MaintenanceTechnician) {
+                $orders = $this->maintenanceTechnicianApprovedOrders($userId);
+            }
+
+            return $orders;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    private function departmentSupervisorApproveds($userId)
+    {
+        $orders = DB::table('orders')
+            ->leftJoin('users', 'orders.technician', '=', 'users.id')
+            ->leftJoin('employees', 'users.id', '=', 'employees.user_id')
+            ->where('requestor', $userId)
+            ->where('status', '!=', 'desaprobado')
+            ->select(
+                'number as number',
+                DB::raw('DATE_FORMAT(orders.created_at, "%d/%c/%Y %r") created_at'),
+                DB::raw('DATE_FORMAT(orders.start_date, "%d/%c/%Y %r") start_date'),
+                DB::raw('DATE_FORMAT(orders.end_date, "%d/%c/%Y %r") end_date'),
+                DB::raw('UCASE(status) as status'),
+                DB::raw('(CASE WHEN orders.technician is null THEN "Sin asignar" ELSE CONCAT(employees.names, " ", employees.last_names) END) name'),
+            )
+            ->orderBy('orders.created_at')
+            ->take(5)
+            ->get();
+
+        return $orders;
+    }
+
+    private function maintenanceSupervisorApproveds()
+    {
+        $orders = DB::table('orders')
+            ->leftJoin('users', 'orders.technician', '=', 'users.id')
+            ->leftJoin('employees', 'users.id', '=', 'employees.user_id')
+            ->whereNotNull('technician')
+            ->select(
+                'number as number',
+                DB::raw('DATE_FORMAT(orders.created_at, "%d/%c/%Y %r") created_at'),
+                DB::raw('DATE_FORMAT(orders.start_date, "%d/%c/%Y %r") start_date'),
+                DB::raw('DATE_FORMAT(orders.end_date, "%d/%c/%Y %r") end_date'),
+                DB::raw('UCASE(status) as status'),
+                DB::raw('(CASE WHEN orders.technician is null THEN "Sin asignar" ELSE CONCAT(employees.names, " ", employees.last_names) END) name'),
+            )
+            ->orderBy('orders.created_at')
+            ->take(5)
+            ->get();
+
+        return $orders;
+    }
+
+    private function maintenanceTechnicianApprovedOrders($userId)
+    {
+        $orders = DB::table('orders')
+            ->leftJoin('users', 'orders.requestor', '=', 'users.id')
+            ->leftJoin('employees', 'users.id', '=', 'employees.user_id')
+            ->where('technician', $userId)
+            ->WhereNotNull('end_date')
+            ->select(
+                'number as number',
+                DB::raw('DATE_FORMAT(orders.created_at, "%d/%c/%Y %r") created_at'),
+                DB::raw('DATE_FORMAT(orders.start_date, "%d/%c/%Y %r") start_date'),
+                DB::raw('DATE_FORMAT(orders.end_date, "%d/%c/%Y %r") end_date'),
+                DB::raw('UCASE(status) as status'),
+                DB::raw('CONCAT(employees.names, " ", employees.last_names) name'),
+            )
+            ->orderBy('orders.created_at')
+            ->take(5)
+            ->get();
+
+        return $orders;
+    }
+
+    public function pendingItemsManagement()
+    {
+        try {
+            $userId = auth()->id();
+            $employee = $this->employeeRepository->employeeByUserId($userId);
+
+            if ($employee == null) {
+                throw new NotFoundModelException('No se encontró el empleado con el usuario número ' . $userId);
+            }
+
+            $orders = [];
+            if ($employee['system_role'] == SystemRoles::Warehouseman) {
+                $orders = $this->noItemsDispatchedServiceOrders();
+            } else if ($employee['system_role'] == SystemRoles::MaintenanceSupervisor || $employee['system_role'] == SystemRoles::MaintenanceManager) {
+                $orders = $this->maintenanceSupervisorNoItemsDispatched();
+            }
+
+            return $orders;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    private function noItemsDispatchedServiceOrders()
+    {
+        try {
+            $orders = DB::table('order_items')
+                ->join('orders', 'order_items.service_order_id', '=', 'orders.id')
+                ->leftJoin('users', 'orders.assigned_by', '=', 'users.id')
+                ->leftJoin('employees', 'users.id', '=', 'employees.user_id')
+                ->whereNull('order_items.dispatched_by')
+                ->select(
+                    'number as number',
+                    DB::raw('DATE_FORMAT(order_items.created_at, "%d/%c/%Y %r") created_at'),
+                    DB::raw('UCASE(order_items.status) as status'),
+                    DB::raw('CONCAT(employees.names, " ", employees.last_names) name'),
+                )
+                ->orderBy('order_items.created_at')
+                ->take(5)
+                ->get();
+
+            return $orders;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    private function maintenanceSupervisorNoItemsDispatched()
+    {
+        try {
+            $orders = DB::table('order_items')
+                ->join('orders', 'order_items.service_order_id', '=', 'orders.id')
+                ->leftJoin('users', 'order_items.requestor', '=', 'users.id')
+                ->leftJoin('employees', 'users.id', '=', 'employees.user_id')
+                ->whereNull('order_items.dispatched_by')
+                ->select(
+                    'number as number',
+                    DB::raw('DATE_FORMAT(order_items.created_at, "%d/%c/%Y %r") created_at'),
+                    DB::raw('UCASE(order_items.status) as status'),
+                    DB::raw('CONCAT(employees.names, " ", employees.last_names) name'),
+                )
+                ->orderBy('order_items.created_at')
+                ->take(5)
+                ->get();
+
+            return $orders;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function approvedItemsManagement()
+    {
+        try {
+            $userId = auth()->id();
+            $employee = $this->employeeRepository->employeeByUserId($userId);
+
+            if ($employee == null) {
+                throw new NotFoundModelException('No se encontró el empleado con el usuario número ' . $userId);
+            }
+
+            $orders = [];
+            if ($employee['system_role'] == SystemRoles::Warehouseman) {
+                $orders = $this->itemsDispatchedServiceOrders();
+            } else if ($employee['system_role'] == SystemRoles::MaintenanceSupervisor || $employee['system_role'] == SystemRoles::MaintenanceManager) {
+                $orders = $this->maintenanceSupervisorItemsDispatchedServiceOrders();
+            }
+
+            return $orders;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    private function itemsDispatchedServiceOrders()
+    {
+        try {
+            $orders = DB::table('order_items')
+                ->join('orders', 'order_items.service_order_id', '=', 'orders.id')
+                ->leftJoin('users', 'orders.assigned_by', '=', 'users.id')
+                ->leftJoin('employees', 'users.id', '=', 'employees.user_id')
+                ->whereNotNull('order_items.dispatched_by')
+                ->select(
+                    'number as number',
+                    DB::raw('DATE_FORMAT(order_items.updated_at, "%d/%c/%Y %r") date'),
+                    DB::raw('UCASE(order_items.status) as status'),
+                    DB::raw('CONCAT(employees.names, " ", employees.last_names) name'),
+                )
+                ->orderBy('order_items.updated_at')
+                ->take(5)
+                ->get();
+
+            return $orders;
+        } catch (\Throwable $th) {
+            var_dump($th);
+            //throw $th;
+        }
+    }
+    private function maintenanceSupervisorItemsDispatchedServiceOrders()
+    {
+        try {
+            $orders = DB::table('order_items')
+                ->join('orders', 'order_items.service_order_id', '=', 'orders.id')
+                ->leftJoin('users', 'order_items.dispatched_by', '=', 'users.id')
+                ->leftJoin('employees', 'users.id', '=', 'employees.user_id')
+                ->whereNotNull('order_items.dispatched_by')
+                ->select(
+                    'number as number',
+                    DB::raw('DATE_FORMAT(order_items.updated_at, "%d/%c/%Y %r") date'),
+                    DB::raw('UCASE(order_items.status) as status'),
+                    DB::raw('CONCAT(employees.names, " ", employees.last_names) name'),
+                )
+                ->orderBy('order_items.updated_at')
+                ->take(5)
+                ->get();
+
+            return $orders;
+        } catch (\Throwable $th) {
+            var_dump($th);
+            //throw $th;
+        }
     }
 }

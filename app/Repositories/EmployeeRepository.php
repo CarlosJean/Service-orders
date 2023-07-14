@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Exceptions\NotFoundModelException;
 use App\Exceptions\NoUserEmailException;
 use App\Exceptions\UniqueColumnException;
 use App\Models\Employee;
@@ -68,6 +69,10 @@ class EmployeeRepository
             $employeeModel =  Employee::where('user_id', $userId)
                 ->first();
 
+            if ($employeeModel == null) {
+                throw new NotFoundModelException('No se encontró el usuario buscado.');
+            }
+
             $employee = array(
                 'id' => $employeeModel->id,
                 'roleId' => $employeeModel->role_id,
@@ -78,12 +83,13 @@ class EmployeeRepository
                 'email' => $employeeModel->email,
                 'department' => $employeeModel->department,
                 'role' => $employeeModel->role,
+                'system_role' => $employeeModel->system_role
             );
 
             return $employee;
         } catch (\Throwable $th) {
-            var_dump($th);
-            //throw $th;
+            //var_dump($th);
+            throw $th;
         }
     }
 
@@ -249,5 +255,16 @@ class EmployeeRepository
             ->where('department_id', $departmentId);
         
         return $employees;
+    }
+    
+    public function employeeSystemRole($userId){
+
+        $employee = $this->employeeByUserId($userId);
+
+        $employeeId = $employee['id'];
+        $systemRole = Employee::find($employeeId)        
+            ->getSystemRoleAttribute();
+
+        return $systemRole;
     }
 }

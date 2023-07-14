@@ -83,7 +83,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'es',
 
     /*
     |--------------------------------------------------------------------------
@@ -171,6 +171,7 @@ return [
         App\Providers\NavbarServiceProvider::class,
         App\Providers\RolesServiceProvider::class,
         App\Providers\DepartmentsServiceProvider::class,
+        App\Providers\DashboardServiceProvider::class,
     ])->toArray(),
 
     /*

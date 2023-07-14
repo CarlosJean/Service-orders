@@ -22,7 +22,14 @@ class AddItemsToOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'items' => 'required'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'items.required' => 'Debe indicar los materiales para la orden de servicio.'
         ];
     }
 }

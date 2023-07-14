@@ -6,7 +6,7 @@
 @endpush
 
 @section('orderContent')
-@if($departmentId != 2 && ($roleId == 2 || $roleId == 3))
+@if($isDepartmentSupervisor)
 @include('partials.orders.create', ['orderNumber' => $orderNumber])
 @endIf
 @endsection
