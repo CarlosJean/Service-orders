@@ -11,6 +11,58 @@ use Illuminate\Support\Facades\DB;
 class reportRepository
 {
 
+    protected $employeeRepository;
+
+    public function __construct(
+        EmployeeRepository $employeeRepository,
+
+    ) 
+    
+    {
+        $this->employeeRepository = $employeeRepository;
+   
+    }
+
+    public function getReportByRole()
+    {
+        $userId = auth()->id();
+        $employee = $this->employeeRepository->employeeByUserId($userId);
+            $roleId = $employee['role']->id;
+            $departmentId = $employee['department']->id;
+
+            $data=null;
+
+            $data2=null;
+
+            if ($departmentId == 2 && ($roleId == 2 || $roleId == 3)) {
+              //  supervisor y gerente de mantenimientos;
+              $data=[
+                'id' => "Reporte costo por servicios",
+                'name' => "Reporte costo por servicios"
+              ];
+              $data2=[
+                'id' => "Reporte servicios",
+                'name' => "Reporte servicios",
+              ];
+
+            } else if ($departmentId == 3 && ($roleId == 2 || $roleId == 5)) {
+              // supervisor y operador de alamacen;
+              $data=[
+                'id' => "Reporte de compras",
+                'name' => "Reporte de compras"
+              ];
+            } else if ($roleId == 1) {
+                // administrador de sistema;
+                $data=[
+                  'id' => "Reporte de usuarios registrados",
+                  'name' => "Reporte de usuarios registrados"
+                ];
+              }
+
+
+            return  json_encode([ $data,  $data2 ]);;
+    }
+
     public function getReportByDate($fromDate, $toDate, $type)
     {
 

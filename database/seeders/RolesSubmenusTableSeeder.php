@@ -48,6 +48,18 @@ class RolesSubmenusTableSeeder extends Seeder
             'role_id' => 1,
             'submenu_id' => 11,
         ]);
+
+        DB::table('role_submenu')->insert([
+            'role_id' => 1,
+            'submenu_id' => 14,
+        ]);
+
+        DB::table('role_submenu')->insert([
+            'role_id' => 1,
+            'submenu_id' => 15,
+        ]);
+        
+      
         
         //Supervisor
         DB::table('role_submenu')->insert([

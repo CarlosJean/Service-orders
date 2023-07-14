@@ -28,8 +28,7 @@ const getServices = function () {
 
 
 $(document).on('show.bs.modal','#asignarMenu', function () {
-    alert('hi');
-    console.log('prueba')
+   
     var triggerLink = $(e.relatedTarget);
     var id = triggerLink.data("id");
     var fieldname = triggerLink.data("fieldname");

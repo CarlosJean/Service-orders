@@ -13,11 +13,11 @@ class EmployeeServiceTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('employee_service')->insert([
+        DB::table('users_technician_services')->insert([
             'employee_id' => 5,
             'service_id' => 1,
         ]);
-        DB::table('employee_service')->insert([
+        DB::table('users_technician_services')->insert([
             'employee_id' => 5,
             'service_id' => 2,
         ]);

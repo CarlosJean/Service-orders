@@ -24,7 +24,9 @@ class EmployeeRepository
             ->leftJoin('users', 'employees.user_id', '=', 'users.id')
             ->select(
                 'employees.id',
+                'users.id as userId' ,
                 'names',
+                'users.active',
                 'last_names',
                 'identification',
                 'employees.email',
@@ -35,6 +37,28 @@ class EmployeeRepository
             ->get();
 
         return $employees;
+    }
+
+
+    public function update($id)
+    {
+        try {
+
+            $model =  User::find($id);
+
+
+        if ($model->active == 1)
+            $model->active = 0;
+        else 
+            $model->active = 1;
+
+            $model->save();
+
+            return  $model->active ;
+        } catch (\Throwable $th) {
+                       return redirect()->back() ->with('error',  $th->getMessage());
+
+        }
     }
 
     public function employeeByUserId($userId)

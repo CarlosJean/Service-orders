@@ -88,6 +88,23 @@ class EmployeesController extends Controller
         }
     }
 
+
+    
+
+
+    public function updateEmpleyee ($id){    
+        try {            
+
+            $employeeState = $this->employeeRepository->update($id);
+            return  $employeeState ;
+
+
+        } catch (\Throwable $th) {          
+            var_dump($th);
+            //throw $th;
+        }    
+    } 
+
     public function getEmployees()
     {
         $employees = $this->employeeRepository

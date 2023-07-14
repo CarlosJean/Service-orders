@@ -34,6 +34,13 @@ class SubmenusTableSeeder extends Seeder
             'order' => 3,
             'menu_id' => 2,
             'URL' => 'roles'
+        ]);
+
+        DB::table('submenus')->insert([
+            'name' => 'Tecnicos',
+            'order' => 2,
+            'menu_id' => 15,
+            'URL' => 'userTechnician'
 
         ]);
         
@@ -119,7 +126,7 @@ class SubmenusTableSeeder extends Seeder
         DB::table('submenus')->insert([
             'name' => 'Reportes',
             'order' => 1,
-            'menu_id' => 6,
+            'menu_id' => 14,
             'URL' => 'reports'
         ]);
     }

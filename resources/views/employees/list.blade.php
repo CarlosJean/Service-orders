@@ -14,7 +14,7 @@
                 <hr class="opacity-100">
             </div>
             <div class="col-12">
-                <table id="employeesTable" class="table table-striped table-hover">
+                <table id="employeesTable" class="table table-striped table-hover" style="font-size:12px;  width: 100%">
                     <thead class="thead-custom1"></thead>
                 </table>
             </div>

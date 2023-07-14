@@ -18,10 +18,14 @@ use App\Http\Controllers\SuppliersController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\InventoriesController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\userTechnicianController;
+
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\RoleController;
+use App\Repositories\RolesRepository;
 
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +37,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" smiddleware group. Make something great!
 |
 */
+
 
 Route::get('/', function () {
     return redirect()->route('home');
@@ -49,8 +54,11 @@ Route::get('registro-empleado/{id?}', [EmployeesController::class, 'index']);
 Route::post('registro-empleado/{id?}', [EmployeesController::class, 'store']);
 Route::get('empleados', [EmployeesController::class, 'list']);
 Route::get('getEmployees', [EmployeesController::class, 'getEmployees']);
+Route::get('update-employee/{value}', [EmployeesController::class, 'updateEmpleyee']);
+
 
 Route::get('registro-empleado', [EmployeesController::class, 'index']);
+
 Route::post('registro-empleado', [EmployeesController::class, 'store']);
 
 Route::get('services', [ServicesController::class, 'index']);
@@ -66,9 +74,15 @@ Route::get('get-submenu-by-menu/{Id?}', [RoleController::class, 'getSubmenuByMen
 Route::post('register-roles-submenu', [RoleController::class, 'storeRolSubmenu']);
 
 
+Route::get('userTechnician', [userTechnicianController::class, 'index']);
+Route::get('getUsersten', [userTechnicianController::class, 'getServices']);
+Route::post('getServicesByIdEmployee', [userTechnicianController::class, 'getServicesByIdEmployee']);
+Route::post('setServices', [userTechnicianController::class, 'setServices']);
+
+
+
 Route::get('inventory_value', [InventoriesController::class, 'index']);
 Route::post('inventory_value', [InventoriesController::class, 'getInventory']);
-
 
 
 Route::get('categories', [CategoriesController::class, 'index']);
@@ -78,6 +92,7 @@ Route::get('update-categories/{id?}', [CategoriesController::class, 'update']);
 
 Route::get('reports', [ReportsController::class, 'index']);
 Route::post('get-report', [ReportsController::class, 'getReport']);
+Route::get('fillSelectReport', [ReportsController::class, 'fillSelectReport']);
 
 
 Route::get('items', [ItemsController::class, 'index']);
@@ -152,3 +167,5 @@ Route::get('/reestablecer-contraseña', [ResetPasswordController::class, 'showSe
     ->name('password.request');
 
 Route::get('/reestablecer-contraseña/{token}', [ResetPasswordController::class, 'showResetForm']);
+
+

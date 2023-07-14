@@ -1,10 +1,31 @@
 
+const htmlSelect = $("#tipoReporte");
 
 $(document).ready(function () {
 
+ 
 
+    fillSelectReport();
 
 });
+
+
+
+function fillSelectReport () {
+    $.ajax({
+        url: "fillSelectReport",
+        type: 'get',
+        dataType: 'json',
+        success: function (data) {
+
+            data.forEach(data => {
+                const option = new Option(data.name, data.id);
+                htmlSelect.append(option);
+            });
+
+        }
+    })
+}
 
 
 

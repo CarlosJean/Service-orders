@@ -15,7 +15,7 @@
 </button>
 <br>
 <br> -->
-<table id="dataTable" class="table table-striped table-bordered nowrap" style="font-size:10px;">
+<table id="dataTable" class="table table-striped table-bordered nowrap" style="font-size:11px;">
       <!-- <thead>
           <tr>
           <th>Nombre</th>

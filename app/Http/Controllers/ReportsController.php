@@ -20,6 +20,12 @@ class ReportsController extends Controller
         return view('reports.reports');
 
     }
+    
+
+    public function fillSelectReport(){
+        return $data = $this->reportRepository->getReportByRole();
+    }
+
 
     public function getReport(getReportRequest $request){
         $fromDate = $request->input('fromDate');
