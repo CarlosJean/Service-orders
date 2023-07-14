@@ -25,10 +25,13 @@ const serviceOrderItems = function (serviceOrderNumber) {
             dataType: 'json',
             dataSrc:function(serviceOrderItems){
                 $("#items").removeClass('d-none');
+                $("#errorMessage").add('d-none');
                 return serviceOrderItems.data;
             },
-            error:function(){
+            error:function(error){
+                $("#errorMessage").text(error.responseJSON.message);
                 $("#items").addClass('d-none');
+                $("#errorMessage").removeClass('d-none');
             }
         },
         processing: true,

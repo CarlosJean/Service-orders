@@ -10,7 +10,6 @@ use App\Http\Requests\AssignTechnicianToOrderRequest;
 use App\Http\Requests\CreateOrderRequest;
 use App\Http\Requests\DisapproveServiceOrderRequest;
 use App\Http\Requests\TechnicalReportRequest;
-use App\Models\Order;
 use App\Repositories\EmployeeRepository;
 use App\Repositories\OrdersRepository;
 use App\Repositories\ServicesRepository;
@@ -46,8 +45,8 @@ class ServiceOrdersController extends Controller
         $employee = $this->employeeRepository
             ->employeeByUserId(auth()->id());
 
-        $canCreateNewOrder = ($employee['system_role'] == SystemRoles::DepartmentSupervisor 
-        || $employee['system_role'] == SystemRoles::DepartmentManager);
+        $canCreateNewOrder = ($employee['system_role'] == SystemRoles::DepartmentSupervisor
+            || $employee['system_role'] == SystemRoles::DepartmentManager);
 
         return view('orders.index')->with('canCreateNewOrder', $canCreateNewOrder);
     }
@@ -62,7 +61,7 @@ class ServiceOrdersController extends Controller
 
         $employee = $this->employeeRepository->employeeByUserId($userId);
         $isDepartmentSupervisor = ($employee['system_role'] == SystemRoles::DepartmentSupervisor
-        || $employee['system_role'] == SystemRoles::DepartmentManager);
+            || $employee['system_role'] == SystemRoles::DepartmentManager);
 
         return view('orders.create', [
             'orderNumber' => $orderNumber,
@@ -203,7 +202,7 @@ class ServiceOrdersController extends Controller
             $this->ordersRepository->storeItemsOrder($orderNumber, $items);
 
             return view('orders.order_items_created')->with('orderNumber', $orderNumber);
-        } catch(NoServiceOrderItemsException $ex){
+        } catch (NoServiceOrderItemsException $ex) {
             return back()->withErrors($ex->getMessage());
         } catch (\Throwable $th) {
             var_dump($th);
@@ -226,9 +225,13 @@ class ServiceOrdersController extends Controller
 
     public function serviceOrderItems(Request $request)
     {
-        $serviceOrderNumber = $request->input('service_order_number');
-        return $this->itemsRepository
-            ->serviceOrderItems($serviceOrderNumber);
+        try {
+            $serviceOrderNumber = $request->input('service_order_number');
+            return $this->itemsRepository
+                ->serviceOrderItems($serviceOrderNumber);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     public function storeTechnicalReport(TechnicalReportRequest $request)

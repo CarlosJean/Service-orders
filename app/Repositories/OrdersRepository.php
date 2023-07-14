@@ -346,16 +346,20 @@ class OrdersRepository
 
     public function orderItems($serviceOrderNumber)
     {
+        try {
+            $orderDetail =  $this->serviceOrderByNumber($serviceOrderNumber);
+    
+            $items = Order::where('number', $serviceOrderNumber)
+                ->first()
+                ->items;
+    
+            $order = ['detail' => $orderDetail, 'items' => $items];
+    
+            return $order;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
 
-        $orderDetail =  $this->serviceOrderByNumber($serviceOrderNumber);
-
-        $items = Order::where('number', $serviceOrderNumber)
-            ->first()
-            ->items;
-
-        $order = ['detail' => $orderDetail, 'items' => $items];
-
-        return $order;
     }
 
     public function approveServiceOrderItemRequest($serviceOrderNumber, $approved)

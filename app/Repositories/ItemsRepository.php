@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Enums\InventoryType;
+use App\Exceptions\NotFoundModelException;
 use App\Models\Employee;
 use App\Models\Item;
 use App\Models\Order;
@@ -77,27 +78,35 @@ class ItemsRepository
 
     public function serviceOrderItems($serviceOrderNumber)
     {
-        $serviceOrder = Order::where('number', $serviceOrderNumber)->first();
-
-        $details = $serviceOrder
-            ?->orderItem
-            ?->orderItemDetail
-            ->where('dispatched', false);
-
-        $items = ['data' => []];
-        if ($details == null) {
+        try {
+            $serviceOrder = Order::where('number', $serviceOrderNumber)->first();
+    
+            if ($serviceOrder == null) {
+                throw new NotFoundModelException('No se encontró la orden de servicio número '.$serviceOrderNumber.'.');
+            }
+    
+            $details = $serviceOrder
+                ?->orderItem
+                ?->orderItemDetail
+                ->where('dispatched', false);
+    
+            $items = ['data' => []];
+            if ($details == null) {
+                return $items;
+            }
+            foreach ($details as $detail) {
+                array_push($items['data'], [
+                    'id' => $detail->id,
+                    'name' => $detail->item->name,
+                    'reference' => $detail->item->reference,
+                    'quantity' => $detail->quantity,
+                ]);
+            }
+    
             return $items;
+        } catch (\Throwable $th) {
+            throw $th;
         }
-        foreach ($details as $detail) {
-            array_push($items['data'], [
-                'id' => $detail->id,
-                'name' => $detail->item->name,
-                'reference' => $detail->item->reference,
-                'quantity' => $detail->quantity,
-            ]);
-        }
-
-        return $items;
     }
 
     public function dispatch($itemsId)

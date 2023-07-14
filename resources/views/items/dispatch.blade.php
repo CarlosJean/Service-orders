@@ -12,6 +12,7 @@
   <div class="form-group col-md-2">
     <button type="submit" class="btn btn-primary mb-2 w-100" id="btnFindOrderItems">Buscar orden de servicio</button>
   </div>
+  <span id="errorMessage" class="text-danger d-none"></span>
 </form>
 
 <section id="items" class="d-none">
