@@ -30,8 +30,8 @@ class Employee extends Model
     }
 
     public function getSystemRoleAttribute(){        
-        $roleId = $this->attributes['role_id'];
-        $departmentId = $this->attributes['department_id'];
+        $roleId = $this->role_id;
+        $departmentId = $this->department_id;
         
         if($roleId == 1 && $departmentId == 1){ return SystemRoles::SystemAdmin;}
         if($roleId == 2 && $departmentId == 2){ return SystemRoles::MaintenanceSupervisor;}

@@ -23,8 +23,7 @@ const loadEmployeesTable = function () {
                 e.preventDefault();
                 var value = this.value;
                 Swal.fire({
-                    title: 'Esta seguro que desea proceder con la accion?',
-                    // text: "Un usuario desactivado no podra acceder al sistema.",
+                    title: '¿Está seguro que desea proceder con la acción?',
                     icon: 'warning',
                     showCancelButton: true,
                     cancelButtonText: "Cancelar",
@@ -41,13 +40,13 @@ const loadEmployeesTable = function () {
                             .done(function (data) {
                                 if(data==1) 
                                 Swal.fire({
-                                    title:  'Usuario activado!',
+                                    title:  '¡Usuario activado!',
                                     text: 'Este usuario ya puede acceder al sistema.',
                                     icon:  'success'
                                 }).then((result) => {    location.reload();     }) ;
                                    else
                                    Swal.fire({
-                                    title:  'Usuario desactivado!',
+                                    title:  '¡Usuario desactivado!',
                                     text: 'Este usuario ya no puede acceder al sistema.',
                                     icon:  'success'
                                 }).then((result) => {    location.reload();     }) ;
