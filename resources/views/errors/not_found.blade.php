@@ -11,7 +11,8 @@
                 <div class="text-center mt-3">
                     <h1>Página no encontrada</h1>
                     <p>La página que busca no fue encontrada.</p>
-                    <a href="{{isset($redirect) ? $redirect : URL::previous()}}" class="btn btn-primary">Ir atrás</a>
+                    <a href="{{isset($redirect) ? $redirect : URL::previous()}}" class="btn btn-secondary">Ir atrás</a>
+                    <a href="{{url('/')}}" class="btn btn-primary">Ir a la página principal</a>
                 </div>
             </div>
         </div>
