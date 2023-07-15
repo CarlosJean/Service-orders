@@ -17,7 +17,6 @@ const pendingItemsRequests = function () {
             let dom = "ft";
             let actionVisible = true;
             if (orderItems.user_system_role != "warehouseman") {
-                dom = "<'row justify-content-end' <'col-sm-12 col-lg-5' f> <'#newItemsRequestButton.col-sm-12 col-lg-2 px-1 px-md-3'> >";                
                 actionVisible = false;
             }
             
