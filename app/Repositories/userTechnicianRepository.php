@@ -17,7 +17,7 @@ class userTechnicianRepository{
          ->leftjoin('users','employees.user_id','users.id')
          ->leftjoin('users_technician_services','employees.id','users_technician_services.employee_id')
          ->leftjoin('services','services.id','users_technician_services.service_id')
-         ->where('users.active',1)->where('employees.role_id',4)->groupBy('employees.id',DB::raw('CONCAT(employees.names," ",employees.last_names)'))
+         ->where('users.active',1)->where('employees.role_id',6)->groupBy('employees.id',DB::raw('CONCAT(employees.names," ",employees.last_names)'))
          ->get();
         
     return $services;
