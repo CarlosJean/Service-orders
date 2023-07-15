@@ -56,9 +56,6 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('asignar-tecnico', function () {
-    return view('orders.assign_technician');
-});
 
 Route::get('registro-empleado/{id?}', [EmployeesController::class, 'index'])
     ->middleware([Authenticate::class, CanManageEmployees::class]);
