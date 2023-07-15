@@ -35,7 +35,7 @@ class userTechnicianController extends Controller
     
 
     
-    public function setServices (setServicesEmpl $request){    
+    public function setServices (ServicesEmpl $request){    
         try {            
             $id = $request->input('EmpId');
             $services = $request->input('slcServices');

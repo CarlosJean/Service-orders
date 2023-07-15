@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Employee;
-use App\Models\employee_service;
+use App\Models\users_technician_services;
 
 use App\Models\Service;
 use Exception;
@@ -11,17 +11,12 @@ use Illuminate\Support\Facades\DB;
 
 class userTechnicianRepository{
     public function getUserTen(){      
-        //return Service::get();
-        // $services = Employee::select('employees.id',
-        // DB::raw('CONCAT(employees.names," ",employees.last_names) names'))
-        // ->join('users','employees.id','users.id')
-        // ->where('users.active',1)->where('employees.role_id',4)
-        // ->get();
+     
         $services = Employee::select('employees.id',
          DB::raw('CONCAT(employees.names," ",employees.last_names) names'), DB::raw('GROUP_CONCAT(services.name) services'))
          ->leftjoin('users','employees.user_id','users.id')
-         ->leftjoin('employee_service','employees.id','employee_service.employee_id')
-         ->leftjoin('services','services.id','employee_service.service_id')
+         ->leftjoin('users_technician_services','employees.id','users_technician_services.employee_id')
+         ->leftjoin('services','services.id','users_technician_services.service_id')
          ->where('users.active',1)->where('employees.role_id',4)->groupBy('employees.id',DB::raw('CONCAT(employees.names," ",employees.last_names)'))
          ->get();
         
@@ -36,10 +31,10 @@ class userTechnicianRepository{
     {
       
 
-            employee_service::where('employee_id',$id)->delete();
+            users_technician_services::where('employee_id',$id)->delete();
        
             foreach ($services as &$value) {
-                $model =  employee_service::firstOrCreate([
+                $model =  users_technician_services::firstOrCreate([
                     'employee_id' => $id,
                     'service_id' => $value
                 ]);
@@ -78,8 +73,8 @@ class userTechnicianRepository{
         $services = Employee::select('services.id')
        // DB::raw('CONCAT(employees.names," ",employees.last_names) names'))
         ->leftjoin('users','employees.user_id','users.id')
-        ->leftjoin('employee_service','employees.id','employee_service.employee_id')
-        ->leftjoin('services','services.id','employee_service.service_id')
+        ->leftjoin('users_technician_services','employees.id','users_technician_services.employee_id')
+        ->leftjoin('services','services.id','users_technician_services.service_id')
         ->where('users.active',1)->where('employees.id',$id)
         ->get();
         
