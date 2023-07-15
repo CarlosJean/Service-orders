@@ -11,6 +11,7 @@ use App\Models\OrderItem;
 use App\Models\OrderItemsDetail;
 use App\Models\PurchaseOrder;
 use App\Models\Quote;
+use App\Notifications\ItemsRunningOut;
 use App\Notifications\ServiceOrderItemsDispatch;
 use Exception;
 use Illuminate\Support\Facades\Notification;
@@ -32,6 +33,7 @@ class ItemsRepository
     public function available()
     {
         $items = Item::where('quantity', '>', '0')
+            ->where('active', 1)
             ->get();
 
         return $items;
@@ -80,16 +82,16 @@ class ItemsRepository
     {
         try {
             $serviceOrder = Order::where('number', $serviceOrderNumber)->first();
-    
+
             if ($serviceOrder == null) {
-                throw new NotFoundModelException('No se encontró la orden de servicio número '.$serviceOrderNumber.'.');
+                throw new NotFoundModelException('No se encontró la orden de servicio número ' . $serviceOrderNumber . '.');
             }
-    
+
             $details = $serviceOrder
                 ?->orderItem
                 ?->orderItemDetail
                 ->where('dispatched', false);
-    
+
             $items = ['data' => []];
             if ($details == null) {
                 return $items;
@@ -102,7 +104,7 @@ class ItemsRepository
                     'quantity' => $detail->quantity,
                 ]);
             }
-    
+
             return $items;
         } catch (\Throwable $th) {
             throw $th;
@@ -111,7 +113,6 @@ class ItemsRepository
 
     public function dispatch($itemsId)
     {
-
         try {
 
             $orderItem = OrderItemsDetail::find($itemsId[0])
@@ -121,16 +122,22 @@ class ItemsRepository
                 ->serviceOrder
                 ->number;
 
+            $itemsRunningOut = [];
             foreach ($itemsId as $itemId) {
                 $orderItemDetail = OrderItemsDetail::find($itemId);
                 $orderItemDetail->dispatched = true;
                 $orderItemDetail->save();
 
                 $item = Item::find($itemId);
-                $item->quantity = $orderItemDetail->quantity;
 
                 $this->inventoriesRepository
                     ->historical($item, InventoryType::Dispatch);
+
+                if ($item->quantity - $orderItemDetail->quantity <= 3) {
+                    array_push($itemsRunningOut, $item);
+                }
+
+                $item->quantity = $orderItemDetail->quantity;
             }
 
             $maintenanceSupervisorAndManager = Employee::get()
@@ -145,12 +152,23 @@ class ItemsRepository
 
             $orderItem->dispatched_by = auth()?->id();
             $orderItem->save();
-            
+
             $serviceOrder = Order::where('number', $serviceOrderNumber)
                 ->first();
 
             $serviceOrder->status = "en espera de resolucion";
             $serviceOrder->save();
+
+            //Envío de notificación de materiales a punto de acabarse
+            $warehousemans = Employee::get()
+                ->whereIn('role_id', 7)
+                ->where('department_id', 3);
+
+            $warehousemansUsers = [];
+            foreach ($warehousemans as $employee) {
+                array_push($warehousemansUsers, $employee->user);
+            }
+            Notification::send($warehousemansUsers, new ItemsRunningOut($itemsRunningOut));
         } catch (\Throwable $th) {
             throw $th;
         }
