@@ -30,7 +30,7 @@
         <div class="table-responsive">
             <table class="table table-striped w-100" id="tblQuotes"></table>
         </div>
-        <form action="" method="post" id="frmPurchaseOrder">
+        <form action="{{route('storePurchaseOrder')}}" method="post" id="frmPurchaseOrder">
             @csrf
             <input type="hidden" name="quote_number">
             <input type="hidden" name="purchase_order_number" value="{{$purchaseOrderNumber}}">

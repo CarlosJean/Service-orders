@@ -130,8 +130,6 @@ class PurchaseOrderRepository
                 $orderItemDetail->orderItem()->associate($orderItem);
                 $orderItemDetail->quantity = $detail['quantity'];
                 $orderItemDetail->save();
-
-                return $orderItemDetail;
             }
         } catch (\Throwable $th) {
             throw $th;
@@ -181,7 +179,7 @@ class PurchaseOrderRepository
         $purchaseOrder['totals']['quantity'] = $purchaseOrder['detail']->sum('quantity');
         $purchaseOrder['totals']['price'] = $purchaseOrder['detail']->sum('price');
 
-        return $purchaseOrder;
+       return $purchaseOrder;
     }
 
     public function getPurchaseOrders()

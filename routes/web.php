@@ -60,7 +60,8 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('registro-empleado/{id?}', [EmployeesController::class, 'index'])
     ->middleware([Authenticate::class, CanManageEmployees::class]);
 Route::post('registro-empleado/{id?}', [EmployeesController::class, 'store']);
-Route::get('empleados', [EmployeesController::class, 'list']);
+Route::get('empleados', [EmployeesController::class, 'list'])
+    ->middleware([Authenticate::class, HasPermissionToSubmenu::class]);
 Route::get('getEmployees', [EmployeesController::class, 'getEmployees']);
 Route::get('update-employee/{value}', [EmployeesController::class, 'updateEmpleyee']);
 
@@ -86,7 +87,8 @@ Route::get('get-submenu-by-menu/{Id?}', [RoleController::class, 'getSubmenuByMen
 Route::post('register-roles-submenu', [RoleController::class, 'storeRolSubmenu']);
 
 
-Route::get('userTechnician', [userTechnicianController::class, 'index']);
+Route::get('userTechnician', [userTechnicianController::class, 'index'])
+    ->middleware([Authenticate::class, HasPermissionToSubmenu::class]);
 Route::get('getUsersten', [userTechnicianController::class, 'getServices']);
 Route::post('getServicesByIdEmployee', [userTechnicianController::class, 'getServicesByIdEmployee']);
 Route::post('setServices', [userTechnicianController::class, 'setServices']);
@@ -191,7 +193,7 @@ Route::prefix('ordenes-compra')->group(function () {
     Route::get('{number}', [PurchaseOrderController::class, 'show'])
         ->middleware([Authenticate::class, CanDoWarehouseWorks::class]);
     Route::post('/', [PurchaseOrderController::class, 'getPurchaseOrders']);
-    Route::post('crear', [PurchaseOrderController::class, 'store']);
+    Route::post('crear', [PurchaseOrderController::class, 'store'])->name('storePurchaseOrder');
 });
 
 Route::prefix('inventario')->group(function () {
@@ -214,6 +216,3 @@ Route::prefix('solicitud-materiales')->group(function () {
 Route::fallback(function () {
     return view('errors.not_found');
 });
-
-
-

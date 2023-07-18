@@ -14,64 +14,69 @@ class MenuRepository
         try {
             //Find current logged user´s id
             $userId = auth()->id();
-    
+
             //Find user´s role id
             $employeeRepository  = new EmployeeRepository();
             $roleId = $employeeRepository->employeeByUserId($userId)['roleId'];
-    
+
             //Find user´s role
             $role = Role::find($roleId);
-    
+
             //Array to store menus and submenus information
             $submenusByRole = array();
-    
+
             $currentMenuName = '';
             $submenus = $role->submenus
                 ->sortBy(['menu_id', 'order']);
-    
+
             foreach ($submenus as $submenu) {
-    
+
                 $newSubmenu = array(
                     'name' => $submenu->name,
                     'icon' => $submenu?->icon,
                     'url' => $submenu?->url ?? '/'
                 );
-    
+
                 $isNewMenu = ($currentMenuName != $submenu->menu?->name);
-    
+
                 if ($isNewMenu || $submenu->menu?->name == null) {
-    
+
                     $menu = array(
                         'name' => $submenu->menu?->name,
                         'icon' => $submenu->menu?->icon,
                         'url' => $submenu?->url ?? '/'
                     );
-    
+
                     $newArray = array(
                         'menu' => $menu,
                         'submenus' => array($newSubmenu)
                     );
-    
+
                     array_push($submenusByRole, $newArray);
                 } else {
                     $lastIndex = count($submenusByRole) - 1;
                     array_push($submenusByRole[$lastIndex]['submenus'], $newSubmenu);
                 }
-    
+
                 $currentMenuName = $submenu->menu?->name;
             }
-    
+
             return $submenusByRole;
-        } catch(NotFoundModelException){
+        } catch (NotFoundModelException) {
             return [];
-        }catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             throw $th;
         }
     }
 
-    public function userHasSubmenu($roleId, $path){        
-        $roleSubmenus = Role::find($roleId)->submenus->where('url', $path);
+    public function userHasSubmenu($roleId, $path)
+    {  
+        $roleSubmenus = Role::find($roleId)
+            ->submenus
+            ->where('url', $path);
+
         $hasPath = count($roleSubmenus) > 0;
+
         return $hasPath;
     }
 }

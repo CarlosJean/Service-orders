@@ -30,8 +30,8 @@ class HasPermissionToSubmenu
 
         $userHasPermission = $this->menuRepository
             ->userHasSubmenu($roleId, $request->path());
-
-        if (!$userHasPermission) {
+          
+       if (!$userHasPermission) {
             abort(403);
         }
 

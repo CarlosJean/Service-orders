@@ -6,10 +6,9 @@ var url = `../cotizaciones/obtener-por-numero`;
 $(function(){
     const quoteNumber = $("#txtQuoteNumber").val();
 
-    console.log(quoteNumber);
-
     if (quoteNumber != '') {
         url = `../../cotizaciones/obtener-por-numero`;
+        $("#frmGetQuoteByNumber").trigger('submit');
     }
 });
 

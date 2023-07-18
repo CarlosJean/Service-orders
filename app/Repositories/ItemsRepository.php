@@ -151,6 +151,7 @@ class ItemsRepository
             Notification::send($users, new ServiceOrderItemsDispatch($serviceOrderNumber));
 
             $orderItem->dispatched_by = auth()?->id();
+            $orderItem->status = 'materiales despachados';
             $orderItem->save();
 
             $serviceOrder = Order::where('number', $serviceOrderNumber)
