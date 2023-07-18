@@ -102,7 +102,8 @@ Route::get('categories', [CategoriesController::class, 'index'])
     ->middleware([Authenticate::class, HasPermissionToSubmenu::class]);
 
 
-Route::get('categories', [CategoriesController::class, 'index']);
+Route::get('categories', [CategoriesController::class, 'index'])
+    ->middleware([Authenticate::class, HasPermissionToSubmenu::class]);
 Route::get('get-categories', [CategoriesController::class, 'getCategories']);
 Route::post('register-categories', [CategoriesController::class, 'store']);
 Route::get('update-categories/{id?}', [CategoriesController::class, 'update']);
@@ -129,7 +130,8 @@ Route::get('/ordersSup', [OrdersSupController::class, 'index']);
 Route::get('/GestionMateriales', [GestionMaterialesController::class, 'index']);
 Route::get('/GestionMaterialesBTN', [GestionMaterialesBTNController::class, 'index']);
 
-Route::get('/departments', [DepartmentsController::class, 'index']);
+Route::get('/departments', [DepartmentsController::class, 'index'])
+    ->middleware([Authenticate::class, HasPermissionToSubmenu::class]);
 Route::get('get-deparments', [DepartmentsController::class, 'getDeparments']);
 Route::post('register-deparment', [DepartmentsController::class, 'store']);
 Route::get('update-deparment/{id?}', [DepartmentsController::class, 'update']);
