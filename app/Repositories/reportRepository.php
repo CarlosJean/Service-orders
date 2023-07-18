@@ -3,6 +3,8 @@
 namespace App\Repositories;
 
 use App\Enums\InventoryType;
+use App\Enums\SystemRoles;
+use App\Models\Employee;
 use App\Models\Inventory;
 use App\Models\Item;
 use Exception;
@@ -27,6 +29,7 @@ class reportRepository
     {
         $userId = auth()->id();
         $employee = $this->employeeRepository->employeeByUserId($userId);
+
             $roleId = $employee['role']->id;
             $departmentId = $employee['department']->id;
 
@@ -34,7 +37,10 @@ class reportRepository
 
             $data2=null;
 
-            if ($departmentId == 2 && ($roleId == 2 || $roleId == 3)) {
+            $systemRole = Employee::find($employee['id'])->getSystemRoleAttribute();
+
+            //if ($departmentId == 2 && ($roleId == 2 || $roleId == 3)) {
+                if ( $systemRole== SystemRoles::MaintenanceManager || $systemRole== SystemRoles::MaintenanceSupervisor ){
               //  supervisor y gerente de mantenimientos;
               $data=[
                 'id' => "Reporte costo por servicios",
@@ -45,13 +51,13 @@ class reportRepository
                 'name' => "Reporte servicios",
               ];
 
-            } else if ($departmentId == 3 && ($roleId == 2 || $roleId == 5)) {
+            } else if ($systemRole== SystemRoles::Warehouseman) {
               // supervisor y operador de alamacen;
               $data=[
                 'id' => "Reporte de compras",
                 'name' => "Reporte de compras"
               ];
-            } else if ($roleId == 1) {
+            } else if ($systemRole== SystemRoles::SystemAdmin) {
                 // administrador de sistema;
                 $data=[
                   'id' => "Reporte de usuarios registrados",

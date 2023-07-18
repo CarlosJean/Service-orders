@@ -82,7 +82,7 @@
             </div>
             <div class="col-md-3">
                 <div class="card">
-                    <a href="{{url('departments')}}" class="tile text-decoration-none" id="departments">
+                    <a href="{{url('departamentos')}}" class="tile text-decoration-none" id="departments">
                         <div class="row justify-content-center align-items-center h-100 text-center">
                             <div class="col-12">
                                 Departamentos

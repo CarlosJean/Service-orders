@@ -71,12 +71,12 @@ Route::get('update-employee/{value}', [EmployeesController::class, 'updateEmpley
 Route::get('registro-empleado', [EmployeesController::class, 'index'])
     ->middleware([Authenticate::class, CanManageEmployees::class]);
 Route::get('registro-empleado', [EmployeesController::class, 'index']);
-
 Route::post('registro-empleado', [EmployeesController::class, 'store']);
 
-Route::get('services', [ServicesController::class, 'index'])
+Route::get('servicios', [ServicesController::class, 'index'])
     ->middleware([Authenticate::class, HasPermissionToSubmenu::class]);
 Route::post('register-services', [ServicesController::class, 'store']);
+Route::get('getServices', [ServicesController::class, 'getServices']) ;
 Route::get('update-services/{id?}', [ServicesController::class, 'update']);
 
 Route::get('roles', [RoleController::class, 'index'])
@@ -89,39 +89,37 @@ Route::get('get-submenu-by-menu/{Id?}', [RoleController::class, 'getSubmenuByMen
 Route::post('register-roles-submenu', [RoleController::class, 'storeRolSubmenu']);
 
 
-Route::get('userTechnician', [userTechnicianController::class, 'index']);
+Route::get('tecnicos', [userTechnicianController::class, 'index']);
 Route::get('getUsersten', [userTechnicianController::class, 'getServices']);
 Route::post('getServicesByIdEmployee', [userTechnicianController::class, 'getServicesByIdEmployee']);
 Route::post('setServices', [userTechnicianController::class, 'setServices']);
 
 
-Route::get('inventory_value', [InventoriesController::class, 'index'])
+Route::get('valor_inventario', [InventoriesController::class, 'index'])
     ->middleware([Authenticate::class, CanDoWarehouseWorks::class]);
 Route::post('inventory_value', [InventoriesController::class, 'getInventory']);
 
-Route::get('categories', [CategoriesController::class, 'index'])
+Route::get('categorias', [CategoriesController::class, 'index'])
     ->middleware([Authenticate::class, HasPermissionToSubmenu::class]);
-
-
-Route::get('categories', [CategoriesController::class, 'index']);
 Route::get('get-categories', [CategoriesController::class, 'getCategories']);
 Route::post('register-categories', [CategoriesController::class, 'store']);
 Route::get('update-categories/{id?}', [CategoriesController::class, 'update']);
 
-Route::get('reports', [ReportsController::class, 'index'])
+Route::get('reportes', [ReportsController::class, 'index'])
     ->middleware([Authenticate::class, HasPermissionToSubmenu::class]);
 Route::post('get-report', [ReportsController::class, 'getReport']);
 Route::get('fillSelectReport', [ReportsController::class, 'fillSelectReport']);
 
-Route::get('items', [ItemsController::class, 'index'])
+Route::get('articulo', [ItemsController::class, 'index'])
     ->middleware([Authenticate::class, HasPermissionToSubmenu::class]);
 Route::get('get-items', [ItemsController::class, 'getItems']);
+Route::get('getItemsAll', [ItemsController::class, 'getItemsAll']);
 Route::post('register-items', [ItemsController::class, 'store']);
 Route::get('update-items/{id?}', [ItemsController::class, 'update']);
 
-Route::get('suppliers', [SuppliersController::class, 'index'])
+Route::get('suplidor', [SuppliersController::class, 'index'])
     ->middleware([Authenticate::class, HasPermissionToSubmenu::class]);
-Route::get('get-suppliers', [SuppliersController::class, 'getSuppliers']);
+Route::get('get-suppliers', [SuppliersController::class, 'getSuppliersAll']);
 Route::post('register-suppliers', [SuppliersController::class, 'store']);
 Route::get('update-suppliers/{id?}', [SuppliersController::class, 'update']);
 
@@ -130,7 +128,7 @@ Route::get('/ordersSup', [OrdersSupController::class, 'index']);
 Route::get('/GestionMateriales', [GestionMaterialesController::class, 'index']);
 Route::get('/GestionMaterialesBTN', [GestionMaterialesBTNController::class, 'index']);
 
-Route::get('/departments', [DepartmentsController::class, 'index']);
+Route::get('/departamentos', [DepartmentsController::class, 'index']);
 Route::get('get-deparments', [DepartmentsController::class, 'getDeparments']);
 Route::post('register-deparment', [DepartmentsController::class, 'store']);
 Route::get('update-deparment/{id?}', [DepartmentsController::class, 'update']);

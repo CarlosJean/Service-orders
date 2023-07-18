@@ -39,10 +39,12 @@ class DepartmentsController extends Controller
             $this->deparmentRepository->create($description, $nombre);
             
 
-            return redirect('departments');
+           // return redirect('departments');
+            
+            return back()->with('success',  'Registro creado!');
             
         } catch (\Throwable $th) {
-            var_dump($th);
+            return back()->with('error',  $th->getMessage());
             //throw $th;
         }    
     }
@@ -52,11 +54,13 @@ class DepartmentsController extends Controller
 
             $this->deparmentRepository->update($id);
            
-            return redirect('departments');
+            //return redirect('departments');
 
+            echo json_encode(['type' => 'success','message' => 'Cambios aplicados correctamente!']);
 
-        } catch (\Throwable $th) {          
-            var_dump($th);
+            
+        } catch (\Throwable $th) {
+            echo json_encode(['type' => 'error','message' => $th->getMessage()]);
             //throw $th;
         }    
     } 

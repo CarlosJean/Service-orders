@@ -3,7 +3,7 @@
 
 @section('content')
 
-@vite(['resources/js/userTechnician.js'])
+@vite(['resources/js/tecnicos.js'])
 
 <!-- Modal -->
 <div class="modal fade asignarMenu" id="asignarMenu" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

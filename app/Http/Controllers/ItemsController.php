@@ -10,6 +10,7 @@ use App\Http\Requests\RegisterItemsRequest;
 class ItemsController extends Controller
 {
     protected $itemsRepository;
+    
     public function __construct(ItemsRepository $itemsRepository ){
         $this->itemsRepository = $itemsRepository;
     }
@@ -33,10 +34,12 @@ class ItemsController extends Controller
             $this->itemsRepository->create($description, $nombre, $medida, $precio, $cantidad, $referencia);
             
 
-            return redirect('items');
+           // return redirect('items');
+            
+            return back()->with('success',  'Registro creado!');
             
         } catch (\Throwable $th) {
-            var_dump($th);
+            return back()->with('error',  $th->getMessage());
             //throw $th;
         }    
     }
@@ -46,17 +49,24 @@ class ItemsController extends Controller
 
             $this->itemsRepository->update($id);
            
-            return redirect('items');
+          //  return redirect('items');
 
+            echo json_encode(['type' => 'success','message' => 'Cambios aplicados correctamente!']);
 
         } catch (\Throwable $th) {          
-            var_dump($th);
+            echo json_encode(['type' => 'error','message' => $th->getMessage()]);
+
             //throw $th;
         }    
     } 
 
     public function getItems(){
         $items = $this->itemsRepository->all();
+        return $items;
+    }    
+
+    public function getItemsAll(){
+        $items = $this->itemsRepository->all(true);
         return $items;
     }    
     

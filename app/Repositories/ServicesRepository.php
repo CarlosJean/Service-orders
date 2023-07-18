@@ -6,12 +6,15 @@ use App\Models\Service;
 use Exception;
 
 class ServicesRepository{
-    public function services(){
+    public function services($all=false){
         //return Service::get();
 
-        $services = Service::select('name', 'id','description','active') 
-        ->get();
-        
+    $services = Service::select('name', 'id','description','active') 
+    ->get();
+    if(!$all) {       
+         $services = $services->where('active',1);
+    }
+      
     return $services;
 
     }

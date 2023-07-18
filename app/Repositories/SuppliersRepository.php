@@ -7,10 +7,14 @@ use Exception;
 
 class SuppliersRepository
 {
-    public function suppliers()
+    public function suppliers($all=false)
     {
         $suppliers = Suppliers::select('id','name', 'address','city','email','cellphone','ident','identType','active')
             ->get();
+
+            if(!$all) {       
+                $suppliers = $suppliers ->where('active',1);
+            }
             
         return $suppliers;
     }

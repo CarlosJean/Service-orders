@@ -67,6 +67,10 @@ $(document).ready(function () {
                 "initComplete": function(settings, json) {
                                
                     $('.commonClass').bind('click', function(e) {
+
+                        $(".modal-body input").val("")
+                        $(".modal-body select").val(null).trigger('change');     
+                        
                         e.preventDefault();
                         var value = this.value.split('-');
                             inputol.val(value[1]);

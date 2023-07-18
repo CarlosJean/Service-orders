@@ -10,9 +10,7 @@ use App\Repositories\SuppliersRepository;
 
 class SuppliersController extends Controller
 {
-    public function index(){
-        return view('shopping.suppliers');
-    }
+
 
     protected $SuppliersRepository;
 
@@ -23,6 +21,11 @@ class SuppliersController extends Controller
     {
         $this->SuppliersRepository = $SuppliersRepository;
     }
+    
+    public function index(){
+        return view('shopping.suppliers');
+    }
+   
 
     public function getSuppliers() {
         return $this->SuppliersRepository->suppliers();
@@ -44,10 +47,12 @@ class SuppliersController extends Controller
             $this->SuppliersRepository->create($tipoidentificacion, $nombre, $rnc, $direccion, $municipio, $correo, $celular);
             
 
-            return redirect('suppliers');
+         //   return redirect('suppliers');
+            
+            return back()->with('success',  'Registro creado!');
             
         } catch (\Throwable $th) {
-            var_dump($th);
+            return back()->with('error',  $th->getMessage());
             //throw $th;
         }    
     }
@@ -57,15 +62,19 @@ class SuppliersController extends Controller
 
             $this->SuppliersRepository->update($id);
            
-            return redirect('suppliers');
+            //return redirect('suppliers');
 
+            echo json_encode(['type' => 'success','message' => 'Cambios aplicados correctamente!']);
 
         } catch (\Throwable $th) {          
-            var_dump($th);
+            echo json_encode(['type' => 'error','message' => $th->getMessage()]);
+
             //throw $th;
         }    
     } 
     
-    
+    public function getSuppliersAll(){
+        return $this->SuppliersRepository->suppliers(true);
+    }
   
 }
