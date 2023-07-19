@@ -1,5 +1,6 @@
 @extends('layouts.orders_template')
 
+@section('title', 'Cotización')
 @section('screenName', 'Cotización')
 
 @push('orderNumber')

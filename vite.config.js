@@ -19,6 +19,7 @@ export default defineConfig({
                 'resources/js/purchaseOrders.js',
                 'resources/js/itemsDispatch.js',
                 'resources/js/quotesIndex.js',
+                'resources/css/whiteBackgroundColor.css',
             ],
             refresh: true,
         }),

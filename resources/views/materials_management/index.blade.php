@@ -1,7 +1,10 @@
 @vite([
 'resources/js/app.js',
 'resources/js/materialsManagementIndex.js',
+'resources/css/whiteBackgroundColor.css',
 ])
+
+@section('screenName','Solicitudes materiales')
 
 @extends('layouts.app')
 

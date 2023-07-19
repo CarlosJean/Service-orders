@@ -1,9 +1,9 @@
-
 @extends('layouts.app')
 
 
 @section('content')
 
+@section('title', 'Departamentos')
 
 @vite(['resources/js/departments.js'])
 

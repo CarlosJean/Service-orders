@@ -1,6 +1,8 @@
 
 @extends('layouts.app')
 
+@section('title', 'Técnicos')
+
 @section('content')
 
 @vite(['resources/js/userTechnician.js', 'resources/css/whiteBackgroundColor.css',])

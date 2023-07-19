@@ -8,8 +8,10 @@
                 <div class="col-12">
                     @if($employee_id > 0)
                     <h3 class="my-0">¡Empleado actualizado satisfactoriamente!</h3>
+                    @section('title', 'Empleado actualizado')
                     @else
                     <h3 class="my-0">¡Empleado creado satisfactoriamente!</h3>
+                    @section('title', 'Empleado creado')
                     @endif
                     <hr class="opacity-100">
                 </div>

@@ -37,3 +37,12 @@ td {
   background-color: #1aa179;
   color: #fff;
 }
+
+.navbar-brand{
+  font-family: poppings, sans-serif;
+  font-weight: bold;
+}
+
+.nav-item{
+  font-weight: bold;
+}

@@ -1,6 +1,8 @@
 @extends('layouts.orders_template')
 
+@section('title', 'Gestión de materiales')
 @section('screenName', 'Gestión de materiales')
+
 @push('orderNumber')
 <input type="text" readonly="readonly" class="form-control text-right" value="{{$order->number}}">
 @endpush

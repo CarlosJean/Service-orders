@@ -1,6 +1,7 @@
 @extends('layouts.orders_template')
 
 @section('screenName','Despacho de materiales')
+@section('title', 'Despacho de materiales')
 
 @section('orderContent')
 <hr>

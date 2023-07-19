@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@vite(['resources/css/whiteBackgroundColor.css'])
+
+@section('title', 'Inicio')
+
 @section('content')
 <div class="container">
     <div class="row justify-content-between">

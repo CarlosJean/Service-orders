@@ -3,9 +3,9 @@
 
 @section('content')
 
+@section('title', 'Reportes')
 
-@vite(['resources/js/reports.js'])
-
+@vite(['resources/js/reports.js','resources/css/whiteBackgroundColor.css',])
 
 <!-- Inicio contenido -->
 <br>

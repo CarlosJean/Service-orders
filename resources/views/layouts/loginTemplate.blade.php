@@ -10,7 +10,7 @@
     </title>
 
 
-    @vite(['resources/css/azia.min.css','resources/js/app.js','resources/css/login.css'])
+    @vite(['resources/css/azia.min.css','resources/js/app.js','resources/css/login.css', 'resources/css/whiteBackgroundColor.css'])
 
 </head>
 

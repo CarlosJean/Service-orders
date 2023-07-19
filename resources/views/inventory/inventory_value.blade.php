@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+@section('title', 'Valor de inventario')
 
 @section('content')
 

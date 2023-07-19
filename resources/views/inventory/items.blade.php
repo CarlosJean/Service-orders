@@ -1,11 +1,12 @@
 
 @extends('layouts.app')
 
+@section('title', 'Artículos')
 
 @section('content')
 
 
-@vite(['resources/js/items.js'])
+@vite(['resources/js/items.js','resources/css/whiteBackgroundColor.css',])
 
 
 <div class="container">

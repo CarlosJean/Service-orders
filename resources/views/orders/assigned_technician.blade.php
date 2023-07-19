@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('screenName','Técnico asignado')
+
 @section('content')
 <div class="container">
     <div class="card p-3">

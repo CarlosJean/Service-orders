@@ -1,5 +1,7 @@
 @extends('layouts.loginTemplate')
 
+@section('title', 'Página no encontrada')
+
 @section('content')
 <div class="container">
     <div class="row">

@@ -5,7 +5,7 @@
     <div class="card p-2">
         <div class="row">
             <div class="col-12">
-                
+
                 @if($errors->has('error'))
                 <ul class="alert alert-danger">
                     {{$errors->first('error')}}
@@ -13,10 +13,12 @@
                 @endif
 
                 @if(isset($employee))
+                @section('title', 'Actualización de empleado')
                 <h1>Actualización de empleado</h1>
                 <hr>
                 @include('partials.employees.update')
                 @else
+                @section('title', 'Registro de empleado')
                 <h1>Registro de empleado</h1>
                 <hr>
                 @include('partials.employees.create')

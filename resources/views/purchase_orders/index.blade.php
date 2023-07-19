@@ -1,9 +1,12 @@
 @vite([
 'resources/js/app.js',
 'resources/js/purchaseOrdersIndex.js',
+'resources/css/whiteBackgroundColor.css',
 ])
 
 @extends('layouts.app')
+
+@section('title', 'Ordenes de compra')
 
 @section('content')
 <div class="container">

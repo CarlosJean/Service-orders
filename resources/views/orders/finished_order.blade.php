@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Orden de servicio finalizada')
+
 @section('content')
 <div class="container">
     <div class="card p-3">

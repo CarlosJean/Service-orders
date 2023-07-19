@@ -2,8 +2,11 @@
 
 @vite([
 'resources/js/app.js',
-'resources/js/employeesList.js'
+'resources/js/employeesList.js',
+'resources/css/whiteBackgroundColor.css',
 ])
+
+@section('title', 'Empleados')
 
 @section('content')
 <div class="container">

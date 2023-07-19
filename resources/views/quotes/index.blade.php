@@ -1,9 +1,12 @@
 @vite([
 'resources/js/app.js',
 'resources/js/quotesIndex.js',
+'resources/css/whiteBackgroundColor.css',
 ])
 
 @extends('layouts.app')
+
+@section('title', 'Cotizaciones pendientes')
 
 @section('content')
 <div class="container">

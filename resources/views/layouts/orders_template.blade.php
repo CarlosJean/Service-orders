@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@vite(['resources/css/whiteBackgroundColor.css'])
+
 @section('content')
 <div class="container">
     <div class="card shadow p-3">

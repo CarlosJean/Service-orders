@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('screenName','Aprobación de solicitud de materiales')
+
 @section('content')
 <div class="container">
     <div class="card p-3">

@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Materiales solicitados')
+
 @section('content')
 <di class="container">
     <div class="row justify-content-center">

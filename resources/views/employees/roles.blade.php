@@ -1,11 +1,12 @@
 
 @extends('layouts.app')
 
+@section('title', 'Roles')
 
 @section('content')
 
 
-@vite(['resources/js/roles.js'])
+@vite(['resources/js/roles.js', 'resources/css/whiteBackgroundColor.css',])
 
 
 <div class="container">
