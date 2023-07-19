@@ -3,7 +3,7 @@
 
 @section('content')
 
-@vite(['resources/js/tecnicos.js'])
+@vite(['resources/js/userTechnician.js', 'resources/css/whiteBackgroundColor.css',])
 
 <!-- Modal -->
 <div class="modal fade asignarMenu" id="asignarMenu" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
