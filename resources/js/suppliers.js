@@ -61,7 +61,7 @@ $(document).ready(function () {
                         var Id= this.href.substring(this.href.lastIndexOf('/') + 1); 
                     
                         Swal.fire({
-                            title: 'Esta seguro que desea proceder con la accion?',
+                            title: '¿Está seguro que desea proceder con la acción?',
                             // text: "Un usuario desactivado no podra acceder al sistema.",
                             icon: 'warning',
                             showCancelButton: true,
