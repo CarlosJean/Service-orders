@@ -178,11 +178,12 @@ class OrdersRepository
                 return new Exception('No se encontró la orden número ' . $orderNumber);
             }
 
-            $technicianUser = User::find($technicianId);
+            $technicianUser = Employee::find($technicianId)
+                ->user;
 
             if ($technicianUser == null) throw new Exception('El técnico indicado es incorrecto.');
 
-            $order->technician = $technicianId;
+            $order->technician = $technicianUser->id;
             $order->assignation_date = now();
             $order->status = 'tecnico asignado';
 
@@ -348,18 +349,17 @@ class OrdersRepository
     {
         try {
             $orderDetail =  $this->serviceOrderByNumber($serviceOrderNumber);
-    
+
             $items = Order::where('number', $serviceOrderNumber)
                 ->first()
                 ->items;
-    
+
             $order = ['detail' => $orderDetail, 'items' => $items];
-    
+
             return $order;
         } catch (\Throwable $th) {
             throw $th;
         }
-
     }
 
     public function approveServiceOrderItemRequest($serviceOrderNumber, $approved)
@@ -428,8 +428,8 @@ class OrdersRepository
 
             if ($employee == null) {
                 throw new NotFoundModelException('No se encontró el empleado con el usuario número ' . $userId);
-            }            
-            
+            }
+
             $orders = [];
             if ($employee['system_role'] == SystemRoles::DepartmentSupervisor || $employee['system_role'] == SystemRoles::DepartmentManager) {
                 $orders = $this->departmentSupervisorPendings($userId);

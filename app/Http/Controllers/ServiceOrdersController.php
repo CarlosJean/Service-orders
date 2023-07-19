@@ -128,7 +128,7 @@ class ServiceOrdersController extends Controller
 
             $this->ordersRepository->assignTechnician($serviceOrderNumber, $technicianId);
 
-            $employee = $this->employeeRepository->employeeByUserId($technicianId);
+            $employee = $this->employeeRepository->employeeById($technicianId);
             $technician = $employee['names'] . ' ' . $employee['last_names'];
 
             return view('orders.assigned_technician')
