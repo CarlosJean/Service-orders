@@ -25,9 +25,15 @@ class ItemsRepository
         $this->inventoriesRepository = $inventoriesRepository;
     }
 
-    public function all()
+    public function all($all=false)
     {
-        return Item::get();
+    $model = Item::select('id', 'name','description','measurement_unit','price','quantity','reference','active')->get();
+  
+    if(!$all) {       
+        $model = $model ->where('active',1);
+    }
+      
+    return $model;
     }
 
     public function available()

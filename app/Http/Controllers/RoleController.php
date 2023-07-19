@@ -56,10 +56,12 @@ class RoleController extends Controller
             $this->RolesRepository->create($description, $nombre);
             
 
-            return redirect('roles');
+           // return redirect('roles');
+            
+            return back()->with('success',  'Registro creado!');
             
         } catch (\Throwable $th) {
-            var_dump($th);
+            return back()->with('error',  $th->getMessage());
             //throw $th;
         }    
     }
@@ -69,11 +71,12 @@ class RoleController extends Controller
 
             $this->RolesRepository->update($id);
            
-            return redirect('roles');
+          //  return redirect('roles');
 
+          echo json_encode(['type' => 'success','message' => 'Cambios aplicados correctamente!']);
 
         } catch (\Throwable $th) {          
-            return redirect()->back() ->with('error',  $th->getMessage());;
+            echo json_encode(['type' => 'error','message' => $th->getMessage()]);
             //throw $th;
         }    
     } 

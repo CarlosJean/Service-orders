@@ -7,13 +7,16 @@ use Exception;
 
 class CategoriesRepository{
 
-    public function categories(){
+    public function categories($all=false){
         //return Service::get();
 
-        $services = Categories::select('name', 'id','description','active') 
-        ->get();
-        
-    return $services;
+    $model = Categories::select('name', 'id','description','active') ->get();
+    
+    if(!$all) {       
+        $model = $model ->where('active',1);
+    }
+      
+    return $model;
 
     }
 

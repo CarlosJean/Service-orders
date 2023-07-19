@@ -40,7 +40,7 @@ class SubmenusTableSeeder extends Seeder
             'name' => 'Tecnicos',
             'order' => 2,
             'menu_id' => 2,
-            'URL' => 'userTechnician'
+            'URL' => 'tecnicos'
 
         ]);
         
@@ -63,7 +63,7 @@ class SubmenusTableSeeder extends Seeder
             'name' => 'Suplidor',
             'order' => 3,
             'menu_id' => 3,
-            'URL' => 'suppliers'            
+            'URL' => 'suplidor'            
         ]);
         
         //Menú de inventarios
@@ -71,7 +71,7 @@ class SubmenusTableSeeder extends Seeder
             'name' => 'Artículos',
             'order' => 1,
             'menu_id' => 4,
-            'URL' => 'items'
+            'URL' => 'articulo'
 
         ]);
         
@@ -79,7 +79,7 @@ class SubmenusTableSeeder extends Seeder
             'name' => 'Valor de inventario',
             'order' => 2,
             'menu_id' => 4,
-            'URL' => 'inventory_value'
+            'URL' => 'valor_inventario'
 
         ]);
         
@@ -87,7 +87,7 @@ class SubmenusTableSeeder extends Seeder
             'name' => 'Categorías',
             'order' => 4,
             'menu_id' => 4,
-            'URL' => 'categories'
+            'URL' => 'categorias'
 
         ]);
         
@@ -96,7 +96,7 @@ class SubmenusTableSeeder extends Seeder
             'name' => 'Servicios',
             'order' => 1,
             'menu_id' => 5,
-            'URL' => 'services'
+            'URL' => 'servicios'
 
         ]);
         
@@ -104,7 +104,7 @@ class SubmenusTableSeeder extends Seeder
             'name' => 'Departamentos',
             'order' => 2,
             'menu_id' => 5,
-            'URL' => 'departments'
+            'URL' => 'departamentos'
 
         ]);
         
@@ -134,7 +134,7 @@ class SubmenusTableSeeder extends Seeder
             'name' => 'Reportes',
             'order' => 1,
             'menu_id' => 6,
-            'URL' => 'reports'
+            'URL' => 'reportes'
         ]);
     }
 }

@@ -37,10 +37,11 @@ class CategoriesController extends Controller
             $this->CategoriesRepository->create($description, $nombre);
             
 
-            return redirect('categories');
+            return back()->with('success',  'Registro creado!');
             
         } catch (\Throwable $th) {
-            var_dump($th);
+            return back()->with('error',  $th->getMessage());
+
             //throw $th;
         }    
     }
@@ -50,18 +51,20 @@ class CategoriesController extends Controller
 
             $this->CategoriesRepository->update($id);
            
-            return redirect('categories');
+          //  return redirect('categories');
 
+
+            echo json_encode(['type' => 'success','message' => 'Cambios aplicados correctamente!']);
 
         } catch (\Throwable $th) {          
-            var_dump($th);
+            echo json_encode(['type' => 'error','message' => $th->getMessage()]);
             //throw $th;
         }    
     } 
 
     public function getCategories()
     {
-        return $this->CategoriesRepository->categories();
+        return $this->CategoriesRepository->categories(true);
     }
   
 }

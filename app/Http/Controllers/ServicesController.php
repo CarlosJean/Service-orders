@@ -37,10 +37,12 @@ class ServicesController extends Controller
             $this->servicesRepository->create($description, $nombre);
             
 
-            return redirect('services');
+          //  return redirect('services');
+            
+            return back()->with('success',  'Registro creado!');
             
         } catch (\Throwable $th) {
-            var_dump($th);
+            return back()->with('error',  $th->getMessage());
             //throw $th;
         }    
     }
@@ -50,22 +52,23 @@ class ServicesController extends Controller
 
             $this->servicesRepository->update($id);
            
-            return redirect('services');
+           // return redirect('services');
+           echo json_encode(['type' => 'success','message' => 'Cambios aplicados correctamente!']);
 
 
         } catch (\Throwable $th) {          
-            var_dump($th);
+            echo json_encode(['type' => 'error','message' => $th->getMessage()]);
             //throw $th;
         }    
     } 
 
-    // public function getServices()
-    // {
-    //     $employees = $this->employeeRepository
-    //         ->services();
+    public function getServices()
+    {
+        $data = $this->servicesRepository
+            ->services(true);
 
-    //     echo json_encode($employees);
-    // }
+      return $data;
+    }
 
 
   

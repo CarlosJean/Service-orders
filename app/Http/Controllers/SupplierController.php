@@ -76,4 +76,9 @@ class SupplierController extends Controller
         return $this->suppliersRepository
             ->suppliers();
     }
+
+    public function getSuppliersAll(){
+        return $this->suppliersRepository
+            ->suppliers(true);
+    }
 }

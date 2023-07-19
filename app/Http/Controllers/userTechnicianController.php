@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\Http\Requests\setServicesEmpl;
 
 use App\Http\Requests\ServicesEmpl;
 use Illuminate\Support\Facades\Auth;
@@ -45,7 +44,7 @@ class userTechnicianController extends Controller
 
          //   echo json_encode(['$services ' => $services , '$id ' =>  $id  ]);
 
-           // return redirect('userTechnician')->with('success', 'success');
+           // return redirect('tecnicos')->with('success', 'success');
            echo json_encode(['type' => 'success','message' => 'Cambios aplicados correctamente!']);
 
         } catch (\Throwable $th) {

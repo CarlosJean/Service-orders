@@ -7,6 +7,9 @@ use App\Exceptions\NoUserEmailException;
 use App\Exceptions\UniqueColumnException;
 use App\Models\Employee;
 use App\Models\Service;
+use App\Models\users_technician_services;
+
+
 use App\Models\User;
 use App\Notifications\RegisteredUser;
 use Illuminate\Support\Facades\DB;
@@ -234,18 +237,34 @@ class EmployeeRepository
     public function employeesByService($serviceId)
     {
 
-        $employeesByService = Service::with('employees')
-            ->where('id', $serviceId)
-            ->first()
-            ->employees;
+      
+        $employeesByService = Employee::select('employees.id','employees.names','employees.last_names')
+        ->leftjoin('users','employees.user_id','users.id')
+        ->leftjoin('users_technician_services','employees.id','users_technician_services.employee_id')
+        ->leftjoin('services','services.id','users_technician_services.service_id')
+        ->where('users.active',1)->where('users_technician_services.service_id', $serviceId)
+        ->get();
 
         $employees = [];
-        foreach ($employeesByService as $employee) {
+          foreach ($employeesByService as $employee) {
             array_push($employees, [
-                'id' => $employee->user->id,
+                'id' => $employee->id,
                 'name' => $employee->names . ' ' . $employee->last_names,
             ]);
         }
+
+        // $employeesByService = users_technician_services::with('employees')
+        //     ->where('service_id', $serviceId)
+        //     ->first()
+        //     ->employees;
+
+        // $employees = [];
+        // foreach ($employeesByService as $employee) {
+        //     array_push($employees, [
+        //         'id' => $employee->user->id,
+        //         'name' => $employee->names . ' ' . $employee->last_names,
+        //     ]);
+        // }
 
         return $employees;
     }

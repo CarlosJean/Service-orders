@@ -116,6 +116,14 @@ class RolesRepository
         $Submenu = Submenu::select('id','name')->where('menu_id',$id)
         ->get() ;
 
+    
+
+        if ($id==1)
+        $Submenu = Menu::select('id','name')->where('id',$id)
+        ->get() ;
+
+  
+
         return $Submenu;
 
         // $model = Menu::with('Submenu')
