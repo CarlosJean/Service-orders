@@ -1,9 +1,36 @@
 import applyStyle from '../js/azia.js';
 import * as language from './datatables.spanish.json' ;
+const slc = $(".slc");
 
+
+const getCategories= function () {
+    $.ajax({
+        url: "get-categories",
+        type: 'get',
+        dataType: 'json',
+        success: function (data) {
+
+            data.forEach(data => {
+                const option = new Option(data.name, data.id);
+                slc.append(option);
+            });
+
+        }
+    })
+}
 
 $(document).ready(function () {
 
+    slc.select2();
+
+  
+
+    slc.select2({
+        dropdownParent: $('#exampleModal')
+       // ,placeholder: 'Seleccione un Menu'
+    });
+
+    getCategories();
     $("input[id*='txtQty']").keydown(function (event) {
 
 
@@ -97,6 +124,8 @@ $(document).ready(function () {
                     { data: 'measurement_unit', title: 'Medida' },        
                     { data: 'price', title: 'Precio' },        
                     { data: 'reference', title: 'Referencia' },   
+                    { data: 'category', title: 'Categoria' },   
+
                     { 
                         title:'Estado' ,
                         data: 'active', 

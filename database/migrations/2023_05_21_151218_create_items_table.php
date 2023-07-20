@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('description');
             $table->boolean('active')->default(true);
             $table->double('price');
+            $table->bigInteger('id_category')->nullable();
+
         });
     }
 

@@ -102,6 +102,8 @@ Route::post('inventory_value', [InventoriesController::class, 'getInventory']);
 Route::get('categorias', [CategoriesController::class, 'index'])
     ->middleware([Authenticate::class, HasPermissionToSubmenu::class]);
 Route::get('get-categories', [CategoriesController::class, 'getCategories']);
+//Route::get('get-categories', [CategoriesController::class, 'getCategories']);
+
 Route::post('register-categories', [CategoriesController::class, 'store']);
 Route::get('update-categories/{id?}', [CategoriesController::class, 'update']);
 

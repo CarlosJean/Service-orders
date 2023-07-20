@@ -29,9 +29,10 @@ class ItemsController extends Controller
             $precio = $request->input('precio');
             $cantidad = $request->input('cantidad');
             $referencia = $request->input('referencia');
+            $categoria = $request->input('categoria');
 
 
-            $this->itemsRepository->create($description, $nombre, $medida, $precio, $cantidad, $referencia);
+            $this->itemsRepository->create($description, $nombre, $medida, $precio, $cantidad, $referencia,  $categoria);
             
 
            // return redirect('items');
