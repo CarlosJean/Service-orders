@@ -21,8 +21,10 @@ return new class extends Migration
             $table->string('description');
             $table->boolean('active')->default(true);
             $table->double('price');
-            $table->bigInteger('id_category')->nullable();
+            $table->unsignedBigInteger('id_category')->nullable();
 
+            $table->foreign('id_category')
+            ->references('id')->on('categories');
         });
     }
 

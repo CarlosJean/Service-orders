@@ -24,7 +24,7 @@ class ItemFactory extends Factory
             'reference' => fake()->sentence(),
             'measurement_unit' => fake()->sentence(1),
             'description' => fake()->sentence(1),
-
+            'id_category' => fake()->numberBetween(1,3),
         ];
     }
 }
