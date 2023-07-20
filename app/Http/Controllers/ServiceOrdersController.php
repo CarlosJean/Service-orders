@@ -90,6 +90,13 @@ class ServiceOrdersController extends Controller
     {
         $userId = auth()->id();
         $serviceOrders = $this->ordersRepository->serviceOrdersByUserId($userId);
+
+        foreach ($serviceOrders['data'] as $index => $serviceOrder) {
+            if (isset($serviceOrders['data'][$index]->status)) {
+                $serviceOrders['data'][$index]->status = strtoupper($serviceOrder->status);
+            }
+        }
+        
         return $serviceOrders;
     }
 
