@@ -24,7 +24,8 @@ class CanViewServiceOrders
         if (!($employee['system_role'] == SystemRoles::DepartmentManager 
         || $employee['system_role'] == SystemRoles::DepartmentSupervisor
         || $employee['system_role'] == SystemRoles::MaintenanceManager 
-        || $employee['system_role'] == SystemRoles::MaintenanceSupervisor)) {
+        || $employee['system_role'] == SystemRoles::MaintenanceSupervisor
+        || $employee['system_role'] == SystemRoles::MaintenanceTechnician)) {
             abort(403, 'Acceso denegado');
         }
 
