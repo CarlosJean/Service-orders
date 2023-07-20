@@ -27,7 +27,8 @@ class ItemsRepository
 
     public function all($all=false)
     {
-    $model = Item::select('id', 'name','description','measurement_unit','price','quantity','reference','active')->get();
+    $model = Item::select('items.id', 'items.name','items.description','measurement_unit','price','quantity','reference','items.active','categories.name as category')
+    ->leftjoin('categories','categories.id','items.id_category')->get();
   
     if(!$all) {       
         $model = $model ->where('active',1);
@@ -198,7 +199,7 @@ class ItemsRepository
         }
     }
 
-    public function create($description, $nombre, $medida, $precio, $cantidad, $referencia)
+    public function create($description, $nombre, $medida, $precio, $cantidad, $referencia,$categoria)
     {
         try {
 
@@ -210,16 +211,23 @@ class ItemsRepository
                 throw new Exception('Debe especificar un nombre.', 1);
             }
 
+            if ($categoria == null) {
+                throw new Exception('Debe especificar una categoria.', 1);
+            }
+
+
             $model = new Item([
                 'description' => $description,
                 'name' => $nombre,
                 'measurement_unit' => $medida,
                 'price' => $precio,
                 'quantity' => $cantidad,
-                'reference' => $referencia
+                'reference' => $referencia,
+                'id_category' =>  $categoria
             ]);
 
             $model->save();
+
         } catch (\Throwable $th) {
             return redirect()->back()->with('error',  $th->getMessage());
         }

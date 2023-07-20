@@ -106,14 +106,14 @@
             </div>
           </div>
           
-          <!-- <div class="col-6">
-            <label for="">Almacen</label>
+          <div class="col-6">
+            <label for="">Categoria</label>
             <div class="form-group">
-            <select class="form-control" name="Alamacen">
-                 <option>Principal</option>
-                </select>
+            <select class="form-control slc" name="categoria" style="width: 100%; height: 100%" required>
+                     
+            </select>
             </div>
-          </div> -->
+            </div>
 
           <div class="col-6">
             <label for="">Costo inicial</label>
@@ -121,7 +121,6 @@
               <input type="text" class="form-control" name="precio" required id="txtQty">
             </div>
           </div>
-
           <div class="col-6">
             <label for="">Cantidad</label>
             <div class="form-group">
@@ -129,15 +128,15 @@
             
             </div>
           </div>
-
       
-
-          <div class="col-12">
+        
+          <div class="col-6">
             <label for="">Referencia</label>
             <div class="form-group">
               <input type="text" class="form-control" name="referencia" required>
             </div>
           </div>
+        
           <div class="form-group col-md-12">
       <label for="inputState">Descripción</label>
       <input type="text" class="form-control" id="inputZip" name="descripcion" required>
