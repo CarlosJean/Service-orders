@@ -1,11 +1,13 @@
 
 import applyStyle from '../js/azia.js';
-import * as language from './datatables.spanish.json' ;
+import * as language from './datatables.spanish.json';
 
 const slcMenus = $(".slcMenus");
 const slcSubmenu = $(".slcSubmenu");
 const inputol = $("#rol");
 const inputrolId = $("#rolId");
+const hdnAssignSubmenuToRol = $("#reg input[type='hidden'][name='_token']");
+const assignSubmenuToken = hdnAssignSubmenuToRol.val();
 
 
 const getServices = function () {
@@ -24,31 +26,27 @@ const getServices = function () {
     })
 }
 
+const myModal = document.getElementById('asignarMenu');
+myModal.addEventListener('shown.bs.modal', () => {
+    hdnAssignSubmenuToRol.val(assignSubmenuToken);
+});
 
-
-
-
-
-$(document).on('show.bs.modal','#asignarMenu', function () {
-   // $("#asignarMenu").html("");
-//    slcMenus.val('');
-//    slcSubmenu.val('');
+$(document).on('show.bs.modal', '#asignarMenu', function () {
+    // $("#asignarMenu").html("");
+    //    slcMenus.val('');
+    //    slcSubmenu.val('');
 
     var triggerLink = $(e.relatedTarget);
     var id = triggerLink.data("id");
     var fieldname = triggerLink.data("fieldname");
-    $(this).find(".modal-body").html("<h5>id: "+id+"</h5>");
+    $(this).find(".modal-body").html("<h5>id: " + id + "</h5>");
+
 });
-
-
-
-
 
 
 $(".slcMenus").on('change', function (e) {
 
     const Id = e.target.value;
-    
     $.ajax({
         url: `get-submenu-by-menu/${Id}`,
         type: 'get',
@@ -59,7 +57,7 @@ $(".slcMenus").on('change', function (e) {
 
             const option = new Option('Seleccione un submenu', '');
             slcSubmenu.append(option);
-            
+
             submenu.forEach(submenu => {
                 const option = new Option(submenu.name, submenu.id);
                 slcSubmenu.append(option);
@@ -102,85 +100,85 @@ $(document).ready(function () {
 
                 data: employees,
 
-                "initComplete": function(settings, json) {
-                             
+                "initComplete": function (settings, json) {
+
                     applyStyle('<button type="button" class="btn btn-primary "  data-bs-toggle="modal" data-bs-target="#exampleModal">+ Nuevo rol</button>')
-        
-
-            $('.commonClass').bind('click', function(e) {
-
-                $(".modal-body input").val("")
-                $(".modal-body select").val(null).trigger('change');              
-
-                e.preventDefault();
-
-                
-                var value = this.value.split('-');
-                    inputol.val(value[1]);
-
-                    inputrolId.val(value[0]);
-                     
-
-});
-
-$('.btn-sm').bind('click', function(e) {
-    e.preventDefault();
-    var Id= this.href.substring(this.href.lastIndexOf('/') + 1); 
-
-    Swal.fire({
-        title: '¿Está seguro que desea proceder con la acción?',
-        // text: "Un usuario desactivado no podra acceder al sistema.",
-        icon: 'warning',
-        showCancelButton: true,
-        cancelButtonText: "Cancelar",
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si'
-      }).then((result) => {
-        if (result.isConfirmed) {
-        $.ajax({
-            url:  `update-role/${Id}`,
-            type: 'get',
-           // data: {slcServices:slcServices.val(),EmpId:inputEmpId.val()},
-            dataType: 'json',
-            success: function (data) {
-
-              //  location.reload(); 
-                if(data.type=='success') 
-                Swal.fire({
-                    title: data.message,
-                    icon:  data.type
-
-                }).then((result) => {    location.reload();     }) ;
-                   else
-                   Swal.fire({
-                    title:  'Cambios no aplicados',
-                    text: data.message,
-                    icon:  'error'
-                }).then((result) => {    location.reload();     }) ;
-            }
-        })
-    }
-})    
-
-});
 
 
-        
+                    $('.commonClass').bind('click', function (e) {
+
+                        $(".modal-body input").val("")
+                        $(".modal-body select").val(null).trigger('change');
+
+                        e.preventDefault();
+
+
+                        var value = this.value.split('-');
+                        inputol.val(value[1]);
+
+                        inputrolId.val(value[0]);
+
+
+                    });
+
+                    $('.btn-sm').bind('click', function (e) {
+                        e.preventDefault();
+                        var Id = this.href.substring(this.href.lastIndexOf('/') + 1);
+
+                        Swal.fire({
+                            title: '¿Está seguro que desea proceder con la acción?',
+                            // text: "Un usuario desactivado no podra acceder al sistema.",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            cancelButtonText: "Cancelar",
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Si'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $.ajax({
+                                    url: `update-role/${Id}`,
+                                    type: 'get',
+                                    // data: {slcServices:slcServices.val(),EmpId:inputEmpId.val()},
+                                    dataType: 'json',
+                                    success: function (data) {
+
+                                        //  location.reload(); 
+                                        if (data.type == 'success')
+                                            Swal.fire({
+                                                title: data.message,
+                                                icon: data.type
+
+                                            }).then((result) => { location.reload(); });
+                                        else
+                                            Swal.fire({
+                                                title: 'Cambios no aplicados',
+                                                text: data.message,
+                                                icon: 'error'
+                                            }).then((result) => { location.reload(); });
+                                    }
+                                })
+                            }
+                        })
+
+                    });
+
+
+
                 },
 
 
                 columns: [
-                    
+
                     { data: 'id', title: 'id' },
-                    { data: 'name', title: 'nombre' },      
-                    { data: 'description', title: 'descripcion' },  
-                    { data: 'submenus', title: 'Submenus asignados' },        
-                    { 
-                        title:'Estado' ,
-                        data: 'active', 
-                        render: function(data,type,row) { if(data==0) return "Inactiva"; else return "Activa"; }
-                    },  
+                    { data: 'name', title: 'nombre' },
+                    { data: 'description', title: 'descripcion' },
+                    { data: 'submenus', title: 'Submenus asignados' },
+                    {
+                        title: 'Estado',
+                        data: 'active',
+                        render: function (data, type, row) { if (data == 0) return "Inactiva"; else return "Activa"; }
+                    },
                     {
                         title: 'Accion 1',
                         data: 'id',
@@ -189,20 +187,21 @@ $('.btn-sm').bind('click', function(e) {
                     {
                         title: 'Accion 2',
                         data: 'id',
-                        render: function(data,type,row) {
-                          
-                            return '<button type="button"  class="btn btn-primary commonClass" value='+data+"-"+row.name+' id="asigMenu" data-bs-toggle="modal" data-bs-target="#asignarMenu">Asignar menu</button>'; }
+                        render: function (data, type, row) {
+
+                            return '<button type="button"  class="btn btn-primary commonClass" value=' + data + "-" + row.name + ' id="asigMenu" data-bs-toggle="modal" data-bs-target="#asignarMenu">Asignar menu</button>';
+                        }
 
                         //render: (data, type, row) => '<button type="button" class="btn btn-primary asigMenu" value='+data+"-"+row.name+' id="asigMenu'+data+'" data-bs-toggle="modal" data-bs-target="#asignarMenu">Asignar menu</button>'
                     },
-                 
+
                 ],
-                dom:"<'row justify-content-end'<'col-3'f><'col-12't><'col-12'<'row justify-content-center'<'col-3'p>>>>",
+                dom: "<'row justify-content-end'<'col-3'f><'col-12't><'col-12'<'row justify-content-center'<'col-3'p>>>>",
                 language
             });
         });
 
-        
+
 });
 
 
