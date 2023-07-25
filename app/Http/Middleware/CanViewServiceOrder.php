@@ -10,7 +10,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CanViewServiceOrder
 {
-    public function __construct(protected EmployeeRepository $employeeRepository) {}
+    public function __construct(protected EmployeeRepository $employeeRepository)
+    {
+    }
 
     /**
      * Handle an incoming request.
@@ -22,7 +24,9 @@ class CanViewServiceOrder
         $userId = auth()->id();
         $employee = $this->employeeRepository->employeeByUserId($userId);
 
-        if (!($employee['system_role'] == SystemRoles::MaintenanceManager || $employee['system_role'] == SystemRoles::MaintenanceSupervisor)) {
+        if (!($employee['system_role'] == SystemRoles::MaintenanceManager
+            || $employee['system_role'] == SystemRoles::MaintenanceSupervisor
+            || $employee['system_role'] == SystemRoles::MaintenanceTechnician)) {
             abort(403, 'Acceso denegado');
         }
 
