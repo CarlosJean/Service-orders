@@ -45,8 +45,9 @@ class ServiceOrdersController extends Controller
         $employee = $this->employeeRepository
             ->employeeByUserId(auth()->id());
 
-        $canCreateNewOrder = ($employee['system_role'] == SystemRoles::DepartmentSupervisor
-            || $employee['system_role'] == SystemRoles::DepartmentManager);
+        $canCreateNewOrder = (!($employee['system_role'] == SystemRoles::MaintenanceSupervisor
+            || $employee['system_role'] == SystemRoles::MaintenanceManager
+            || $employee['system_role'] == SystemRoles::MaintenanceTechnician));
 
         return view('orders.index')->with('canCreateNewOrder', $canCreateNewOrder);
     }
@@ -60,8 +61,9 @@ class ServiceOrdersController extends Controller
         $orderNumber = $this->ordersRepository->orderNumber();
 
         $employee = $this->employeeRepository->employeeByUserId($userId);
-        $isDepartmentSupervisor = ($employee['system_role'] == SystemRoles::DepartmentSupervisor
-            || $employee['system_role'] == SystemRoles::DepartmentManager);
+
+        $isDepartmentSupervisor = (!($employee['system_role'] == SystemRoles::MaintenanceSupervisor
+            || $employee['system_role'] == SystemRoles::MaintenanceManager || $employee['system_role'] == SystemRoles::MaintenanceTechnician));
 
         return view('orders.create', [
             'orderNumber' => $orderNumber,
@@ -96,7 +98,7 @@ class ServiceOrdersController extends Controller
                 $serviceOrders['data'][$index]->status = strtoupper($serviceOrder->status);
             }
         }
-        
+
         return $serviceOrders;
     }
 

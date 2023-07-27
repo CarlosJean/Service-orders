@@ -81,18 +81,17 @@ class OrdersRepository
         try {
             $employee = $this->employeeRepository->employeeByUserId($userId);
 
-            $isDepartmentSupervisor = ($employee['system_role'] == SystemRoles::DepartmentSupervisor || $employee['system_role'] == SystemRoles::DepartmentManager);
             $isMaintenanceDepartmentSupervisor = ($employee['system_role'] == SystemRoles::MaintenanceSupervisor);
             $isMaintenanceDepartmentManager = ($employee['system_role'] == SystemRoles::MaintenanceManager);
             $isMaintenanceTechnician = ($employee['system_role'] == SystemRoles::MaintenanceTechnician);
 
             $orders = [];
-            if ($isDepartmentSupervisor) {
-                $orders = $this->departmentSupervisorOrders($userId);
-            } else if ($isMaintenanceDepartmentSupervisor || $isMaintenanceDepartmentManager) {
+            if ($isMaintenanceDepartmentSupervisor || $isMaintenanceDepartmentManager) {
                 $orders = $this->maintenanceSupervisorOrders($isMaintenanceDepartmentManager);
             } elseif ($isMaintenanceTechnician) {
                 $orders = $this->maintenanceTechnicianOrders();
+            } else {
+                $orders = $this->departmentSupervisorOrders($userId);
             }
 
             return $orders;

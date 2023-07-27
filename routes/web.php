@@ -141,7 +141,7 @@ Route::get('update-deparment/{id?}', [DepartmentsController::class, 'update']);
 
 Route::prefix('ordenes-servicio')->group(function () {
     Route::get('/', [ServiceOrdersController::class, 'index'])
-        ->middleware([Authenticate::class, CanViewServiceOrders::class]);
+        ->middleware([Authenticate::class, HasPermissionToSubmenu::class]);
     Route::get('crear', [ServiceOrdersController::class, 'create'])
         ->middleware([Authenticate::class, CanCreateServiceOrders::class]);
     Route::get('getOrders', [ServiceOrdersController::class, 'getOrders']);
