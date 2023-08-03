@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\EmptyListException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PurchaseOrderRequest;
 use App\Repositories\PurchaseOrderRepository;
@@ -52,6 +53,8 @@ class PurchaseOrderController extends Controller
                 ->storePurchaseOrder($quoteNumber, $purchaseOrderNumber, $details);
 
             return view('purchase_orders.created')->with('purchaseOrderNumber', $purchaseOrderNumber);
+        } catch (EmptyListException $ex) {
+            return back()->withErrors($ex->getMessage());
         } catch (\Throwable $th) {
             var_dump($th);
             //throw $th;

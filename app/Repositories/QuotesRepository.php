@@ -127,9 +127,9 @@ class QuotesRepository
     {
 
         $quotes = DB::table('quotes')
-            ->join('orders', 'quotes.order_id', '=', 'orders.id')
-            ->join('users', 'orders.requestor', '=', 'users.id')
-            ->join('employees', 'users.id', '=', 'employees.user_id')
+            ->leftJoin('orders', 'quotes.order_id', '=', 'orders.id')
+            ->leftJoin('users', 'orders.requestor', '=', 'users.id')
+            ->leftJoin('employees', 'users.id', '=', 'employees.user_id')
             ->where('retrieved', '=', false)
             ->select(
                 'quotes.id',

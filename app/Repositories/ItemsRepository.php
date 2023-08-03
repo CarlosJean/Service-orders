@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Enums\InventoryType;
+use App\Exceptions\EmptyListException;
 use App\Exceptions\NotFoundModelException;
 use App\Models\Employee;
 use App\Models\Item;
@@ -121,6 +122,10 @@ class ItemsRepository
     public function dispatch($itemsId)
     {
         try {
+
+            if ($itemsId == null) {
+                throw new EmptyListException('Debe seleccionar los materiales correspondientes a la solicitud.');
+            }
 
             $orderItem = OrderItemsDetail::find($itemsId[0])
                 ->orderItem;

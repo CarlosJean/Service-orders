@@ -20,7 +20,7 @@ class MaterialsManagementRepository
 
     private function warehousemanPendings(){
         $pendings = DB::table('orders')
-            ->leftJoin('order_items', 'orders.id', '=', 'order_items.service_order_id')
+            ->join('order_items', 'orders.id', '=', 'order_items.service_order_id')
             ->leftJoin('quotes', 'orders.id', '=', 'quotes.order_id')
             ->leftJoin('users as order_items_users', 'order_items.requestor', '=', 'order_items_users.id')
             ->leftJoin('employees as order_items_employees', 'order_items_users.id', '=', 'order_items_employees.user_id')

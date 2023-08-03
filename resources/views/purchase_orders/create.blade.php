@@ -12,6 +12,15 @@
 <div class="row">
     <hr class="mt-3">
     <div class="col-12">
+
+        @if(count($errors) > 0)
+        <div class="alert alert-danger" role="alert">
+            @foreach ($errors->all() as $error)
+            <p>{{ $error }}</p>
+            @endforeach
+        </div>
+        @endif
+
         <form class="form-inline" method="get" action="./obtener-cotizacion" id="frmGetQuoteByNumber">
             @csrf
             <div class="row align-items-end">

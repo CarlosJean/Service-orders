@@ -1,9 +1,9 @@
-import * as language from './datatables.spanish.json' ;
+import * as language from './datatables.spanish.json';
 
 var table = {};
 var url = `../cotizaciones/obtener-por-numero`;
 
-$(function(){
+$(function () {
     const quoteNumber = $("#txtQuoteNumber").val();
 
     if (quoteNumber != '') {
@@ -20,7 +20,7 @@ $("#frmGetQuoteByNumber").on('submit', function (e) {
     $.ajax({
         url,
         type: 'post',
-        data:{quoteNumber},
+        data: { quoteNumber },
         dataType: 'json',
         success: function (quote) {
             if (quote == null) {
@@ -59,7 +59,7 @@ $("#frmGetQuoteByNumber").on('submit', function (e) {
                         { title: 'Cantidad', data: 'quantity' },
                         { title: 'Precio', data: 'price' },
                     ],
-                    dom:'ft',
+                    dom: 'ft',
                     language,
                     destroy: true,
                 });
@@ -89,6 +89,5 @@ $("#btnSave").on('click', function () {
         <input type="hidden" name="items[${index}][quantity]" value="${row.quantity}" />
         <input type="hidden" name="items[${index}][price]" value="${row.price}" />
         `);
-
     }
 })

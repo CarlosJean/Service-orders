@@ -5,6 +5,15 @@
 
 @section('orderContent')
 <hr>
+
+@if(count($errors) > 0)
+<div class="alert alert-danger" role="alert">
+  @foreach ($errors->all() as $error)
+  <p>{{ $error }}</p>
+  @endforeach
+</div>
+@endif
+
 <form class="row align-items-end">
   <div class="form-group col-md-4 mr-md-0">
     <label for="txtServiceOrder" class="mr-3">Número de orden de servicio</label>
@@ -19,16 +28,16 @@
 <section id="items" class="d-none">
   <hr />
   <h3>Materiales</h3>
-  
+
   <div class="table-responsive">
     <table id="tblItems" class="table table-striped"></table>
   </div>
-  
+
   <form action="{{route('dispatchItems')}}" method="post" id="frmDispatchItems">
     @csrf
     <input type="hidden" name="items">
   </form>
-  
+
   <div class="row p-1 justify-content-end">
     <div class="col-md-3">
       <button class="btn btn-primary w-100" id="btnDispatch">Despachar</button:button>

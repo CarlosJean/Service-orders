@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Enums\InventoryType;
+use App\Exceptions\EmptyListException;
 use App\Exceptions\NotFoundModelException;
 use App\Models\detail;
 use App\Models\Item;
@@ -49,6 +50,10 @@ class PurchaseOrderRepository
                 return new Exception('No se encontró una cotización con el número ' . $quoteNumber);
             }
 
+            if ($details == null) {
+                throw new EmptyListException('Debe seleccionar los artículos a los cuales desea darle entrada en inventario.');
+            }
+
             $purchaseOrder = new PurchaseOrder([
                 'user_id' => auth()->id(),
                 'quote_id' => $quote->id,
@@ -63,7 +68,7 @@ class PurchaseOrderRepository
                 ->user_id;
 
             $orderItem = $quote->orderItem;
-            if ($orderItem == null) {
+            if ($orderItem == null && $quote->order != null) {
                 $orderItem = new OrderItem([
                     'service_order_id' => $quote->order_id,
                     'requestor' => $maintenanceSupervisor,
@@ -72,6 +77,7 @@ class PurchaseOrderRepository
 
                 $orderItem->save();
             }
+
 
             foreach ($details as $detail) {
 

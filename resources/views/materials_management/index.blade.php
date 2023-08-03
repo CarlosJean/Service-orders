@@ -5,6 +5,7 @@
 ])
 
 @section('screenName','Solicitudes materiales')
+@section('title', 'Solicitudes materiales')
 
 @extends('layouts.app')
 

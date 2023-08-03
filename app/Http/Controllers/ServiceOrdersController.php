@@ -81,7 +81,6 @@ class ServiceOrdersController extends Controller
 
             return view('orders.created')->with('orderNumber', $orderNumber);
         } catch (\Throwable $th) {
-
             if ($th->getCode() == 1) {
                 return back()->withErrors(['error' => $th->getMessage()]);
             }
