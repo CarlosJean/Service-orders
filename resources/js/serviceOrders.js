@@ -64,17 +64,21 @@ const columnsByUserRole = function (userRole) {
                 data: null,
                 render: (data) => {
 
-                    const requestedItems = data.items_requested
-                    const orderNumber = data.order_number
-                    const technician = data.technician
-                    const status = data.status
-                    const orderItemsStatus = data.order_items_status
+                    const requestedItems = data.items_requested;
+                    const orderNumber = data.order_number;
+                    const technician = data.technician;
+                    const status = data.status;
+                    const orderItemsStatus = data.order_items_status;
 
                     return `
                         <div class="row mx-1 justify-content-around">
-                            ${(status == 'pendiente de asignar tecnico' || technician == null)
-                            ? `<a href='ordenes-servicio/${orderNumber}' class='btn btn-primary'>Aprobar/Desaprobar</a>`
-                            : ``}
+                            ${(function () {
+                            if (status.toLowerCase() == 'desaprobado')
+                                return `<a href='ordenes-servicio/${orderNumber}' class='btn btn-primary'>Detalles</a>`
+                            else if (status.toLowerCase() == 'pendiente de asignar tecnico' || technician == null)
+                                return `<a href='ordenes-servicio/${orderNumber}' class='btn btn-primary'>Aprobar/Desaprobar</a>`
+                            else return ``
+                        })()}
 
                             ${(technician != null) ? `<a href='ordenes-servicio/${orderNumber}/gestion-materiales' class='btn btn-primary mt-2 mt-md-0'>Gestión de materiales</a>` : ``}
                             
