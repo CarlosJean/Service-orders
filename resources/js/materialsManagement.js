@@ -11,6 +11,7 @@ const validationRules = {
         quantity: {
             required: true,
             min: 1,
+            number:true,
         },
     },
     messages: {
@@ -19,12 +20,13 @@ const validationRules = {
             required: 'Debe indicar la cantidad antes de agregarlo al listado',
             min: 'La cantidad mínima es 1',
             max: 'No debe exceder la cantidad máxima',
+            number: 'El valor ingresado debe ser un número'
         },
     },
     errorClass: 'text-danger'
 };
 
-const validator = {};
+var validator = {};
 
 $(function () {
     loadItems();

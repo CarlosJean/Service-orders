@@ -16,6 +16,11 @@
                 <p>Se desaprobó la solicitud de materiales de la orden número <strong>{{$serviceOrderNumber}}</strong>.</p>
                 @endif
             </div>
+            <div class="col-12">
+                <div class="row justify-content-end">
+                    <a class="btn btn-primary col-md-4" href="{{url('/ordenes-servicio')}}">Ver todas las ordenes</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>

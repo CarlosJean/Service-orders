@@ -16,7 +16,9 @@ use App\Notifications\ServiceOrderItemsRequestApproved;
 use App\Notifications\TechnicianAssigned;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
+use Symfony\Component\Mailer\Exception\TransportException;
 
 class OrdersRepository
 {
@@ -31,19 +33,17 @@ class OrdersRepository
 
     public function orderNumber()
     {
-        //!TODO: Determinar si el número de orden está repetido.
-
         return $this->generateOrderNumber();
     }
 
     private function generateOrderNumber()
     {
-        $minOrderNumber = 000000;
-        $maxOrderNumber = 999999;
+        $number = Order::max('number') ?? 0;
+        $number = (int)$number + 1;
 
-        return rand($minOrderNumber, $maxOrderNumber);
+        return str_pad($number, 6, "0", STR_PAD_LEFT);
     }
-
+    
     public function createOrder($issue, $orderNumber)
     {
         try {
@@ -71,6 +71,8 @@ class OrdersRepository
             foreach ($maintenanceSupervisors as $employee) {
                 $employee->user->notify(new ServiceOrderCreated($requestor, $orderNumber));
             }
+        } catch (TransportException $ex) {
+            Log::warning($ex);
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -134,6 +136,8 @@ class OrdersRepository
                 ->join('users', 'orders.requestor', '=', 'users.id')
                 ->join('employees as e', 'users.id', '=', 'e.user_id')
                 ->join('departments as d', 'e.department_id', '=', 'd.id')
+                ->leftJoin('users as techinican_users', 'orders.technician', 'techinican_users.id')
+                ->leftJoin('employees as techinicans', 'techinican_users.id', 'techinicans.user_id')
                 ->select(
                     'orders.id',
                     DB::raw('concat(e.names," ",e.last_names) requestor'),
@@ -147,6 +151,7 @@ class OrdersRepository
                     'orders.diagnosis',
                     'orders.start_date',
                     DB::raw('d.name department'),
+                    DB::raw('concat(techinicans.names," ",techinicans.last_names) technician_fullname'),
                 )
                 ->where('number', $orderNumber)
                 ->first();

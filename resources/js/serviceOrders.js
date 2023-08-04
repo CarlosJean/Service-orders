@@ -73,14 +73,14 @@ const columnsByUserRole = function (userRole) {
                     return `
                         <div class="row mx-1 justify-content-around">
                             ${(function () {
-                            if (status.toLowerCase() == 'desaprobado')
+                            if (status.toLowerCase() == 'desaprobado' || technician != null)
                                 return `<a href='ordenes-servicio/${orderNumber}' class='btn btn-primary'>Detalles</a>`
                             else if (status.toLowerCase() == 'pendiente de asignar tecnico' || technician == null)
                                 return `<a href='ordenes-servicio/${orderNumber}' class='btn btn-primary'>Aprobar/Desaprobar</a>`
                             else return ``
                         })()}
 
-                            ${(technician != null) ? `<a href='ordenes-servicio/${orderNumber}/gestion-materiales' class='btn btn-primary mt-2 mt-md-0'>Gestión de materiales</a>` : ``}
+                            ${(technician != null && !requestedItems) ? `<a href='ordenes-servicio/${orderNumber}/gestion-materiales' class='btn btn-primary mt-2 mt-md-0'>Gestión de materiales</a>` : ``}
                             
                             ${(requestedItems
                             && userRole == 'maintenanceManager'

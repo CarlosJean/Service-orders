@@ -12,5 +12,7 @@
 @include('partials.orders.assign_technician')
 @elseIf($userRole == 'technician')
 @include('partials.orders.technician_order', ['order' => $order])
+@else
+@include('partials.orders.department_supervisor_order', ['order' => $order])
 @endif
 @endsection

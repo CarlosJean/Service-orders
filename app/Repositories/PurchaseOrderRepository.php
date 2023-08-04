@@ -34,12 +34,10 @@ class PurchaseOrderRepository
 
     public function purchaseOrderNumber()
     {
-        $number = rand(111111, 999999);
-        $isUsed =  Quote::where('number', $number)->first();
-        if ($isUsed) {
-            return $this->purchaseOrderNumber();
-        }
-        return $number;
+        $number = PurchaseOrder::max('number') ?? 0;
+        $number = (int)$number + 1;
+
+        return str_pad($number, 6, "0", STR_PAD_LEFT);
     }
 
     public function storePurchaseOrder($quoteNumber, $purchaseOrderNumber, $details)

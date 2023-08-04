@@ -24,9 +24,7 @@ class CanViewServiceOrder
         $userId = auth()->id();
         $employee = $this->employeeRepository->employeeByUserId($userId);
 
-        if (!($employee['system_role'] == SystemRoles::MaintenanceManager
-            || $employee['system_role'] == SystemRoles::MaintenanceSupervisor
-            || $employee['system_role'] == SystemRoles::MaintenanceTechnician)) {
+        if ($employee['system_role'] == SystemRoles::Warehouseman) {
             abort(403, 'Acceso denegado');
         }
 

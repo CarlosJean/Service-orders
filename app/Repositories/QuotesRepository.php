@@ -22,12 +22,10 @@ class QuotesRepository
 
     private function newQuoteNumber()
     {
-        $number = rand(111111, 999999);
-        $isUsed =  Quote::where('number', $number)->first();
-        if ($isUsed) {
-            return $this->newQuoteNumber();
-        }
-        return $number;
+        $number = Quote::max('number') ?? 0;
+        $number = (int)$number + 1;
+
+        return str_pad($number, 6, "0", STR_PAD_LEFT);
     }
 
     public function storeQuote($quoteNumber, $orderNumber, $quoteDetail)
