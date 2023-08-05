@@ -59,7 +59,7 @@ $("#frmGetQuoteByNumber").on('submit', function (e) {
                         { title: 'Cantidad', data: 'quantity' },
                         { title: 'Precio', data: 'price' },
                     ],
-                    dom: 'ft',
+                    dom: 'ftp',
                     language,
                     destroy: true,
                 });

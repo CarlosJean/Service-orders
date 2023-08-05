@@ -38,7 +38,7 @@ const activeQuotes = function () {
                 render: (purchaseOrderNumber) => "<a href='ordenes-compra/" + purchaseOrderNumber + "' class='btn btn-primary'>Detalles</a>"
             },
         ],
-        dom: "<'row justify-content-end' <'col-sm-12 col-lg-5' f> <'#newQuoteButton.col-sm-12 col-lg-3 px-1 px-md-3'> >",
+        dom: "<'row justify-content-end' <'col-sm-12 col-lg-5' f> <'#newQuoteButton.col-sm-12 col-lg-3 px-1 px-md-3'>  <'row justify-content-center' <'col-sm-12 col-lg-4' p>>>",
         destroy: true,
         language,
     });

@@ -18,8 +18,8 @@ const appendNewServiceOrderButton = function () {
 const loadServiceOrders = function () {
 
     const dom = (canCreateNewOrder)
-        ? "<'row justify-content-end' <'col-sm-12 col-lg-4' f> <'#newServiceOrderButton.col-sm-12 col-lg-2 px-1 px-md-2'> >"
-        : "f";
+        ? "<'row justify-content-end' <'col-sm-12 col-lg-4' f> <'#newServiceOrderButton.col-sm-12 col-lg-2 px-1 px-md-2'> <'col-12' t> <'row justify-content-center' <'col-12 col-lg-4' p>>>"
+        : "<'row' ft> <'row justify-content-center' <'col-md-4'p>>";
 
     $.ajax({
         url: 'ordenes-servicio/getOrders',
@@ -32,7 +32,7 @@ const loadServiceOrders = function () {
                 columns: columnsByUserRole(orders.user_role),
                 dom,
                 language,
-                responsive: true
+                responsive: true,
             });
 
             if (canCreateNewOrder) {
@@ -51,10 +51,19 @@ const columnsByUserRole = function (userRole) {
             { data: 'created_at', title: 'Fecha y hora de creación' },
             { data: 'status', title: 'Estado' },
             { data: 'technician', title: 'Técnico asignado' },
+            {
+                data: 'order_number',
+                render: (orderNumber) => `
+                    <div class="row mx-1">
+                        <a href='ordenes-servicio/${orderNumber}' class='btn btn-primary'>Detalles</a>
+                    </div>
+                `,
+                title: 'Acción'
+            },
         ]
     } else if (userRole == 'maintenanceSupervisor' || userRole == 'maintenanceManager') {
         return [
-            { data: 'id', title: 'Id' },
+            { data: 'id', title: 'Id', visible: false },
             { data: 'order_number', title: 'Número de orden' },
             { data: 'created_at', title: 'Fecha y hora de creación' },
             { data: 'requestor', title: 'Solicitante' },
@@ -80,7 +89,7 @@ const columnsByUserRole = function (userRole) {
                             else return ``
                         })()}
 
-                            ${(technician != null && !requestedItems) ? `<a href='ordenes-servicio/${orderNumber}/gestion-materiales' class='btn btn-primary mt-2 mt-md-0'>Gestión de materiales</a>` : ``}
+                            ${(technician != null && !requestedItems) ? `<a href='ordenes-servicio/${orderNumber}/gestion-materiales' class='btn btn-primary mt-2 mt-md-1'>Gestión de materiales</a>` : ``}
                             
                             ${(requestedItems
                             && userRole == 'maintenanceManager'
@@ -97,7 +106,7 @@ const columnsByUserRole = function (userRole) {
         ]
     } else if (userRole == 'maintenanceTechnician') {
         return [
-            { data: 'id', title: 'Id' },
+            { data: 'id', title: 'Id', visible: false },
             { data: 'order_number', title: 'Número de orden' },
             { data: 'created_at', title: 'Fecha y hora de creación' },
             { data: 'requestor', title: 'Solicitante' },
