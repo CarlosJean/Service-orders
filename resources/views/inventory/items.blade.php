@@ -108,8 +108,7 @@
           <div class="col-6">
             <label for="">Categoria</label>
             <div class="form-group">
-            <select class="form-control slc" name="categoria" style="width: 100%; height: 100%" required>
-                     
+            <select class="form-control slc" name="categoria" style="background-color:  #ced4da;width: 100%; height: 100%; font-weight: normal" required>
             </select>
             </div>
             </div>

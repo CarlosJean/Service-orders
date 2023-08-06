@@ -4,11 +4,18 @@ const slc = $(".slc");
 
 
 const getCategories= function () {
+
+
     $.ajax({
         url: "get-categories",
         type: 'get',
         dataType: 'json',
         success: function (data) {
+
+            slc.empty();
+
+            slc.append(new Option('Selecione la categoria', null))
+
 
             data.forEach(data => {
                 const option = new Option(data.name, data.id);
@@ -27,7 +34,6 @@ $(document).ready(function () {
 
     slc.select2({
         dropdownParent: $('#exampleModal')
-       // ,placeholder: 'Seleccione un Menu'
     });
 
     getCategories();
@@ -120,6 +126,7 @@ $(document).ready(function () {
                 columns: [
                     { data: 'id', title: 'Id' },
                     { data: 'name', title: 'Nombre' },        
+                    { data: 'description', title: 'Descripcion' },        
                     { data: 'quantity', title: 'Cantidad' },        
                     { data: 'measurement_unit', title: 'Medida' },        
                     { data: 'price', title: 'Precio' },        

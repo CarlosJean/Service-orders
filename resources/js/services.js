@@ -68,7 +68,8 @@ $(document).ready(function () {
 
                 columns: [
                     { data: 'id', title: 'Id' },
-                    { data: 'name', title: 'Descripcion' },        
+                    { data: 'name', title: 'Nombre' },        
+                    { data: 'description', title: 'Descripcion' },        
                     { 
                         title:'Estado' ,
                         data: 'active', 
