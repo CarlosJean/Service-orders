@@ -6,7 +6,7 @@
     </div>
     <div class="col-12 p-md-0 mt-1 mt-md-3">
         <div class="row justify-content-center">
-            <a class="btn btn-secondary col-3" href="http://localhost/service-orders/public/ordenes-servicio">Volver</a>
+            <a class="btn btn-secondary col-3" href="{{URL::previous()}}">Volver</a>
         </div>
     </div>
 </div>
