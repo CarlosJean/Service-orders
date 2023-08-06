@@ -109,4 +109,15 @@ class ItemsController extends Controller
             //throw $th;
         }
     }
+
+    public function getItem($itemId)
+    {
+        try {
+            $item = $this->itemsRepository->item($itemId);
+            return $item;
+        } catch (\Throwable $th) {
+            var_dump($th);
+            //throw $th;
+        }
+    }
 }

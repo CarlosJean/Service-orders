@@ -5,13 +5,13 @@ const tblOrderItems = $("#tbl_order_items");
 const frmAddItem = $("#frmAddItem");
 const validationRules = {
     rules: {
-        item:{
+        item: {
             required: true
         },
         quantity: {
             required: true,
             min: 1,
-            number:true,
+            number: true,
         },
     },
     messages: {
@@ -26,7 +26,7 @@ const validationRules = {
     errorClass: 'text-danger'
 };
 
-var validator = {};
+var validator = frmAddItem.validate(validationRules);;
 
 $(function () {
     loadItems();
@@ -34,7 +34,6 @@ $(function () {
         placeholder: 'Seleccione un artículo',
         dropdownParent: $('#materialsManagement'),
     });
-    validator = frmAddItem.validate(validationRules);
 })
 
 const loadItems = function () {
@@ -46,7 +45,7 @@ const loadItems = function () {
             //Limpiamos y cargamos los artículos al localstorage
             localStorage.setItem('items', JSON.stringify(items));
 
-            //Limpiamos y cargalos los artículos al select
+            //Limpiamos y cargamos los artículos al select
             slcItems.empty();
             slcItems.append(new Option('Seleccione material', ''));
             items.forEach((item) => {
@@ -57,23 +56,26 @@ const loadItems = function () {
 
 };
 
-//Consigue el artículo partir del id del artículo seleccionado.
-const itemById = function (itemId) {
-    const items = JSON.parse(localStorage.getItem('items'));
-    return items.find(item => item.id == itemId);
+//Consigue el artículo partir del id del artículo selecci onado.
+const itemById = async function (itemId) {
+    const response = await fetch(`../../articulos/${itemId}`);
+    const item = await response.json();
+
+    return item;
 }
 
-slcItems.on('change', function () {
+slcItems.on('change', async function () {
     //El id del artículo seleccionado en el select de artículos.
     const selectedItemId = $("#slc_items option:selected").val();
 
     //Se consigue la cantidad disponible del arículo seleccionado
-    const selectedItemQuantity = itemById(selectedItemId).quantity;
+    const selectedItem = await itemById(selectedItemId);
+    const selectedItemQuantity = selectedItem.quantity;
 
     //Se muestra la cantidad disponible en la tabla de la vista.
     $("#td_current_quantity").text(selectedItemQuantity);
 
-    txtQuantity.attr('max', selectedItemQuantity);  
+    txtQuantity.attr('max', selectedItemQuantity);
     $("#txt_quantity").rules('add', {
         max: selectedItemQuantity
     });
@@ -99,11 +101,11 @@ txtQuantity.on('blur', function () {
     }
 })
 
-frmAddItem.on('submit', function (e) {
-    e.preventDefault();  
+frmAddItem.on('submit', async function (e) {
+    e.preventDefault();
 
     const formValid = frmAddItem.valid();
-    if(!formValid) return;
+    if (!formValid) return;
 
     //El id del artículo seleccionado en el select de artículos.
     const selectedItemId = $("#slc_items option:selected").val();
@@ -111,13 +113,17 @@ frmAddItem.on('submit', function (e) {
     const wantedQuantity = txtQuantity.val();
 
     //Se consigue la cantidad disponible del arículo seleccionado
-    const item = itemById(selectedItemId);
+    const item = await itemById(selectedItemId);
 
     const rowNumber = $("#orderItems tr").length;
 
+    //Si el artículo ya fue añadido en el listado entonces se elimina, para que la cantidad se actualice.
+    var found = itemExistsInTheOrder(selectedItemId);
+    if (found != null) { found.remove();}
+    
     $("#orderItems").append(`
         <tr>       
-            <input type="hidden" name="items[${rowNumber}][id]" value="${item.id}"/>
+            <input type="hidden" name="items[${rowNumber}][id]" value="${item.id}" class="hdnItemId"/>
             <input type="hidden" name="items[${rowNumber}][quantity]" value="${wantedQuantity}"/>
             <td scope="row">${item.name}</td>
             <td>${item.reference}</td>
@@ -133,3 +139,22 @@ frmAddItem.on('submit', function (e) {
     //Limpia los mensajes de validación una vez el formulario ha sido enviado
     validator.resetForm();
 });
+
+const itemExistsInTheOrder = function (newItemId) {
+    const itemsAddedToOrder = $(".hdnItemId")
+    
+    var found = null;
+    itemsAddedToOrder.each(function(){
+        if ($(this).val() == newItemId) {
+            found = $(this);
+            return;
+        }        
+    });
+    
+    var row = null;
+    if (found != null) {
+        row = found.parent();
+    }
+
+    return row;
+}

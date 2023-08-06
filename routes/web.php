@@ -182,6 +182,7 @@ Route::prefix('cotizaciones')->group(function () {
 Route::prefix('articulos')->group(function () {
     Route::get('/', [ItemsController::class, 'getItems']);
     Route::get('disponibles', [ItemsController::class, 'getAvailableItems']);
+    Route::get('{itemId}', [ItemsController::class, 'getItem']);
     Route::get('despachar/{serviceOrderNumber?}', [ItemsController::class, 'createDispatchMaterials']);
     Route::post('despachar', [ItemsController::class, 'storeDispatch'])->name('dispatchItems');
 });

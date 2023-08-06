@@ -16,8 +16,8 @@
             </div>
             <div class="col-md-4">
               <div class="form-group">
-                <label for="" class="col-12">Cantidad Actual</label>
-                <label for="" id="td_current_quantity" class="text-center w-100">5</label>
+                <label class="col-12">Cantidad Actual</label>
+                <label id="td_current_quantity" class="text-center w-100"></label>
               </div>
             </div>
             <div class="col-md-4">

@@ -1,4 +1,4 @@
-import * as language from './datatables.spanish.json' ;
+import * as language from './datatables.spanish.json';
 
 const tblItems = $("#tblItems");
 var itemsTable = null;
@@ -6,7 +6,7 @@ const txtServiceOrder = $("#txtServiceOrder");
 const btnFindOrderItems = $("#btnFindOrderItems");
 var findServiceOrderItemsUrl = '../ordenes-servicio/materiales';
 
-$(function(){
+$(function () {
     $("#dvOrderNumber").addClass('d-none');
     const serviceOrderNumber = txtServiceOrder.val();
     if (serviceOrderNumber != "") {
@@ -19,16 +19,16 @@ $(function(){
 const serviceOrderItems = function (serviceOrderNumber) {
     itemsTable = tblItems.DataTable({
         ajax: {
-            url:findServiceOrderItemsUrl,
+            url: findServiceOrderItemsUrl,
             data: { service_order_number: serviceOrderNumber },
             type: 'post',
             dataType: 'json',
-            dataSrc:function(serviceOrderItems){
+            dataSrc: function (serviceOrderItems) {
                 $("#items").removeClass('d-none');
                 $("#errorMessage").add('d-none');
                 return serviceOrderItems.data;
             },
-            error:function(error){
+            error: function (error) {
                 $("#errorMessage").text(error.responseJSON.message);
                 $("#items").addClass('d-none');
                 $("#errorMessage").removeClass('d-none');
@@ -49,7 +49,6 @@ const serviceOrderItems = function (serviceOrderNumber) {
 $("#btnDispatch").on('click', function () {
     var selectedRowsData = itemsTable?.rows()?.data();
 
-    console.log(selectedRowsData);
     if (selectedRowsData == undefined) {
         Swal.fire({
             icon: 'error',
