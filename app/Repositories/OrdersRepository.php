@@ -292,14 +292,21 @@ class OrdersRepository
             $order->status = "en espera de materiales";
             $order->save();
 
-            //Notificación al gerente de mantenimiento
-            $maintenanceManager = Employee::where('department_id', 2)
-                ->where('role_id', 3)
-                ->first()
-                ->user;
-            $maintenanceSupervisorName = $requestor['names'] . ' ' . $requestor['last_names'];
-            $maintenanceManager
-                ->notify(new ServiceOrderItemRequest($maintenanceSupervisorName, $orderNumber));
+            $userId = auth()->id();
+            $employee = $this->employeeRepository->employeeByUserId($userId);
+            if($employee['system_role'] == SystemRoles::MaintenanceManager){
+                $this->approveServiceOrderItemRequest($orderNumber, true);
+            }else{
+                //Notificación al gerente de mantenimiento
+                $maintenanceManager = Employee::where('department_id', 2)
+                    ->where('role_id', 3)
+                    ->first()
+                    ->user;
+                $maintenanceSupervisorName = $requestor['names'] . ' ' . $requestor['last_names'];
+                $maintenanceManager
+                    ->notify(new ServiceOrderItemRequest($maintenanceSupervisorName, $orderNumber));
+            }
+
         } catch (\Throwable $th) {
             throw $th;
         }
