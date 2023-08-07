@@ -137,7 +137,7 @@ class OrdersRepository
                 ->join('employees as e', 'users.id', '=', 'e.user_id')
                 ->join('departments as d', 'e.department_id', '=', 'd.id')
                 ->leftJoin('users as techinican_users', 'orders.technician', 'techinican_users.id')
-                ->leftJoin('employees as techinicans', 'techinican_users.id', 'techinicans.user_id')
+                ->leftJoin('employees as technicians', 'techinican_users.id', 'technicians.user_id')
                 ->select(
                     'orders.id',
                     DB::raw('concat(e.names," ",e.last_names) requestor'),
@@ -151,7 +151,7 @@ class OrdersRepository
                     'orders.diagnosis',
                     'orders.start_date',
                     DB::raw('d.name department'),
-                    DB::raw('concat(techinicans.names," ",techinicans.last_names) technician_fullname'),
+                    DB::raw('concat(technicians.names," ",technicians.last_names) technician_fullname'),
                 )
                 ->where('number', $orderNumber)
                 ->first();

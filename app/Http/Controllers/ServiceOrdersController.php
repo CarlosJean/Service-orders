@@ -225,7 +225,7 @@ class ServiceOrdersController extends Controller
 
         $order = json_encode([
             'requestor' => $order->detail->requestor,
-            'technician' => $order->detail->technician,
+            'technician' => $order->detail->technician_fullname,
         ]);
 
         return $order;
