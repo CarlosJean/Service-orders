@@ -17,6 +17,11 @@ const getServices = function () {
         dataType: 'json',
         success: function (menu) {
 
+            slcMenus.empty();
+
+            const option = new Option('Seleccione un menu', '');
+            slcMenus.append(option);
+
             menu.forEach(menu => {
                 const option = new Option(menu.name, menu.id);
                 slcMenus.append(option);
@@ -78,7 +83,7 @@ $(document).ready(function () {
 
     slcMenus.select2({
         dropdownParent: $('#asignarMenu'),
-        placeholder: 'Seleccione un Menu'
+        // placeholder: 'Seleccione un Menu'
     });
 
     slcSubmenu.select2({

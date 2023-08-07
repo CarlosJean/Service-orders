@@ -10,6 +10,11 @@ const getCategories = function () {
         dataType: 'json',
         success: function (data) {
 
+            slc.empty();
+
+            slc.append(new Option('Selecione la categoria', null))
+
+
             data.forEach(data => {
                 const option = new Option(data.name, data.id);
                 slc.append(option);
@@ -109,12 +114,13 @@ $(document).ready(function () {
                 data: employees,
                 columns: [
                     { data: 'id', title: 'Id' },
-                    { data: 'name', title: 'Nombre' },
-                    { data: 'quantity', title: 'Cantidad' },
-                    { data: 'measurement_unit', title: 'Medida' },
-                    { data: 'price', title: 'Precio' },
-                    { data: 'reference', title: 'Referencia' },
-                    { data: 'category', title: 'Categoria' },
+                    { data: 'name', title: 'Nombre' },        
+                    { data: 'description', title: 'Descripcion' },        
+                    { data: 'quantity', title: 'Cantidad' },        
+                    { data: 'measurement_unit', title: 'Medida' },        
+                    { data: 'price', title: 'Precio' },        
+                    { data: 'reference', title: 'Referencia' },   
+                    { data: 'category', title: 'Categoria' },   
 
                     {
                         title: 'Estado',

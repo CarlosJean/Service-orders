@@ -39,7 +39,6 @@
         <div class="row" style="margin-top:5px">        
         <div class="col-12">
         <select name="slcMenus" id="slcMenus" class="form-select slcMenus" style="width: 100%" required>
-          <option value="">Seleccione un menu</option>
        </select>
         </div>
         </div>
