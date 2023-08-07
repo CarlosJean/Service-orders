@@ -99,10 +99,9 @@ class PurchaseOrderRepository
                     $item = Item::find($detail['item_id']);
                     $item->price = $detail['price'];
                     $item->quantity += $detail['quantity'];
-                    $item->description += $detail['reference'];
+                    $item->reference = $detail['reference'];
                 }
 
-                $item->quantity = $detail['quantity'];
                 $item->save();
 
                 $purchaseOrderDetail = new PurchaseOrderDetail([
@@ -183,7 +182,7 @@ class PurchaseOrderRepository
         $purchaseOrder['totals']['quantity'] = $purchaseOrder['detail']->sum('quantity');
         $purchaseOrder['totals']['price'] = $purchaseOrder['detail']->sum('price');
 
-       return $purchaseOrder;
+        return $purchaseOrder;
     }
 
     public function getPurchaseOrders()
