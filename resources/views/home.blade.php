@@ -29,7 +29,7 @@
                     </strong>
                 </div>
 
-                <div class="card-body">
+                <div class="card-body overflow-auto">
                     @include('dashboards.approved_service_orders')
                 </div>
             </div>
