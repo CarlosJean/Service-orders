@@ -91,9 +91,9 @@ class PurchaseOrderRepository
                         'name' => $detail['item'],
                         'quantity' => $detail['quantity'],
                         'price' => $detail['price'],
-                        'reference' => $detail['reference'],
+                        'reference' => $detail['reference'] ?? '',
                         'measurement_unit' => 'unidad',
-                        'description' => $detail['reference']
+                        'description' => $detail['reference'] ?? '',
                     ]);
                 } else {
                     $item = Item::find($detail['item_id']);
