@@ -550,6 +550,7 @@ class OrdersRepository
             ->leftJoin('employees', 'users.id', '=', 'employees.user_id')
             ->where('requestor', $userId)
             ->where('status', '!=', 'desaprobado')
+            ->whereNotNull('technician')
             ->select(
                 'number as number',
                 DB::raw('DATE_FORMAT(orders.created_at, "%d/%c/%Y %r") created_at'),
