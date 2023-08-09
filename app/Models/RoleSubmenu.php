@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 
 
-class Role_Submenu extends Model
+class RoleSubmenu extends Model
 {
     use HasFactory;
 

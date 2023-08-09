@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Models\Menu;
 use App\Models\Role;
 use App\Models\Submenu;
-use App\Models\Role_Submenu;
+use App\Models\RoleSubmenu;
 use Illuminate\Support\Facades\DB;
 
 use Exception;
@@ -53,7 +53,7 @@ class RolesRepository
 
 
             foreach ($submenus as &$value) {
-                $role_submenu =  Role_Submenu::firstOrNew([
+                $role_submenu =  RoleSubmenu::firstOrNew([
                     'role_id' => $rolId,
                     'submenu_id' => $value
                 ]);
