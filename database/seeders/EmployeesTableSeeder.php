@@ -14,10 +14,10 @@ class EmployeesTableSeeder extends Seeder
     public function run(): void
     {
         DB::table('employees')->insert([
-            'names' => 'Jean Carlos',
-            'last_names' => 'Holguin Berihuete',
+            'names' => 'Robert',
+            'last_names' => 'Ness',
             'identification' => '40225628558',
-            'email' => 'holguinjean1@gmail.com',
+            'email' => 'robertness@gmail.com',
             'department_id' => 1,
             'role_id' => 1,
             'user_id' => 1,
@@ -50,10 +50,10 @@ class EmployeesTableSeeder extends Seeder
             'user_id' => 3,
         ]);
         DB::table('employees')->insert([
-            'names' => 'Xavier',
-            'last_names' => 'Vasquez',
+            'names' => 'Stan',
+            'last_names' => 'Mason',
             'identification' => '00154678945',
-            'email' => 'xavier@gmail.com',
+            'email' => 'stanmason@gmail.com',
             'department_id' => 2,
             'role_id' => 6,
             'user_id' => 4,
