@@ -172,7 +172,7 @@ class OrdersRepository
         }
     }
 
-    public function assignTechnician($orderNumber, $technicianId)
+    public function assignTechnician($orderNumber, $technicianId, $assignedBy)
     {
 
         try {
@@ -190,6 +190,7 @@ class OrdersRepository
             $order->technician = $technicianUser->id;
             $order->assignation_date = now();
             $order->status = 'tecnico asignado';
+            $order->assigned_by = $assignedBy;
 
             $order->save();
 

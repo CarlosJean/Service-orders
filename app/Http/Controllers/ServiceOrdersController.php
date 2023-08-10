@@ -133,8 +133,9 @@ class ServiceOrdersController extends Controller
         try {
             $serviceOrderNumber  = $request->input('order_number');
             $technicianId = $request->input('technician_id');
+            $assignedBy = auth()->id();
 
-            $this->ordersRepository->assignTechnician($serviceOrderNumber, $technicianId);
+            $this->ordersRepository->assignTechnician($serviceOrderNumber, $technicianId, $assignedBy);
 
             $employee = $this->employeeRepository->employeeById($technicianId);
             $technician = $employee['names'] . ' ' . $employee['last_names'];
