@@ -1,7 +1,12 @@
 <div class="row">
     @include('partials.orders.detail')
 
-    @if($order->diagnosis == null && $order->start_date == null)
+    @if($order->diagnosis != null)
+    <div class="form-group col-12">
+        <label for="txtDiagnosis">Informe técnico</label>
+        <textarea name="" id="txtDiagnosis" cols="30" rows="5" class="form-control" readonly>{{$order->diagnosis}}</textarea>
+    </div>
+    @elseif($order->diagnosis == null && $order->start_date == null)
     <div class="col-12">
         <hr>
         <h3>Informe técnico</h3>
@@ -31,21 +36,23 @@
                 <div class="col-md-3 p-0 px-md-1">
                     <a href="{{url('ordenes-servicio')}}" class="btn btn-secondary w-100">Volver</a>
                 </div>
+                @if($order->diagnosis != null && $order->start_date == null)
                 <div class="col-md-3 p-0 pl-md-2">
-                    @if($order->diagnosis == null && $order->start_date == null)
                     <form action="iniciar" method="post">
                         @csrf
                         <input type="hidden" name="order_number" value="{{$order->number}}">
                         <button class="btn btn-primary w-100 mt-1 mt-md-0" id="btnStartOrder" type="submit">Iniciar orden</button>
                     </form>
-                    @elseif($order->start_date != null)
+                </div>
+                @elseif($order->start_date != null)
+                <div class="col-md-3 p-0 pl-md-2">
                     <form action="finalizar" method="post">
                         @csrf
                         <input type="hidden" name="order_number" value="{{$order->number}}">
                         <button class="btn btn-primary w-100" id="btnFinishOrder" type="submit">Finalizar orden</button>
                     </form>
-                    @endif
                 </div>
+                @endif
             </div>
         </div>
     </div>
