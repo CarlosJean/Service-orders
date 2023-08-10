@@ -22,7 +22,7 @@ class InventoriesRepository
             }
 
             //Si es un despacho de artículos entonces la cantidad se coloca en negativo
-            if ($inventoryType::Dispatch) {
+            if ($inventoryType == inventoryType::Dispatch) {
                 $item->quantity *=  -1;
             }
 
@@ -40,12 +40,9 @@ class InventoriesRepository
 
     public function getByDate($fromDate, $toDate)
     {
-
-        $from = date($fromDate);
-        $to = date($toDate);
+        $to = date($toDate . ' 23:59:59');
 
         $inventories = DB::table('inventories')
-           // ->whereDate('inventories.created_at', '>=', $from)
             ->whereDate('inventories.created_at', '<=', $to)
             ->join('items', 'inventories.item_id', '=', 'items.id')
             ->select(
@@ -54,11 +51,11 @@ class InventoriesRepository
                 'items.reference',
                 DB::raw('round(sum(inventories.quantity),2) quantity'),
                 DB::raw('round(avg(inventories.price),2) price')
-            
+
             )
             ->groupBy('items.id', 'items.name', 'items.reference')
             ->get();
-        
+
         $inventoryValue = collect($inventories)->sum('price');
 
         $inventories = ['items' => $inventories, 'total_value' => $inventoryValue];
