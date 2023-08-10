@@ -27,10 +27,12 @@ $(function () {
             quantity: {
                 required: true,
                 digits: true,
+                min:1,
             },
             price:{
                 required: true,
                 digits: true,
+                min:1,
             },
         },
         messages: {
@@ -39,8 +41,12 @@ $(function () {
             quantity:{
                 digits: 'Se aceptan solo números.',
                 required: 'Este campo es requerido.',
+                min: 'La cantidad debe ser mayor a cero.',
             },
-            price: 'Debe indicar el precio.',
+            price: {
+                required: 'Debe indicar el precio.',
+                min: 'El precio debe ser mayor a cero.',
+            },
         },
         errorClass:'text-danger'
     });
