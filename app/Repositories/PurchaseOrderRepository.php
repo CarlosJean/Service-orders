@@ -14,6 +14,7 @@ use App\Models\OrderItemsDetail;
 use App\Models\PurchaseOrderDetail;
 use App\Models\Quote;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 
 class PurchaseOrderRepository
@@ -45,7 +46,7 @@ class PurchaseOrderRepository
         try {
             $quote = Quote::where('number', $quoteNumber)?->first();
             if ($quote == null) {
-                return new Exception('No se encontró una cotización con el número ' . $quoteNumber);
+                throw new ModelNotFoundException('No se encontró una cotización con el número ' . $quoteNumber);
             }
 
             if ($details == null) {
@@ -57,7 +58,7 @@ class PurchaseOrderRepository
                 'quote_id' => $quote->id,
                 'number' => $purchaseOrderNumber,
             ]);
-            $purchaseOrder->total = collect($details)->sum('price');
+            $purchaseOrder->total = $this->total($details);
             $purchaseOrder->save();
 
             $maintenanceSupervisor = $this->employeeRepository
@@ -181,7 +182,11 @@ class PurchaseOrderRepository
             ->get();
 
         $purchaseOrder['totals']['quantity'] = $purchaseOrder['detail']->sum('quantity');
-        $purchaseOrder['totals']['price'] = $purchaseOrder['detail']->sum('price');
+        $purchaseOrder['totals']['price'] = 0;
+
+        foreach ($purchaseOrder['detail'] as $detail) {
+            $purchaseOrder['totals']['price'] += $detail->price * $detail->quantity;
+        }
 
         return $purchaseOrder;
     }
@@ -200,5 +205,15 @@ class PurchaseOrderRepository
             ->get();
 
         return $purchaseOrders;
+    }
+
+    private function total($details)
+    {
+        $total = 0;
+        foreach ($details as $detail) {
+            $total += $detail['quantity'] * $detail['price'];
+        }
+
+        return $total;
     }
 }

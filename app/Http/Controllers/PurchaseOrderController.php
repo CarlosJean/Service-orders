@@ -6,6 +6,7 @@ use App\Exceptions\EmptyListException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PurchaseOrderRequest;
 use App\Repositories\PurchaseOrderRepository;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class PurchaseOrderController extends Controller
@@ -53,6 +54,8 @@ class PurchaseOrderController extends Controller
                 ->storePurchaseOrder($quoteNumber, $purchaseOrderNumber, $details);
 
             return view('purchase_orders.created')->with('purchaseOrderNumber', $purchaseOrderNumber);
+        } catch (ModelNotFoundException $ex) {
+            return back()->withErrors($ex->getMessage());
         } catch (EmptyListException $ex) {
             return back()->withErrors($ex->getMessage());
         } catch (\Throwable $th) {
