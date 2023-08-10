@@ -67,9 +67,9 @@ $(document).ready(function () {
                 data: employees,
 
                 columns: [
-                    { data: 'id', title: 'id' },
-                    { data: 'name', title: 'nombre' },      
-                    { data: 'description', title: 'descripcion' },        
+                    { data: 'id', title: 'Id' },
+                    { data: 'name', title: 'Nombre' },      
+                    { data: 'description', title: 'Descripcion' },        
                     { 
                         title:'Estado' ,
                         data: 'active', 
