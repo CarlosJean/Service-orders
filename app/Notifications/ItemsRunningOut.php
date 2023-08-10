@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ItemsRunningOut extends Notification
+class ItemsRunningOut extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -42,8 +42,7 @@ class ItemsRunningOut extends Notification
             $itemsRunningOutEmail->line('*' . $item->name . '. Referencia: ' . $item->reference);
         }
 
-        $itemsRunningOutEmail->line('*' . $item->name . '. Referencia: ' . $item->reference)
-            ->salutation('--')
+        $itemsRunningOutEmail->salutation('--')
             ->subject('Materiales a punto de agotarse');
 
         return $itemsRunningOutEmail;

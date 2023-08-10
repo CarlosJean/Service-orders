@@ -119,37 +119,32 @@ class ItemsRepository
         }
     }
 
-    public function dispatch($itemsId)
+    public function dispatch($serviceOrderNumber)
     {
         try {
 
-            if ($itemsId == null) {
-                throw new EmptyListException('Debe seleccionar los materiales correspondientes a la solicitud.');
+            $serviceOrder = Order::where('number', $serviceOrderNumber)->first();
+            
+            if ($serviceOrder == null) {
+                throw new Exception('No se encontró la orden de servicio con el número '.$serviceOrderNumber.'.');
             }
 
-            $orderItem = OrderItemsDetail::find($itemsId[0])
-                ->orderItem;
-
-            $serviceOrderNumber = $orderItem
-                ->serviceOrder
-                ->number;
-
             $itemsRunningOut = [];
-            foreach ($itemsId as $itemId) {
-                $orderItemDetail = OrderItemsDetail::find($itemId);
-                $orderItemDetail->dispatched = true;
-                $orderItemDetail->save();
+            foreach ($serviceOrder->items as $detail) {
+                $detail->dispatched = true;
+                $detail->save();
 
-                $item = Item::find($itemId);
+                $item = Item::find($detail->item_id);
+                $item->quantity -= $detail->quantity;
+                $item->save();
 
-                $this->inventoriesRepository
-                    ->historical($item, InventoryType::Dispatch);
-
-                if ($item->quantity - $orderItemDetail->quantity <= 3) {
+                if ($item->quantity - $detail->quantity <= 3) {
                     array_push($itemsRunningOut, $item);
                 }
 
-                $item->quantity = $orderItemDetail->quantity;
+                $item->quantity = $detail->quantity;
+                $this->inventoriesRepository
+                    ->historical($item, InventoryType::Dispatch);
             }
 
             $maintenanceSupervisorAndManager = Employee::get()
@@ -160,14 +155,12 @@ class ItemsRepository
             foreach ($maintenanceSupervisorAndManager as $employee) {
                 array_push($users, $employee->user);
             }
-            Notification::send($users, new ServiceOrderItemsDispatch($serviceOrderNumber));
+            Notification::send($users, new ServiceOrderItemsDispatch($serviceOrder->number));
 
+            $orderItem = $serviceOrder->orderItem;
             $orderItem->dispatched_by = auth()?->id();
             $orderItem->status = 'materiales despachados';
             $orderItem->save();
-
-            $serviceOrder = Order::where('number', $serviceOrderNumber)
-                ->first();
 
             $serviceOrder->status = "en espera de resolucion";
             $serviceOrder->save();

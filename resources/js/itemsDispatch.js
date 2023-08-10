@@ -26,6 +26,7 @@ const serviceOrderItems = function (serviceOrderNumber) {
             dataSrc: function (serviceOrderItems) {
                 $("#items").removeClass('d-none');
                 $("#errorMessage").add('d-none');
+                $("input[name='service_order_id']").val(serviceOrderNumber);
                 return serviceOrderItems.data;
             },
             error: function (error) {
@@ -47,22 +48,24 @@ const serviceOrderItems = function (serviceOrderNumber) {
 };
 
 $("#btnDispatch").on('click', function () {
-    var selectedRowsData = itemsTable?.rows()?.data();
+    // var selectedRowsData = itemsTable?.rows()?.data();
 
-    if (selectedRowsData == undefined) {
-        Swal.fire({
-            icon: 'error',
-            text: 'Debe seleccionar los materiales a despachar.',
-        });
-    }
+    // console.log(selectedRowsData);
 
+    // if (selectedRowsData == undefined) {
+    //     Swal.fire({
+    //         icon: 'error',
+    //         text: 'Debe seleccionar los materiales a despachar.',
+    //     });
+    // }
+
+    
+    // for (let index = 0; index < selectedRowsData.length; index++) {
+        //     const element = selectedRowsData[index];
+        //     $(form).append(`<input type="hidden" name="items[${index}]" value="${element.id}" />`)
+        // }
+        
     var form = document.getElementById("frmDispatchItems");
-
-    for (let index = 0; index < selectedRowsData.length; index++) {
-        const element = selectedRowsData[index];
-        $(form).append(`<input type="hidden" name="items[${index}]" value="${element.id}" />`)
-    }
-
     form.submit();
 });
 

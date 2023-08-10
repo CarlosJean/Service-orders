@@ -35,7 +35,7 @@
 
   <form action="{{route('dispatchItems')}}" method="post" id="frmDispatchItems">
     @csrf
-    <input type="hidden" name="items">
+    <input type="hidden" name="service_order_id">
   </form>
 
   <div class="row p-1 justify-content-end">

@@ -98,8 +98,8 @@ class ItemsController extends Controller
     public function storeDispatch(Request $request)
     {
         try {
-            $itemsId = $request->input('items');
-            $this->itemsRepository->dispatch($itemsId);
+            $serviceOrderNumber = $request->input('service_order_id');
+            $this->itemsRepository->dispatch($serviceOrderNumber);
 
             return view('items.dispatched');
         } catch (EmptyListException $ex) {
