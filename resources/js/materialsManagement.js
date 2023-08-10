@@ -26,7 +26,7 @@ const validationRules = {
     errorClass: 'text-danger'
 };
 
-var validator = frmAddItem.validate(validationRules);;
+var validator = frmAddItem.validate(validationRules);
 
 $(function () {
     loadItems();
