@@ -91,9 +91,9 @@ class PurchaseOrderRepository
                         'name' => $detail['item'],
                         'quantity' => $detail['quantity'],
                         'price' => $detail['price'],
-                        'reference' => $detail['reference'] ?? '',
+                        'reference' => ($detail['reference'] == 'null') ? '' : $detail['reference'],
                         'measurement_unit' => 'unidad',
-                        'description' => $detail['reference'] ?? '',
+                        'description' => ($detail['reference'] == 'null') ? '' : $detail['reference'],
                     ]);
                 } else {
                     $item = Item::find($detail['item_id']);
@@ -120,13 +120,14 @@ class PurchaseOrderRepository
                 $purchaseOrderDetail->save();
 
                 //Guardar operacion en histórico
+                $item->quantity = $detail['quantity'];
                 $this->inventoriesRepository->historical($item, InventoryType::Entry);
 
                 $quote->retrieved = true;
                 $quote->save();
 
                 //Si la cotización no está asociada a una orden de servicio entonces el programa finaliza
-                if ($quote->order == null) return;
+                if ($quote->order == null) continue;
 
                 $orderItemDetail = new OrderItemsDetail();
                 $orderItemDetail->item()->associate($item);
