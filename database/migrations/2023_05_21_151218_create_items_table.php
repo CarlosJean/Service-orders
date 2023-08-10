@@ -18,7 +18,7 @@ return new class extends Migration
             $table->float('quantity');
             $table->string('reference')->nullable();
             $table->string('measurement_unit');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->boolean('active')->default(true);
             $table->double('price');
             $table->unsignedBigInteger('id_category')->nullable();
