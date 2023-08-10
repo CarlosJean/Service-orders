@@ -3,7 +3,20 @@ const materials = $("#materials");
 const txtMaterialName = $("#txt_material_name");
 const txtMaterialQuantity = $("#txt_material_quantity");
 const tblMaterials = $("#tbl_materials");
+const frmTechnicalReport = $("#frmTechnicalReport");
+const validationRules = {
+    rules: {
+        technical_report: {
+            required: true
+        },
+    },
+    messages: {
+        technical_report: 'Debe indicar el informe técnico',
+    },
+    errorClass: 'text-danger'
+};
 
+var validator = frmTechnicalReport.validate(validationRules);
 
 const removeRow = function () {
     const row = $(this).parent()

@@ -7,7 +7,7 @@
         <h3>Informe técnico</h3>
     </div>
 
-    <form action="reporte-tecnico" method="post" class="col-12">
+    <form action="reporte-tecnico" method="post" class="col-12" id="frmTechnicalReport">
         @csrf
         <input type="hidden" name="order_number" value="{{$order->number}}">
         <div class="form-check col-12">
