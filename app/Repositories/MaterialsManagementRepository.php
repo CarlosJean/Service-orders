@@ -27,6 +27,7 @@ class MaterialsManagementRepository
             ->leftJoin('users as quote_users', 'quotes.created_by', '=', 'quote_users.id')
             ->leftJoin('employees as quote_employees', 'quote_users.id', '=', 'quote_employees.user_id')
             ->whereNull('order_items.dispatched_by')
+            ->where('order_items.status','=', 'en espera de entrega')
             ->select(
                 'orders.number as service_order_number',
                 DB::raw('DATE_FORMAT(COALESCE(order_items.created_at, quotes.created_at), "%d/%m/%Y %r") as material_request_date'),

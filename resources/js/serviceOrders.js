@@ -93,7 +93,7 @@ const columnsByUserRole = function (userRole) {
                             
                             ${(requestedItems
                             && userRole == 'maintenanceManager'
-                            && orderItemsStatus == 'en espera de entrega'
+                            && orderItemsStatus == 'en espera aprobacion gerente mantenimiento'
                             && technician != null)
                             ? `<a href='ordenes-servicio/${orderNumber}/aprobacion-materiales' class='btn btn-primary mt-2'>Aprobar materiales</a>`
                             : ``

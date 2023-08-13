@@ -43,7 +43,7 @@ class OrdersRepository
 
         return str_pad($number, 6, "0", STR_PAD_LEFT);
     }
-    
+
     public function createOrder($issue, $orderNumber)
     {
         try {
@@ -270,11 +270,15 @@ class OrdersRepository
             $requestor = $this->employeeRepository
                 ->employeeByUserId(auth()->id());
 
+            $status = ($requestor['system_role'] == SystemRoles::MaintenanceManager)
+                ? 'aprobado por gerente mantenimiento'
+                : 'en espera aprobacion gerente mantenimiento';
+
             if (!$orderItem) {
                 $orderItem = new OrderItem([
                     'service_order_id' => $order->id,
                     'requestor' => $requestor['id'],
-                    'status' => 'en espera de entrega'
+                    'status' => $status
                 ]);
                 $orderItem->save();
             }
@@ -295,9 +299,9 @@ class OrdersRepository
 
             $userId = auth()->id();
             $employee = $this->employeeRepository->employeeByUserId($userId);
-            if($employee['system_role'] == SystemRoles::MaintenanceManager){
+            if ($employee['system_role'] == SystemRoles::MaintenanceManager) {
                 $this->approveServiceOrderItemRequest($orderNumber, true);
-            }else{
+            } else {
                 //Notificación al gerente de mantenimiento
                 $maintenanceManager = Employee::where('department_id', 2)
                     ->where('role_id', 3)
@@ -381,7 +385,7 @@ class OrdersRepository
             ->orderItem;
 
         $orderItemsRequest->status = ($approved)
-            ? 'aprobado por gerente de mantenimiento'
+            ? 'en espera de entrega'
             : 'desaprobado por gerente de mantenimiento';
         $orderItemsRequest->save();
 
@@ -641,6 +645,7 @@ class OrdersRepository
                 ->leftJoin('users', 'orders.assigned_by', '=', 'users.id')
                 ->leftJoin('employees', 'users.id', '=', 'employees.user_id')
                 ->whereNull('order_items.dispatched_by')
+                ->where('order_items.status', '=', 'en espera de entrega')
                 ->select(
                     'number as number',
                     DB::raw('DATE_FORMAT(order_items.created_at, "%d/%c/%Y %r") created_at'),
