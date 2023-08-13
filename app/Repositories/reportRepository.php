@@ -149,8 +149,6 @@ class reportRepository
 
             $data = DB::table('orders')
                 ->whereBetween('orders.created_at',  [$from, $to])
-
-                ->leftjoin('employees', 'orders.requestor', '=', 'employees.id')
                 ->leftjoin('order_items', 'orders.id', '=', 'order_items.service_order_id')
                 ->leftjoin('order_items_details', 'order_items_details.order_item_id', '=', 'orders.id')
                 ->leftjoin('items', 'items.id', '=', 'order_items_details.item_id')
@@ -161,7 +159,7 @@ class reportRepository
                 ->select(
                     'orders.number',
                     DB::raw('count( order_items_details.item_id)  as cantidad_articulos'),
-                    DB::raw('sum(round(IFNULL(IFNULL(inventories.price,items.price),0),2)) as total_cost'),
+                    DB::raw('sum(round(IFNULL(IFNULL(inventories.price,items.price),0),2) * order_items_details.quantity) as total_cost'),
                 )
                 ->groupBy('orders.number')
                 ->get();
