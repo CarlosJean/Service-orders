@@ -97,6 +97,10 @@ class RolesSubmenusTableSeeder extends Seeder
             'role_id' => 3,
             'submenu_id' => 13,
         ]);
+        DB::table('role_submenu')->insert([
+            'role_id' => 3,
+            'submenu_id' => 16,
+        ]);
         
         //Supervisor/Gerente de cualquier departamento
         DB::table('role_submenu')->insert([
