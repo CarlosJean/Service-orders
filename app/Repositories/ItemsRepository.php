@@ -226,6 +226,9 @@ class ItemsRepository
 
             $model->save();
 
+            $this->inventoriesRepository
+                    ->historical($model, InventoryType::Entry);            
+
         } catch (\Throwable $th) {
             return redirect()->back()->with('error',  $th->getMessage());
         }
