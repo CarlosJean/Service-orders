@@ -5,6 +5,7 @@ var itemsTable = null;
 const txtServiceOrder = $("#txtServiceOrder");
 const btnFindOrderItems = $("#btnFindOrderItems");
 var findServiceOrderItemsUrl = '../ordenes-servicio/materiales';
+const btnDispatch = $("#btnDispatch");
 
 $(function () {
     $("#dvOrderNumber").addClass('d-none');
@@ -24,6 +25,13 @@ const serviceOrderItems = function (serviceOrderNumber) {
             type: 'post',
             dataType: 'json',
             dataSrc: function (serviceOrderItems) {
+
+                if (serviceOrderItems.data.length == 0) {
+                    btnDispatch.prop('disabled', true);
+                } else {
+                    btnDispatch.prop('disabled', false);
+                }
+
                 $("#items").removeClass('d-none');
                 $("#errorMessage").add('d-none');
                 $("input[name='service_order_id']").val(serviceOrderNumber);
@@ -47,24 +55,7 @@ const serviceOrderItems = function (serviceOrderNumber) {
     });
 };
 
-$("#btnDispatch").on('click', function () {
-    // var selectedRowsData = itemsTable?.rows()?.data();
-
-    // console.log(selectedRowsData);
-
-    // if (selectedRowsData == undefined) {
-    //     Swal.fire({
-    //         icon: 'error',
-    //         text: 'Debe seleccionar los materiales a despachar.',
-    //     });
-    // }
-
-    
-    // for (let index = 0; index < selectedRowsData.length; index++) {
-        //     const element = selectedRowsData[index];
-        //     $(form).append(`<input type="hidden" name="items[${index}]" value="${element.id}" />`)
-        // }
-        
+btnDispatch.on('click', function () {
     var form = document.getElementById("frmDispatchItems");
     form.submit();
 });

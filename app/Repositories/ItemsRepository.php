@@ -26,16 +26,16 @@ class ItemsRepository
         $this->inventoriesRepository = $inventoriesRepository;
     }
 
-    public function all($all=false)
+    public function all($all = false)
     {
-    $model = Item::select('items.id', 'items.name','items.description','measurement_unit','price','quantity','reference','items.active','categories.name as category')
-    ->leftjoin('categories','categories.id','items.id_category')->get();
-  
-    if(!$all) {       
-        $model = $model ->where('active',1);
-    }
-      
-    return $model;
+        $model = Item::select('items.id', 'items.name', 'items.description', 'measurement_unit', 'price', 'quantity', 'reference', 'items.active', 'categories.name as category')
+            ->leftjoin('categories', 'categories.id', 'items.id_category')->get();
+
+        if (!$all) {
+            $model = $model->where('active', 1);
+        }
+
+        return $model;
     }
 
     public function available()
@@ -95,6 +95,19 @@ class ItemsRepository
                 throw new NotFoundModelException('No se encontró la orden de servicio número ' . $serviceOrderNumber . '.');
             }
 
+            $orderItem = $serviceOrder
+                ?->orderItem;
+
+            if ($orderItem == null) {
+                throw new NotFoundModelException('No se encontraron materiales para esta orden.');
+            }
+
+            $approvedOrderItems = ($orderItem->status == 'en espera de entrega');
+
+            if (!$approvedOrderItems) {
+                throw new NotFoundModelException('No se encontraron materiales aprobados para esta orden.');
+            }
+
             $details = $serviceOrder
                 ?->orderItem
                 ?->orderItemDetail
@@ -124,9 +137,9 @@ class ItemsRepository
         try {
 
             $serviceOrder = Order::where('number', $serviceOrderNumber)->first();
-            
+
             if ($serviceOrder == null) {
-                throw new Exception('No se encontró la orden de servicio con el número '.$serviceOrderNumber.'.');
+                throw new Exception('No se encontró la orden de servicio con el número ' . $serviceOrderNumber . '.');
             }
 
             $itemsRunningOut = [];
@@ -197,7 +210,7 @@ class ItemsRepository
         }
     }
 
-    public function create($description, $nombre, $medida, $precio, $cantidad, $referencia,$categoria)
+    public function create($description, $nombre, $medida, $precio, $cantidad, $referencia, $categoria)
     {
         try {
 
@@ -227,8 +240,7 @@ class ItemsRepository
             $model->save();
 
             $this->inventoriesRepository
-                    ->historical($model, InventoryType::Entry);            
-
+                ->historical($model, InventoryType::Entry);
         } catch (\Throwable $th) {
             return redirect()->back()->with('error',  $th->getMessage());
         }
