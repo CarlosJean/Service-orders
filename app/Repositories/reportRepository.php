@@ -152,14 +152,10 @@ class reportRepository
                 ->leftjoin('order_items', 'orders.id', '=', 'order_items.service_order_id')
                 ->leftjoin('order_items_details', 'order_items_details.order_item_id', '=', 'orders.id')
                 ->leftjoin('items', 'items.id', '=', 'order_items_details.item_id')
-                ->leftJoin('inventories', function ($join)
-                use ($from) {
-                    $join->on('inventories.item_id', '=', 'order_items_details.item_id');
-                })
                 ->select(
                     'orders.number',
-                    DB::raw('count( order_items_details.item_id)  as cantidad_articulos'),
-                    DB::raw('sum(round(IFNULL(IFNULL(inventories.price,items.price),0),2) * order_items_details.quantity) as total_cost'),
+                    DB::raw('sum(order_items_details.quantity)  as cantidad_articulos'),
+                    DB::raw('sum(round(items.price,2)) * order_items_details.quantity) as total_cost'),
                 )
                 ->groupBy('orders.number')
                 ->get();
