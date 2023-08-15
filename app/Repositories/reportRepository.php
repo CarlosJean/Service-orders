@@ -154,8 +154,8 @@ class reportRepository
                 ->leftjoin('items', 'items.id', '=', 'order_items_details.item_id')
                 ->select(
                     'orders.number',
-                    DB::raw('sum(order_items_details.quantity)  as cantidad_articulos'),
-                    DB::raw('sum(round(items.price,2)) * order_items_details.quantity) as total_cost'),
+                    DB::raw('sum(order_items_details.quantity) as cantidad_articulos'),
+                    DB::raw('sum(round(items.price,2) * order_items_details.quantity) as total_cost'),
                 )
                 ->groupBy('orders.number')
                 ->get();
