@@ -9,13 +9,12 @@ class ServicesRepository{
     public function services($all=false){
         //return Service::get();
 
-    $services = Service::select('name', 'id','description','active') 
-    ->get();
+    $services = Service::select('name', 'id','description','active');
     if(!$all) {       
          $services = $services->where('active',1);
     }
       
-    return $services;
+    return $services->get();
 
     }
 
