@@ -235,12 +235,28 @@ class ItemsRepository
                 'quantity' => $cantidad,
                 'reference' => $referencia,
                 'id_category' =>  $categoria
-            ]);
+            ]);            
+            
+            $existingItem = Item::where('name', $model->name)->first();
+            $itemExists = ($existingItem != null);
+            
+            if($itemExists){                
+                $existingItem->description = $model['description'];
+                $existingItem->measurement_unit = $model['measurement_unit'];
+                $existingItem->price = $model['price'];
+                $existingItem->quantity += $model['quantity'];
+                $existingItem->reference = $model['reference'];
+                $existingItem->id_category = $model['id_category'];
 
+                $model = $existingItem;
+            }
+            
             $model->save();
-
+            
+            $model['quantity'] = $cantidad;
             $this->inventoriesRepository
                 ->historical($model, InventoryType::Entry);
+            
         } catch (\Throwable $th) {
             return redirect()->back()->with('error',  $th->getMessage());
         }
