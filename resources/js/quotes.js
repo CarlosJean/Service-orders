@@ -17,7 +17,7 @@ const hiddenServiceOrderNumber = $("#frm_quote input[name='service_order_number'
 $(function () {
     loadItems();
     slcSuppliers.select2({
-        placeholder: 'Seleccione un artículo',
+        placeholder: 'Seleccione un suplidor',
     });    
 
     $("#frm_add_item").validate({
