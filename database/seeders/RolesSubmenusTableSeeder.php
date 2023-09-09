@@ -68,6 +68,10 @@ class RolesSubmenusTableSeeder extends Seeder
         ]);
         DB::table('role_submenu')->insert([
             'role_id' => 2,
+            'submenu_id' => 6,
+        ]);
+        DB::table('role_submenu')->insert([
+            'role_id' => 2,
             'submenu_id' => 11,
         ]);
         DB::table('role_submenu')->insert([
@@ -88,6 +92,10 @@ class RolesSubmenusTableSeeder extends Seeder
         DB::table('role_submenu')->insert([
             'role_id' => 3,
             'submenu_id' => 4,
+        ]);
+        DB::table('role_submenu')->insert([
+            'role_id' => 3,
+            'submenu_id' => 6,
         ]);
         DB::table('role_submenu')->insert([
             'role_id' => 3,

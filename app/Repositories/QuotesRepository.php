@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Enums\SystemRoles;
 use App\Exceptions\NotFoundModelException;
 use App\Models\Item;
 use App\Models\Order;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 
 class QuotesRepository
 {
+    public function __construct(protected EmployeeRepository $employeeRepository){}
 
     public function quoteNumber()
     {
@@ -123,22 +125,47 @@ class QuotesRepository
 
     public function getActiveQuotes()
     {
+        $userId = auth()->id();
+        $employee = $this->employeeRepository->employeeByUserId($userId);
 
-        $quotes = DB::table('quotes')
-            ->leftJoin('orders', 'quotes.order_id', '=', 'orders.id')
-            ->leftJoin('users', 'orders.requestor', '=', 'users.id')
-            ->leftJoin('employees', 'users.id', '=', 'employees.user_id')
-            ->where('retrieved', '=', false)
-            ->select(
-                'quotes.id',
-                DB::raw('DATE_FORMAT(quotes.created_at, "%d/%m/%Y %r") date'),
-                'orders.number as order_number',
-                DB::raw('CONCAT(employees.names, " ", employees.last_names) requestor'),
-                'quotes.number as quote_number',
-            )
-            ->get();
+        $quotes  = [];
+        if ($employee['system_role'] == SystemRoles::MaintenanceSupervisor 
+        || $employee['system_role'] == SystemRoles::MaintenanceManager) {
+            $quotes = DB::table('quotes')
+                ->leftJoin('orders', 'quotes.order_id', '=', 'orders.id')
+                ->leftJoin('users', 'orders.requestor', '=', 'users.id')
+                ->leftJoin('employees', 'users.id', '=', 'employees.user_id')
+                ->join('users as created_by_users', 'created_by_users.id', '=', 'quotes.created_by')
+                ->join('employees as created_by_employees', 'created_by_employees.id', '=', 'created_by_users.id')
+                ->whereIn('created_by_employees.role_id', [2,3])
+                ->where('retrieved', '=', false)
+                ->select(
+                    'quotes.id',
+                    DB::raw('DATE_FORMAT(quotes.created_at, "%d/%m/%Y %r") date'),
+                    'orders.number as order_number',
+                    DB::raw('CONCAT(employees.names, " ", employees.last_names) requestor'),
+                    'quotes.number as quote_number',
+                )
+                ->get();            
+        } else if($employee['system_role'] == SystemRoles::Warehouseman){
+            $quotes = DB::table('quotes')
+                ->leftJoin('orders', 'quotes.order_id', '=', 'orders.id')
+                ->leftJoin('users', 'orders.requestor', '=', 'users.id')
+                ->leftJoin('employees', 'users.id', '=', 'employees.user_id')
+                ->where('retrieved', '=', false)
+                ->select(
+                    'quotes.id',
+                    DB::raw('DATE_FORMAT(quotes.created_at, "%d/%m/%Y %r") date'),
+                    'orders.number as order_number',
+                    DB::raw('CONCAT(employees.names, " ", employees.last_names) requestor'),
+                    'quotes.number as quote_number',
+                )
+                ->get();
+        }
 
-        return $quotes;
+        $data = ['user_role' => $employee['system_role'], 'data' => $quotes];
+
+        return $data;
     }
 
     public function getQuote($quoteNumber)

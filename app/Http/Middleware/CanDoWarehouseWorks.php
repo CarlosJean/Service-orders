@@ -22,7 +22,9 @@ class CanDoWarehouseWorks
         $userId = auth()->id();
         $employee = $this->employeeRepository->employeeByUserId($userId);
 
-        if (!($employee['system_role'] == SystemRoles::Warehouseman)) {
+        if (!($employee['system_role'] == SystemRoles::Warehouseman 
+            || $employee['system_role'] == SystemRoles::MaintenanceSupervisor
+            || $employee['system_role'] == SystemRoles::MaintenanceManager )) {
             abort(403, 'Acceso denegado');
         }
 
