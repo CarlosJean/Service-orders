@@ -7,6 +7,7 @@
             <th>Inicio</th>
             <th>Finalización</th>
             <th>Estado</th>
+            <th>Detalles</th>
         </tr>
     </thead>
     <tbody>
@@ -18,6 +19,11 @@
             <td>{{$serviceOrder->start_date}}</td>
             <td>{{$serviceOrder->end_date}}</td>
             <td>{{$serviceOrder->status}}</td>
+            <td>
+                <a href="ordenes-servicio/{{$serviceOrder->number}}" class="btn btn-secondary">
+                    Ver
+                </a>
+            </td>
         </tr>
         @endforeach
     </tbody>

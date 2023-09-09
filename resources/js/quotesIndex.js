@@ -16,19 +16,42 @@ const appendNewQuoteButton = function () {
 };
 
 const activeQuotes = function () {
-    quotesTable.DataTable({
-        ajax: {
-            url: './cotizaciones/activas',
-            type: 'post',
-            dataType: 'json',
-            dataSrc: function (activeQuotes) {
-                appendNewQuoteButton();
-                return activeQuotes;
+
+    $.ajax({
+        type: 'post',
+        url: './cotizaciones/activas',
+        dataType: 'json',
+    }).done(function (response) {
+        quotesTable.DataTable({
+            data: response.data,
+            processing: true,
+            columns: columnsByUserRole(response),
+            dom: "<'row justify-content-end' <'col-sm-12 col-lg-5' f> <'#newQuoteButton.col-sm-12 col-lg-2 px-1 px-md-3'> >",
+            destroy: true,
+            language,
+        });
+        appendNewQuoteButton();
+    });
+};
+
+const columnsByUserRole = (response) => {
+    
+    if (response.user_role == "maintenancemanager" || response.user_role == "maintenancesupervisor") {
+        return [
+            { title: 'Cotización', data: 'quote_number' },
+            { title: 'Orden de servicio', data: "order_number" },
+            { title: 'Solicitante orden de servicio', data: 'requestor' },
+            { title: 'Fecha', data: 'date' },
+            {
+                title: 'Accion',
+                data: 'quote_number',
+                render: (quoteNumber) => "<a href='cotizaciones/" + quoteNumber + "' class='btn btn-primary'>Detalles</a>"
             },
-        },
-        processing: true,
-        columns: [
-            { title: 'Cotización', data: "quote_number" },
+        ];
+
+    } else if (response.user_role == "warehouseman") {
+        return [
+            { title: 'Cotización', data: 'quote_number' },
             { title: 'Orden de servicio', data: "order_number" },
             { title: 'Solicitante orden de servicio', data: 'requestor' },
             { title: 'Fecha', data: 'date' },
@@ -42,9 +65,6 @@ const activeQuotes = function () {
                 data: 'quote_number',
                 render: (quoteNumber) => "<a href='ordenes-compra/crear/" + quoteNumber + "' class='btn btn-primary'>Orden de compra</a>"
             },
-        ],
-        dom: "<'row justify-content-end' <'col-sm-12 col-lg-5' f> <'#newQuoteButton.col-sm-12 col-lg-2 px-1 px-md-3'> >",
-        destroy: true,
-        language,
-    });
-};
+        ];
+    }
+}
