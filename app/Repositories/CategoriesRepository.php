@@ -10,13 +10,13 @@ class CategoriesRepository{
     public function categories($all=false){
         //return Service::get();
 
-    $model = Categories::select('name', 'id','description','active') ->get();
+    $model = Categories::select('name', 'id','description','active') ;
     
     if(!$all) {       
         $model = $model ->where('active',1);
     }
       
-    return $model;
+    return $model->get();
 
     }
 
