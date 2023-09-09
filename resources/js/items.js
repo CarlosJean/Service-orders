@@ -17,6 +17,7 @@ const getCategories = function () {
 
             data.forEach(data => {
                 const option = new Option(data.name, data.id);
+                if(data.active=='1')
                 slc.append(option);
             });
 

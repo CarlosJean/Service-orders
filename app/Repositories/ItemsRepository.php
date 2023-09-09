@@ -28,14 +28,14 @@ class ItemsRepository
 
     public function all($all = false)
     {
-        $model = Item::select('items.id', 'items.name', 'items.description', 'measurement_unit', 'price', 'quantity', 'reference', 'items.active', 'categories.name as category')
-            ->leftjoin('categories', 'categories.id', 'items.id_category')->get();
-
-        if (!$all) {
-            $model = $model->where('active', 1);
-        }
-
-        return $model;
+    $model = Item::select('items.id', 'items.name','items.description','measurement_unit','price','quantity','reference','items.active','categories.name as category')
+    ->leftjoin('categories','categories.id','items.id_category');
+  
+    if(!$all) {       
+        $model = $model ->where('active',1);
+    }
+      
+    return $model->get();
     }
 
     public function available()

@@ -10,13 +10,13 @@ class DepartmentsRepository
     public function departments($all=false)
     {
 
-        $departments = Department::select('name', 'id','description','active') 
-        ->get();
+        $departments = Department::select('name', 'id','description','active');
+        
         if(!$all) {       
              $departments = $departments->where('active',1);
         }
           
-        return $departments;
+        return $departments->get();
     }
 
     // public function getDepartments()

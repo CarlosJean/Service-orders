@@ -9,14 +9,13 @@ class SuppliersRepository
 {
     public function suppliers($all=false)
     {
-        $suppliers = Suppliers::select('id','name', 'address','city','email','cellphone','ident','identType','active')
-            ->get();
-
+        $suppliers = Suppliers::select('id','name', 'address','city','email','cellphone','ident','identType','active');
+           
             if(!$all) {       
                 $suppliers = $suppliers ->where('active',1);
             }
             
-        return $suppliers;
+        return $suppliers ->get();
     }
 
     
