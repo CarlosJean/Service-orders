@@ -56,6 +56,10 @@
     <div class="container">
         <div class="row justify-content-end">
             <a href="{{URL::previous()}}" class="btn btn-primary col-md-2">Volver atrás</a>
+            <a class="btn btn-secondary col-3 ms-2">
+                <i class="typcn typcn-printer"></i>
+                Imprimir
+            </a>
         </div>
     </div>
 @endSection

@@ -91,6 +91,10 @@
     <div class="col-12 p-md-0 mt-1 mt-md-3">
         <div class="row justify-content-center">
             <a class="btn btn-secondary col-3" href="{{URL::previous()}}">Volver</a>
+            <a class="btn btn-secondary col-3 ms-2">
+                <i class="typcn typcn-printer"></i>
+                Imprimir
+            </a>
         </div>
     </div>
 </div>
