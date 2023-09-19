@@ -33,19 +33,19 @@
     <div class="col-12 mb-2 mt-1">
         <div class="container">
             <div class="row justify-content-end">
-                <div class="col-md-3 p-0 px-md-1">
+                <div class="col-md-3 p-0">
                     <a href="{{url('ordenes-servicio')}}" class="btn btn-secondary w-100">Volver</a>
                 </div>
                 @if($order->diagnosis != null && $order->start_date == null)
-                <div class="col-md-3 p-0 pl-md-2">
+                <div class="col-md-3 p-0 ps-md-2">
                     <form action="iniciar" method="post">
                         @csrf
                         <input type="hidden" name="order_number" value="{{$order->number}}">
                         <button class="btn btn-primary w-100 mt-1 mt-md-0" id="btnStartOrder" type="submit">Iniciar orden</button>
                     </form>
                 </div>
-                @elseif($order->start_date != null)
-                <div class="col-md-3 p-0 pl-md-2">
+                @elseif($order->start_date != null && $order->end_date == null)
+                <div class="col-md-3 p-0 ps-md-2">
                     <form action="finalizar" method="post">
                         @csrf
                         <input type="hidden" name="order_number" value="{{$order->number}}">
